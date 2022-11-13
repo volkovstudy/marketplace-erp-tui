@@ -12,7 +12,6 @@ public:
     explicit Supplier(string companyName);
 
     const string &getCompanyName() const;
-
     void setCompanyName(const string &companyName);
 };
 

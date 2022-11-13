@@ -9,7 +9,7 @@ class Supplier {
 private:
     string companyName;
 public:
-    explicit Supplier(const string &companyName);
+    explicit Supplier(string companyName);
 
     const string &getCompanyName() const;
 

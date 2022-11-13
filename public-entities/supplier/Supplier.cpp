@@ -1,6 +1,8 @@
 #include "Supplier.h"
 
-Supplier::Supplier(const string &companyName) : companyName(companyName) {}
+#include <utility>
+
+Supplier::Supplier(string companyName) : companyName(std::move(companyName)) {}
 
 const string &Supplier::getCompanyName() const {
     return companyName;

@@ -7,5 +7,6 @@ add_executable(marketplace-erp-tui
         main.cpp
         public-entities/supplier/Supplier.h public-entities/supplier/Supplier.cpp
         public-entities/client/Client.cpp public-entities/client/Client.h
+        public-entities/product/Product.cpp public-entities/product/Product.h
         public-entities/category/Category.cpp public-entities/category/Category.h
 )

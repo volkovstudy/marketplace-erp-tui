@@ -10,4 +10,5 @@ add_executable(marketplace-erp-tui
         public-entities/order/Order.cpp public-entities/order/Order.h
         public-entities/product/Product.cpp public-entities/product/Product.h
         public-entities/category/Category.cpp public-entities/category/Category.h
+        utils/property/Property.cpp utils/property/Property.h
 )

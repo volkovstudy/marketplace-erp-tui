@@ -12,6 +12,8 @@ private:
 public:
     explicit Supplier(string companyName);
 
+    Supplier(int id, string companyName);
+
     int getId() const;
     void setId(int id);
 

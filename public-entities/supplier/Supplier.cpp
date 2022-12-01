@@ -23,3 +23,7 @@ int Supplier::getId() const {
 void Supplier::setId(int id) {
     Supplier::id = id;
 }
+
+Supplier::Supplier(int id, string companyName)
+        : id(id),
+          companyName(std::move(companyName)) {}

@@ -13,4 +13,5 @@ add_executable(marketplace-erp-tui
         utils/property/Property.cpp utils/property/Property.h
         utils/csvfileservices/csvfileservice/CsvFileService.cpp utils/csvfileservices/csvfileservice/CsvFileService.h
         utils/csvfileservices/supplierrepository/SupplierRepository.cpp utils/csvfileservices/supplierrepository/SupplierRepository.h
+        utils/csvfileservices/configurationservice/ConfigurationService.cpp utils/csvfileservices/configurationservice/ConfigurationService.h
 )

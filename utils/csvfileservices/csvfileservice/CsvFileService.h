@@ -16,6 +16,8 @@ public:
 
     const string &getFilePath() const;
     void setFilePath(const string &newFilePath);
+
+    void write(vector<Property *> properties);
 };
 
 

@@ -51,6 +51,17 @@ vector<Property*> createVectorWithProperties(vector<string> fieldNames) {
     return result;
 }
 
+vector<string> getColumnNames(const string& filePath) {
+    ifstream fileReader(filePath);
+
+    if (!fileReader.is_open()) return *(new vector<string>);
+
+    string firstLine;
+    getline(fileReader, firstLine);
+
+    return splitLine(firstLine, CSV_DELIMITER);
+}
+
 vector<Property*> CsvFileService::getAllLines() {
     ifstream fileReader(filePath);
 

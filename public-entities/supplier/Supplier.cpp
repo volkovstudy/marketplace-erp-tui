@@ -4,7 +4,8 @@
 
 int SUPPLIER_COUNT;
 
-Supplier::Supplier(string companyName) : companyName(std::move(companyName)) {
+Supplier::Supplier(string companyName)
+        : companyName(std::move(companyName)) {
     id = ++SUPPLIER_COUNT;
 }
 

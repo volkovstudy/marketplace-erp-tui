@@ -11,11 +11,3 @@ ConfigurationService::ConfigurationService(string filePath)
         }
     }
 }
-
-void ConfigurationService::createInstance(string filePath) {
-    instance = new ConfigurationService(std::move(filePath));
-}
-
-ConfigurationService *ConfigurationService::getInstance() {
-    return instance;
-}

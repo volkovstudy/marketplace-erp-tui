@@ -1,4 +1,7 @@
+#include <iostream>
 #include "../utils/csvfileservices/csvfileservice/CsvFileService.h"
+
+using namespace std;
 
 class CsvFileServiceTest {
 private:

@@ -19,7 +19,7 @@ void CsvFileService::setFilePath(const string &newFilePath) {
     CsvFileService::filePath = newFilePath;
 }
 
-vector<string> splitLine(const string& str, const string& delimiter) {
+vector<string> splitLine(const string &str, const string &delimiter) {
     vector<string> result;
 
     string::size_type currentPosition = str.find(delimiter);;
@@ -39,10 +39,10 @@ vector<string> splitLine(const string& str, const string& delimiter) {
     return result;
 }
 
-vector<Property*> createVectorWithProperties(vector<string> fieldNames) {
-    vector<Property*> result;
+vector<Property *> createVectorWithProperties(vector<string> fieldNames) {
+    vector<Property *> result;
 
-    for (const auto& fieldName : fieldNames) {
+    for (const auto &fieldName: fieldNames) {
         auto *property = new Property(fieldName, {});
 
         result.push_back(property);
@@ -51,7 +51,7 @@ vector<Property*> createVectorWithProperties(vector<string> fieldNames) {
     return result;
 }
 
-vector<string> getColumnNames(const string& filePath) {
+vector<string> getColumnNames(const string &filePath) {
     ifstream fileReader(filePath);
 
     if (!fileReader.is_open()) return *(new vector<string>);
@@ -64,14 +64,14 @@ vector<string> getColumnNames(const string& filePath) {
     return splitLine(firstLine, CSV_DELIMITER);
 }
 
-vector<Property*> CsvFileService::getAllLines() {
+vector<Property *> CsvFileService::getAllLines() {
     ifstream fileReader(filePath);
 
     string lineWithColumnNames;
     getline(fileReader, lineWithColumnNames);
 
     vector<string> fieldNames = splitLine(lineWithColumnNames, CSV_DELIMITER);
-    vector<Property*> allLines = createVectorWithProperties(fieldNames);
+    vector<Property *> allLines = createVectorWithProperties(fieldNames);
 
     string line;
     while (getline(fileReader, line)) {

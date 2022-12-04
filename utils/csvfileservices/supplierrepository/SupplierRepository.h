@@ -12,6 +12,8 @@ public:
     explicit SupplierRepository(string filePath);
 
     vector<Supplier *> getAll();
+
+    void write(Supplier *supplier);
 };
 
 

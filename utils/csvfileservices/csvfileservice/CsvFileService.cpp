@@ -60,6 +60,8 @@ vector<string> getColumnNames(const string& filePath) {
     string firstLine;
     getline(fileReader, firstLine);
 
+    if (firstLine.empty()) return {};
+
     return splitLine(firstLine, CSV_DELIMITER);
 }
 

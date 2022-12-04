@@ -106,7 +106,7 @@ void CsvFileService::write(vector<Property *> properties) {
 
             fileWriter << property->getFieldName();
 
-            if (i + 1 < properties.size()) fileWriter << CSV_DELIMITER;
+            columnNames.push_back(property->getFieldName());
         }
     }
 

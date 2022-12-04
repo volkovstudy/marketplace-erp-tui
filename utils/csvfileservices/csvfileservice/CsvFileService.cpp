@@ -42,8 +42,7 @@ vector<string> splitLine(const string& str, const string& delimiter) {
 vector<Property*> createVectorWithProperties(vector<string> fieldNames) {
     vector<Property*> result;
 
-    for (int i = 0; i < fieldNames.size(); ++i) {
-        string fieldName = fieldNames.at(i);
+    for (const auto& fieldName : fieldNames) {
         Property *property = new Property(fieldName, {});
 
         result.push_back(property);

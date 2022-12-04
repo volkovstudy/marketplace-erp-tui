@@ -117,7 +117,7 @@ void CsvFileService::write(vector<Property *> properties) {
         }
 
         // Finding minimal amount of values (lines) in properties
-        int minAmountOfValues = 0;
+        int minAmountOfValues = (int) properties.at(0)->getValues().size();
         for (Property *property: properties) {
             int amountOfValues = (int) property->getValues().size();
             minAmountOfValues = min(minAmountOfValues, amountOfValues);

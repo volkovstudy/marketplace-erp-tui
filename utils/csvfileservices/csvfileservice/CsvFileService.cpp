@@ -43,7 +43,7 @@ vector<Property*> createVectorWithProperties(vector<string> fieldNames) {
     vector<Property*> result;
 
     for (const auto& fieldName : fieldNames) {
-        Property *property = new Property(fieldName, {});
+        auto *property = new Property(fieldName, {});
 
         result.push_back(property);
     }

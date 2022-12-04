@@ -1,4 +1,3 @@
-#include <iostream>
 #include <utility>
 
 #include "CsvFileServiceTest.h"
@@ -10,9 +9,7 @@ void testCsvFileService(string filePath);
 void testSupplierRepository(string filePath);
 
 int main() {
-    string filePath = "test.csv";
-    cout << "Writing properties to " << filePath << endl;
-    testCsvFileService(filePath);
+    testCsvFileService("csv-file-service-test.csv");
 
     testSupplierRepository("supplier-test.csv");
 

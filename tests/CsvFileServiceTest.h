@@ -31,6 +31,8 @@ private:
 
 public:
     static void shouldWritePropertiesToFile(string filePath) {
+        cout << "Writing properties to " << filePath << endl;
+
         CsvFileService csvFileService(std::move(filePath));
 
         vector<Property *> properties = givenThreeProperties();

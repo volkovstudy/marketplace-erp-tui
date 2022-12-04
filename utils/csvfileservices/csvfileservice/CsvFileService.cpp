@@ -106,31 +106,32 @@ void CsvFileService::write(vector<Property *> properties) {
 
             if (i + 1 < properties.size()) fileWriter << CSV_DELIMITER;
         }
-    } else {
-        // Sorting properties by their order in file
-        vector<Property *> sortedProperties;
-        for (Property *property: properties) {
-            for (const string &columnName: columnNames) {
-                if (property->getFieldName() == columnName)
-                    sortedProperties.push_back(property);
-            }
+    }
+
+    // Sorting properties by their order in file
+    vector<Property *> sortedProperties;
+    for (Property *property: properties) {
+        for (const string &columnName: columnNames) {
+            if (property->getFieldName() == columnName)
+                sortedProperties.push_back(property);
+        }
+    }
+
+    // Finding minimal amount of values (lines) in properties
+    int minAmountOfValues = (int) properties.at(0)->getValues().size();
+    for (Property *property: properties) {
+        int amountOfValues = (int) property->getValues().size();
+        minAmountOfValues = min(minAmountOfValues, amountOfValues);
+    }
+
+    for (int lineNumber = 0; lineNumber < minAmountOfValues; ++lineNumber) {
+        for (int i = 0; i < sortedProperties.size(); ++i) {
+            Property *property = sortedProperties.at(i);
+            fileWriter << property->getValues().at(lineNumber);
+
+            if (i + 1 < sortedProperties.size()) fileWriter << CSV_DELIMITER;
         }
 
-        // Finding minimal amount of values (lines) in properties
-        int minAmountOfValues = (int) properties.at(0)->getValues().size();
-        for (Property *property: properties) {
-            int amountOfValues = (int) property->getValues().size();
-            minAmountOfValues = min(minAmountOfValues, amountOfValues);
-        }
-
-        for (int lineNumber = 0; lineNumber < minAmountOfValues; ++lineNumber) {
-            for (int i = 0; i < sortedProperties.size(); ++i) {
-                Property *property = sortedProperties.at(i);
-                fileWriter << property->getValues().at(lineNumber);
-
-                if (i + 1 < sortedProperties.size()) fileWriter << CSV_DELIMITER;
-            }
-            fileWriter << LINE_BREAKER;
-        }
+        fileWriter << LINE_BREAKER;
     }
 }

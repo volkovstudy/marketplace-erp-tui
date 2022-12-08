@@ -9,7 +9,6 @@ private:
         vector<string> names;
         names.emplace_back("Tom");
         names.emplace_back("Alex");
-        names.emplace_back("Bob");
         auto *name = new Property("name", names);
 
         vector<string> surnames;
@@ -21,7 +20,6 @@ private:
         vector<string> ages;
         ages.emplace_back("20");
         ages.emplace_back("30");
-        ages.emplace_back("40");
         auto *age = new Property("age", ages);
 
         vector<Property *> properties;

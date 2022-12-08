@@ -64,6 +64,15 @@ vector<string> getColumnNamesFromString(const string &filePath) {
     return splitLine(firstLine, CSV_DELIMITER);
 }
 
+vector<string> getColumnNamesFromProperties(const vector<Property *>& properties) {
+    vector<string> columnNames;
+
+    for (Property *property : properties)
+        columnNames.push_back(property->getFieldName());
+
+    return columnNames;
+}
+
 vector<Property *> CsvFileService::getAllLines() {
     ifstream fileReader(filePath);
 

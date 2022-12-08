@@ -120,7 +120,7 @@ void CsvFileService::write(vector<Property *> properties) {
 
     if (!fileWriter.is_open()) return;
 
-    vector<string> columnNames = getColumnNames(filePath);
+    vector<string> columnNames = getColumnNamesFromString(filePath);
 
     if (columnNames.empty()) {
         columnNames = getColumnNamesFromProperties(properties);

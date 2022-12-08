@@ -6,6 +6,7 @@
 
 #define CSV_DELIMITER ","
 #define LINE_BREAKER "\n"
+#define EMPTY_VALUE ""
 
 using namespace std;
 
@@ -136,17 +137,22 @@ void CsvFileService::write(vector<Property *> properties) {
         }
     }
 
-    // Finding minimal amount of values (lines) in properties
-    int minAmountOfValues = (int) properties.at(0)->getValues().size();
+    // Finding maximal amount of values (lines) in properties
+    int maxAmountOfValues = (int) properties.at(0)->getValues().size();
     for (Property *property: properties) {
         int amountOfValues = (int) property->getValues().size();
-        minAmountOfValues = min(minAmountOfValues, amountOfValues);
+        maxAmountOfValues = max(maxAmountOfValues, amountOfValues);
     }
 
-    for (int lineNumber = 0; lineNumber < minAmountOfValues; ++lineNumber) {
+    for (int lineNumber = 0; lineNumber < maxAmountOfValues; ++lineNumber) {
         for (int i = 0; i < sortedProperties.size(); ++i) {
             Property *property = sortedProperties.at(i);
-            fileWriter << property->getValues().at(lineNumber);
+
+            vector<string> values = property->getValues();
+            if (lineNumber < values.size())
+                fileWriter << property->getValues().at(lineNumber);
+            else
+                fileWriter << EMPTY_VALUE;
 
             if (i + 1 < sortedProperties.size()) fileWriter << CSV_DELIMITER;
         }

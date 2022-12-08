@@ -39,7 +39,7 @@ vector<string> splitLine(const string &str, const string &delimiter) {
     return result;
 }
 
-vector<Property *> createVectorWithProperties(vector<string> fieldNames) {
+vector<Property *> createVectorWithProperties(const vector<string>& fieldNames) {
     vector<Property *> result;
 
     for (const auto &fieldName: fieldNames) {

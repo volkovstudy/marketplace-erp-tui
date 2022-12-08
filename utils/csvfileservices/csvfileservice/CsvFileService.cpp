@@ -40,7 +40,7 @@ vector<string> splitLine(const string &str, const string &delimiter) {
     return result;
 }
 
-vector<Property *> createVectorWithProperties(const vector<string>& fieldNames) {
+vector<Property *> createVectorWithProperties(const vector<string> &fieldNames) {
     vector<Property *> result;
 
     for (const auto &fieldName: fieldNames) {
@@ -65,10 +65,10 @@ vector<string> getColumnNamesFromString(const string &filePath) {
     return splitLine(firstLine, CSV_DELIMITER);
 }
 
-vector<string> getColumnNamesFromProperties(const vector<Property *>& properties) {
+vector<string> getColumnNamesFromProperties(const vector<Property *> &properties) {
     vector<string> columnNames;
 
-    for (Property *property : properties)
+    for (Property *property: properties)
         columnNames.push_back(property->getFieldName());
 
     return columnNames;

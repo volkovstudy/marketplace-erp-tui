@@ -101,6 +101,20 @@ vector<Property *> CsvFileService::getAllLines() {
     return allLines;
 }
 
+vector<string> writeColumnNamesToFile(ofstream &fileWriter, vector<string> columnNames) {
+    for (int i = 0; i < columnNames.size(); ++i) {
+        string columnName = columnNames.at(i);
+
+        fileWriter << columnName;
+        bool hasNext = i + 1 < columnNames.size();
+        if (hasNext) {
+            fileWriter << CSV_DELIMITER;
+        } else {
+            fileWriter << LINE_BREAKER;
+        }
+    }
+}
+
 void CsvFileService::write(vector<Property *> properties) {
     ofstream fileWriter(filePath, ios::app);
 

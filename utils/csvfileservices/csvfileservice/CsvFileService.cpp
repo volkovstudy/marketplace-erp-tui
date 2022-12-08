@@ -123,18 +123,8 @@ void CsvFileService::write(vector<Property *> properties) {
     vector<string> columnNames = getColumnNames(filePath);
 
     if (columnNames.empty()) {
-        for (int i = 0; i < properties.size(); ++i) {
-            Property *property = properties.at(i);
-
-            fileWriter << property->getFieldName();
-            if (i + 1 < properties.size()) {
-                fileWriter << CSV_DELIMITER;
-            } else {
-                fileWriter << LINE_BREAKER;
-            }
-
-            columnNames.push_back(property->getFieldName());
-        }
+        columnNames = getColumnNamesFromProperties(properties);
+        writeColumnNamesToFile(fileWriter, columnNames);
     }
 
     // Sorting properties by their order in file

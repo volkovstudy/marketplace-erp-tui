@@ -51,7 +51,7 @@ vector<Property *> createVectorWithProperties(const vector<string>& fieldNames) 
     return result;
 }
 
-vector<string> getColumnNames(const string &filePath) {
+vector<string> getColumnNamesFromString(const string &filePath) {
     ifstream fileReader(filePath);
 
     if (!fileReader.is_open()) return *(new vector<string>);

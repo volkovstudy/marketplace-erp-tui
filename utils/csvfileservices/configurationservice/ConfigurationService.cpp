@@ -1,5 +1,4 @@
 #include "ConfigurationService.h"
-
 #include <utility>
 
 #define currentIdColumn "current_id"

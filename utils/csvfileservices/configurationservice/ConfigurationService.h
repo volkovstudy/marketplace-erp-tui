@@ -15,9 +15,7 @@ private:
 public:
     static ConfigurationService *getInstance(string filePath);
 
-    static void createInstance(string filePath) {
-        instance = new ConfigurationService(std::move(filePath));
-    }
+    int getNextId();
 };
 
 

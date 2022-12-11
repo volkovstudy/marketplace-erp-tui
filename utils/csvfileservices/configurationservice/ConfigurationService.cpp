@@ -20,3 +20,10 @@ ConfigurationService *ConfigurationService::getInstance(string filePath) {
         instance = new ConfigurationService(std::move(filePath));
     return instance;
 }
+
+int ConfigurationService::getNextId() {
+    int nextId = currentId + 1;
+    currentId = nextId;
+
+    return nextId;
+}

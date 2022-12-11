@@ -23,10 +23,12 @@ vector<Supplier *> SupplierRepository::getAll() {
         for (Property *property: allLines) {
             if (property->getValues().size() < maxAmountOfLines) break;
 
+            string value = property->getValues().at(i);
+
             if (property->getFieldName() == "id")
-                id = stoi(property->getValues().at(i));
+                id = stoi(value);
             if (property->getFieldName() == "companyName")
-                companyName = property->getValues().at(i);
+                companyName = value;
         }
 
         auto *supplier = new Supplier(id, companyName);

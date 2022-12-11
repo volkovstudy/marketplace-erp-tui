@@ -16,6 +16,8 @@ public:
     static ConfigurationService *getInstance(string filePath);
 
     int getNextId();
+
+    void save();
 };
 
 

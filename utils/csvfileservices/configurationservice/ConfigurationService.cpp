@@ -2,13 +2,15 @@
 
 #include <utility>
 
+#define currentIdColumn "current_id"
+
 ConfigurationService *instance;
 
 ConfigurationService::ConfigurationService(string filePath) {
     csvFileService = new CsvFileService(std::move(filePath));
 
     for (Property *property: csvFileService->getAllLines()) {
-        if (property->getFieldName() == "current_id") {
+        if (property->getFieldName() == currentIdColumn) {
             currentId = stoi(property->getValues().at(0));
             break;
         }
@@ -26,4 +28,10 @@ int ConfigurationService::getNextId() {
     currentId = nextId;
 
     return nextId;
+}
+
+void ConfigurationService::save() {
+    auto *property = new Property(currentIdColumn, {to_string(currentId)});
+
+    csvFileService->eraseAndWrite({property});
 }

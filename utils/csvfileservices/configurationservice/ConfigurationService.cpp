@@ -2,6 +2,8 @@
 
 #include <utility>
 
+ConfigurationService *instance;
+
 ConfigurationService::ConfigurationService(string filePath) {
     csvFileService = new CsvFileService(std::move(filePath));
 
@@ -11,4 +13,10 @@ ConfigurationService::ConfigurationService(string filePath) {
             break;
         }
     }
+}
+
+ConfigurationService *ConfigurationService::getInstance(string filePath) {
+    if (instance == nullptr)
+        instance = new ConfigurationService(std::move(filePath));
+    return instance;
 }

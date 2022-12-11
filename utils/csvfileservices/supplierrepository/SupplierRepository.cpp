@@ -7,7 +7,7 @@ SupplierRepository::SupplierRepository(string filePath) {
 }
 
 vector<Supplier *> SupplierRepository::getAll() {
-    vector<Supplier *> suppliers;
+    vector<Supplier *> result;
     vector<Property *> allLines = csvFileService->getAllLines();
 
     int maxAmountOfLines = 0;
@@ -32,10 +32,10 @@ vector<Supplier *> SupplierRepository::getAll() {
         }
 
         auto *supplier = new Supplier(id, companyName);
-        suppliers.push_back(supplier);
+        result.push_back(supplier);
     }
 
-    return suppliers;
+    return result;
 }
 
 void SupplierRepository::write(Supplier *supplier) {

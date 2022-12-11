@@ -10,17 +10,19 @@ vector<Supplier *> SupplierRepository::getAll() {
     vector<Supplier *> suppliers;
     vector<Property *> allLines = csvFileService->getAllLines();
 
-    int minAmountOfLines = 0;
+    int maxAmountOfLines = 0;
     for (Property *property: allLines) {
         int amountOfLines = (int) property->getValues().size();
-        minAmountOfLines = min(minAmountOfLines, amountOfLines);
+        maxAmountOfLines = max(maxAmountOfLines, amountOfLines);
     }
 
-    for (int i = 0; i < minAmountOfLines; ++i) {
-        int id;
+    for (int i = 0; i < maxAmountOfLines; ++i) {
+        int id = 0;
         string companyName;
 
         for (Property *property: allLines) {
+            if (property->getValues().size() < maxAmountOfLines) break;
+
             if (property->getFieldName() == "id")
                 id = stoi(property->getValues().at(i));
             if (property->getFieldName() == "companyName")

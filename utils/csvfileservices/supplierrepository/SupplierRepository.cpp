@@ -7,6 +7,8 @@ SupplierRepository::SupplierRepository(string filePath) {
 }
 
 vector<Supplier *> SupplierRepository::getAll() {
+    if (!suppliers.empty()) return suppliers;
+
     vector<Supplier *> result;
     vector<Property *> allLines = csvFileService->getAllLines();
 
@@ -35,7 +37,9 @@ vector<Supplier *> SupplierRepository::getAll() {
         result.push_back(supplier);
     }
 
-    return result;
+    suppliers = result;
+
+    return suppliers;
 }
 
 void SupplierRepository::write(Supplier *supplier) {

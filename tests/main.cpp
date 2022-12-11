@@ -13,7 +13,8 @@ using namespace std;
 void deleteFiles();
 
 void testCsvFileService(string filePath);
-void testSupplierRepository(string filePath);
+
+void testSupplierRepository(const string &filePath);
 
 void testConfigurationService(const string &filePath);
 
@@ -39,8 +40,9 @@ void testCsvFileService(string filePath) {
     CsvFileServiceTest::shouldWritePropertiesToFile(std::move(filePath));
 }
 
-void testSupplierRepository(string filePath) {
-    SupplierRepositoryTest::shouldWriteSupplierToFile(std::move(filePath));
+void testSupplierRepository(const string &filePath) {
+    SupplierRepositoryTest::shouldWriteSupplierToFile(filePath);
+    SupplierRepositoryTest::shouldGetAllSuppliersFromFile(filePath);
 }
 
 void testConfigurationService(const string &filePath) {

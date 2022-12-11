@@ -2,6 +2,8 @@
 
 #include <utility>
 
+CsvFileService *csvFileService;
+
 SupplierRepository::SupplierRepository(string filePath) {
     csvFileService = new CsvFileService(std::move(filePath));
 }

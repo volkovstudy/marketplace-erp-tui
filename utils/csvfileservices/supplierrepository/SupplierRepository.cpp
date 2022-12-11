@@ -48,3 +48,9 @@ void SupplierRepository::write(Supplier *supplier) {
 
     csvFileService->write({id, companyName});
 }
+
+void SupplierRepository::save(Supplier *supplier) {
+    suppliers.push_back(supplier);
+
+    write(supplier);
+}

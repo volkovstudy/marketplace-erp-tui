@@ -44,7 +44,7 @@ vector<Supplier *> SupplierRepository::getAll() {
     return suppliers;
 }
 
-void SupplierRepository::write(Supplier *supplier) {
+void write(Supplier *supplier) {
     auto *id = new Property("id", {to_string(supplier->getId())});
     auto *companyName = new Property("companyName", {supplier->getCompanyName()});
 

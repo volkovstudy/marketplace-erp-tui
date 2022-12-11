@@ -13,8 +13,6 @@ public:
 
     vector<Supplier *> getAll();
 
-    void write(Supplier *supplier);
-
     void save(Supplier *supplier);
 };
 

@@ -12,12 +12,12 @@ using namespace std;
 class SupplierRepositoryTest {
 public:
     static void shouldWriteSupplierToFile(string filePath) {
-        cout << "Writing Supplier to " << filePath << endl;
+        cout << "Saving & writing Supplier to " << filePath << endl;
 
         SupplierRepository supplierRepository(std::move(filePath));
         auto *supplier = new Supplier(1, "test company");
 
-        supplierRepository.write(supplier);
+        supplierRepository.save(supplier);
     }
 
     static void shouldGetAllSuppliersFromFile(string filePath) {

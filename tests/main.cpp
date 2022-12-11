@@ -3,17 +3,29 @@
 #include "CsvFileServiceTest.h"
 #include "SupplierRepositoryTest.h"
 
+#define fileForCsvFileServiceTest "tests/csv-file-service-test.csv"
+#define fileForSupplierRepositoryTest "tests/supplier-test.csv"
+
 using namespace std;
+
+void deleteFiles();
 
 void testCsvFileService(string filePath);
 void testSupplierRepository(string filePath);
 
 int main() {
-    testCsvFileService("csv-file-service-test.csv");
+    deleteFiles();
 
-    testSupplierRepository("supplier-test.csv");
+    testCsvFileService(fileForCsvFileServiceTest);
+
+    testSupplierRepository(fileForSupplierRepositoryTest);
 
     return 0;
+}
+
+void deleteFiles() {
+    remove(fileForCsvFileServiceTest);
+    remove(fileForSupplierRepositoryTest);
 }
 
 void testCsvFileService(string filePath) {

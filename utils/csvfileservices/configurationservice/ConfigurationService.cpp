@@ -2,11 +2,12 @@
 
 #include <utility>
 
-ConfigurationService::ConfigurationService(string filePath)
-        : csvFileService(new CsvFileService(std::move(filePath))) {
+ConfigurationService::ConfigurationService(string filePath) {
+    csvFileService = new CsvFileService(std::move(filePath));
+
     for (Property *property: csvFileService->getAllLines()) {
-        if (property->getFieldName() == "id") {
-            nextId = stoi(property->getValues().at(0));
+        if (property->getFieldName() == "current_id") {
+            currentId = stoi(property->getValues().at(0));
             break;
         }
     }

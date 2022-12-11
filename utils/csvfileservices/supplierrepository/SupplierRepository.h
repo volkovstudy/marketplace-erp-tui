@@ -8,6 +8,8 @@
 class SupplierRepository {
 private:
     CsvFileService *csvFileService;
+
+    vector<Supplier *> suppliers{};
 public:
     explicit SupplierRepository(string filePath);
 

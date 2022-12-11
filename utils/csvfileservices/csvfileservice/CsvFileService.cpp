@@ -116,8 +116,8 @@ vector<string> writeColumnNamesToFile(ofstream &fileWriter, vector<string> colum
     }
 }
 
-void CsvFileService::write(vector<Property *> properties) {
-    ofstream fileWriter(filePath, ios::app);
+void writeInSpecificMode(const string &filePath, ios_base::openmode mode, vector<Property *> properties) {
+    ofstream fileWriter(filePath, mode);
 
     if (!fileWriter.is_open()) return;
 
@@ -159,4 +159,8 @@ void CsvFileService::write(vector<Property *> properties) {
 
         fileWriter << LINE_BREAKER;
     }
+}
+
+void CsvFileService::write(vector<Property *> properties) {
+    writeInSpecificMode(filePath, ios::app, std::move(properties));
 }

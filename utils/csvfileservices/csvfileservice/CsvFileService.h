@@ -16,7 +16,10 @@ public:
 
     void write(vector<Property *> properties);
 
+    void eraseAndWrite(vector<Property *> properties);
+
     const string &getFilePath() const;
+
     void setFilePath(const string &newFilePath);
 };
 

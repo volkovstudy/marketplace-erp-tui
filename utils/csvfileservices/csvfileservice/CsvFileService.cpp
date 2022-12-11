@@ -164,3 +164,7 @@ void writeInSpecificMode(const string &filePath, ios_base::openmode mode, vector
 void CsvFileService::write(vector<Property *> properties) {
     writeInSpecificMode(filePath, ios::app, std::move(properties));
 }
+
+void CsvFileService::eraseAndWrite(vector<Property *> properties) {
+    writeInSpecificMode(filePath, ios::ate, std::move(properties));
+}

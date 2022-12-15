@@ -5,14 +5,17 @@
 #include "../../../public-entities/order/Order.h"
 #include "../../csvfileservices/csvfileservice/CsvFileService.h"
 #include "../client-repository/ClientRepository.h"
+#include "../products-repository/ProductsRepository.h"
 
 class OrderRepository {
 private:
     vector<Order *> orders{};
     CsvFileService *csvFileService;
     ClientRepository *clientRepository;
+    ProductsRepository *productsRepository;
 public:
-    explicit OrderRepository(string filePath, ClientRepository *clientRepository);
+    explicit OrderRepository(string filePath, ClientRepository *clientRepository,
+                             ProductsRepository *productsRepository);
 
     vector<Order *> getAll();
 

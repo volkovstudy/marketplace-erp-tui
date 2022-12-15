@@ -2,9 +2,9 @@
 
 int ORDER_COUNT;
 
-Order::Order(Client *client, const map<Product, int> &products) :
-                                        client(client),
-                                        products(products) {
+Order::Order(Client *client, const map<string, int> &products) :
+        client(client),
+        products(products) {
     id = ++ORDER_COUNT;
 }
 
@@ -24,10 +24,10 @@ void Order::setClient(Client *client) {
     Order::client = client;
 }
 
-const map<Product, int> &Order::getProducts() const {
+const map<string, int> &Order::getProducts() const {
     return products;
 }
 
-void Order::setProducts(const map<Product, int> &products) {
+void Order::setProducts(const map<string, int> &products) {
     Order::products = products;
 }

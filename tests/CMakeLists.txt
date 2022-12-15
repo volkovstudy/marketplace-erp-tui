@@ -11,7 +11,6 @@ add_executable(marketplace-erp-tui-tests
         ../public-entities/supplier/Supplier.h ../public-entities/supplier/Supplier.cpp
         ../public-entities/client/Client.cpp ../public-entities/client/Client.h
         ../public-entities/order/Order.cpp ../public-entities/order/Order.h
-        ../public-entities/product/Product.cpp ../public-entities/product/Product.h
         ../public-entities/category/Category.cpp ../public-entities/category/Category.h
         ../utils/property/Property.cpp ../utils/property/Property.h
         ../utils/csvfileservices/csvfileservice/CsvFileService.cpp ../utils/csvfileservices/csvfileservice/CsvFileService.h

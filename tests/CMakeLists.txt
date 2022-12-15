@@ -17,4 +17,5 @@ add_executable(marketplace-erp-tui-tests
         ../utils/repositories/supplier-repository/SupplierRepository.cpp ../utils/repositories/supplier-repository/SupplierRepository.h
         ../utils/csvfileservices/configurationservice/ConfigurationService.cpp ../utils/csvfileservices/configurationservice/ConfigurationService.h
         ../utils/repositories/client-repository/ClientRepository.cpp ../utils/repositories/client-repository/ClientRepository.h
+        ../utils/repositories/order-repository/OrderRepository.cpp ../utils/repositories/order-repository/OrderRepository.h
         )

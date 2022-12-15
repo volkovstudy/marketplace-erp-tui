@@ -47,3 +47,18 @@ vector<Order *> OrderRepository::getAll() {
 
     return orders;
 }
+
+void write(Order *order, CsvFileService *csvFileService, ProductsRepository *productsRepository) {
+    auto *id = new Property("id", {to_string(order->getId())});
+    auto *clientId = new Property("client_id", {to_string(order->getClient()->getId())});
+
+    csvFileService->write({id, clientId});
+
+    productsRepository->save(order->getProducts(), order->getId());
+}
+
+void OrderRepository::save(Order *order) {
+    orders.push_back(order);
+
+    write(order, csvFileService, productsRepository);
+}

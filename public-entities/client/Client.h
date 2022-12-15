@@ -14,6 +14,8 @@ private:
 public:
     Client(string fullName, string address, string email);
 
+    Client(int id, string fullName, string address, string email);
+
     int getId() const;
     void setId(int id);
 

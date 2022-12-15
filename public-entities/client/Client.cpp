@@ -5,11 +5,15 @@
 int CLIENT_AMOUNT;
 
 Client::Client(string fullName, string address, string email) :
-                                            fullName(std::move(fullName)),
-                                            address(std::move(address)),
-                                            email(std::move(email)) {
+        fullName(std::move(fullName)),
+        address(std::move(address)),
+        email(std::move(email)) {
     Client::id = ++CLIENT_AMOUNT;
 }
+
+Client::Client(int id, string fullName, string address, string email) : id(id), fullName(std::move(fullName)),
+                                                                        address(std::move(address)),
+                                                                        email(std::move(email)) {}
 
 int Client::getId() const {
     return id;

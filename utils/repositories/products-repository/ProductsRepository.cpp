@@ -34,7 +34,7 @@ map<string, int> ProductsRepository::getForOrderId(int id) {
     if (!areLinesFoundForTheId) return {};
 
     for (int i = 0; i < maxAmountOfLines; ++i) {
-        if (stoi(orderIdColumn->getValues().at(i)) != id) break;
+        if (stoi(orderIdColumn->getValues().at(i)) != id) continue;
 
         string name;
         int amount;

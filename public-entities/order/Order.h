@@ -13,6 +13,8 @@ private:
 public:
     Order(Client *client, const map<string, int> &products);
 
+    Order(int id, Client *client, const map<string, int> &products);
+
     int getId() const;
 
     void setId(int id);

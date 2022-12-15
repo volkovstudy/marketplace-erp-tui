@@ -8,6 +8,11 @@ Order::Order(Client *client, const map<string, int> &products) :
     id = ++ORDER_COUNT;
 }
 
+Order::Order(int id, Client *client, const map<string, int> &products) :
+        id(id),
+        client(client),
+        products(products) {}
+
 int Order::getId() const {
     return id;
 }

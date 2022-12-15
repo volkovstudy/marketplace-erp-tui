@@ -61,3 +61,14 @@ void ClientRepository::save(Client *client) {
 
     write(client);
 }
+
+Client *ClientRepository::getById(int id) {
+    if (clients.empty()) getAll();
+
+    for (Client *client: clients) {
+        if (client->getId() == id)
+            return client;
+    }
+
+    return nullptr;
+}

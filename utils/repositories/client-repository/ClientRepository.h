@@ -13,6 +13,8 @@ public:
 
     vector<Client *> getAll();
 
+    Client *getById(int id);
+
     void save(Client *client);
 };
 

@@ -51,7 +51,7 @@ vector<Client *> ClientRepository::getAll() {
 void write(Client *client) {
     auto *id = new Property("id", {to_string(client->getId())});
     auto *fullName = new Property("fullName", {client->getFullName()});
-    auto *email = new Property("email", {client->getFullName()});
+    auto *email = new Property("email", {client->getEmail()});
 
     fileService->write({id, fullName, email});
 }

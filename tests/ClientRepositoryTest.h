@@ -25,6 +25,16 @@ public:
 
         assert(!suppliers.empty());
     }
+
+    static void shouldGetClientByIdOne(string filePath) {
+        cout << "Getting Client by id 1 from " << filePath << endl;
+
+        ClientRepository clientRepository(std::move(filePath));
+
+        Client *client = clientRepository.getById(1);
+
+        assert(client != nullptr);
+    }
 };
 
 #endif

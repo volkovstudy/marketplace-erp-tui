@@ -61,4 +61,5 @@ void testConfigurationService(const string &filePath) {
 void testClientRepository(const string &filePath) {
     ClientRepositoryTest::shouldWriteClientToFile(filePath);
     ClientRepositoryTest::shouldGetAllClientsFromFile(filePath);
+    ClientRepositoryTest::shouldGetClientByIdOne(filePath);
 }

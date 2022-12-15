@@ -5,12 +5,14 @@
 #include "ConfigurationServiceTest.h"
 #include "ClientRepositoryTest.h"
 #include "ProductsRepositoryTest.h"
+#include "OrderRepositoryTest.h"
 
 #define fileForCsvFileServiceTest "tests/csv-file-service-test.csv"
 #define fileForSupplierRepositoryTest "tests/supplier-test.csv"
 #define fileForConfigurationServiceTest "tests/configuration-test.csv"
 #define fileForClientRepositoryTest "tests/clients-test.csv"
 #define fileForProductsRepositoryTest "tests/products-test.csv"
+#define fileForOrderRepositoryTest "tests/orders-test.csv"
 
 using namespace std;
 
@@ -26,6 +28,9 @@ void testClientRepository(const string &filePath);
 
 void testProductsRepository(const string &filePath);
 
+void testOrderRepository(const string &filePathForOrders, const string &filePathForClients,
+                         const string &filePathForProducts);
+
 int main() {
     deleteFiles();
 
@@ -39,6 +44,8 @@ int main() {
 
     testProductsRepository(fileForProductsRepositoryTest);
 
+    testOrderRepository(fileForOrderRepositoryTest, fileForClientRepositoryTest, fileForProductsRepositoryTest);
+
     return 0;
 }
 
@@ -48,6 +55,7 @@ void deleteFiles() {
     remove(fileForConfigurationServiceTest);
     remove(fileForClientRepositoryTest);
     remove(fileForProductsRepositoryTest);
+    remove(fileForOrderRepositoryTest);
 }
 
 void testCsvFileService(string filePath) {
@@ -74,4 +82,10 @@ void testClientRepository(const string &filePath) {
 void testProductsRepository(const string &filePath) {
     ProductsRepositoryTest::shouldWriteProductsToFile(filePath);
     ProductsRepositoryTest::shouldGetAllProductsForSpecificOrderFromFile(filePath);
+}
+
+void testOrderRepository(const string &filePathForOrders, const string &filePathForClients,
+                         const string &filePathForProducts) {
+    OrderRepositoryTest::shouldWriteOrderToFile(filePathForOrders, filePathForClients, filePathForProducts);
+    OrderRepositoryTest::shouldGetAllOrdersFromFile(filePathForOrders, filePathForClients, filePathForProducts);
 }

@@ -10,6 +10,7 @@ add_executable(marketplace-erp-tui-tests
         ConfigurationServiceTest.h
         ClientRepositoryTest.h
         ProductsRepositoryTest.h
+        OrderRepositoryTest.h
         ../public-entities/supplier/Supplier.h ../public-entities/supplier/Supplier.cpp
         ../public-entities/client/Client.cpp ../public-entities/client/Client.h
         ../public-entities/order/Order.cpp ../public-entities/order/Order.h

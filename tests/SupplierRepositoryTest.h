@@ -5,7 +5,7 @@
 #include <utility>
 #include <iostream>
 
-#include "../utils/csvfileservices/supplierrepository/SupplierRepository.h"
+#include "../utils/repositories/supplier-repository/SupplierRepository.h"
 
 using namespace std;
 

@@ -2,7 +2,7 @@
 #define MARKETPLACE_ERP_TUI_CSVFILESERVICE_H
 
 #include <string>
-#include "../../property/Property.h"
+#include "../../../models/property/Property.h"
 
 using namespace std;
 

@@ -13,8 +13,8 @@ add_executable(marketplace-erp-tui-tests
         ../models/client/Client.cpp ../models/client/Client.h
         ../models/order/Order.cpp ../models/order/Order.h
         ../models/property/Property.cpp ../models/property/Property.h
-        ../utils/csvfileservices/csvfileservice/CsvFileService.cpp ../utils/csvfileservices/csvfileservice/CsvFileService.h
-        ../utils/csvfileservices/configurationservice/ConfigurationService.cpp ../utils/csvfileservices/configurationservice/ConfigurationService.h
+        ../csvfileservices/csvfileservice/CsvFileService.cpp ../csvfileservices/csvfileservice/CsvFileService.h
+        ../csvfileservices/configurationservice/ConfigurationService.cpp ../csvfileservices/configurationservice/ConfigurationService.h
         ../repositories/client-repository/ClientRepository.cpp ../repositories/client-repository/ClientRepository.h
         ../repositories/order-repository/OrderRepository.cpp ../repositories/order-repository/OrderRepository.h
         ../repositories/products-repository/ProductsRepository.cpp ../repositories/products-repository/ProductsRepository.h

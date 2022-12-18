@@ -7,13 +7,13 @@
 
 class ProductsRepository {
 private:
-    CsvFileService *csvFileService;
+    CsvFileService* csvFileService;
 public:
     explicit ProductsRepository(string filePath);
 
     map<string, int> getForOrderId(int id);
 
-    void save(const map<string, int> &products, int orderId);
+    void save(const map<string, int>& products, int orderId);
 };
 
 

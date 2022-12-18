@@ -16,13 +16,16 @@ public:
     Client(int id, string fullName, string email);
 
     int getId() const;
+
     void setId(int id);
 
-    const string &getFullName() const;
-    void setFullName(const string &fullName);
+    const string& getFullName() const;
 
-    const string &getEmail() const;
-    void setEmail(const string &email);
+    void setFullName(const string& fullName);
+
+    const string& getEmail() const;
+
+    void setEmail(const string& email);
 };
 
 

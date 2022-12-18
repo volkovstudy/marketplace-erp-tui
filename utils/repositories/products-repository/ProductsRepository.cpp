@@ -8,19 +8,19 @@ ProductsRepository::ProductsRepository(string filePath) {
 
 map<string, int> ProductsRepository::getForOrderId(int id) {
     map<string, int> result;
-    vector<Property *> allLines = csvFileService->getAllLines();
+    vector<Property*> allLines = csvFileService->getAllLines();
 
     int maxAmountOfLines = 0;
-    for (Property *property: allLines) {
+    for (Property* property: allLines) {
         int amountOfLines = (int) property->getValues().size();
         maxAmountOfLines = max(maxAmountOfLines, amountOfLines);
     }
 
     bool areLinesFoundForTheId = false;
-    Property *orderIdColumn;
-    for (Property *property: allLines) {
+    Property* orderIdColumn;
+    for (Property* property: allLines) {
         if (property->getFieldName() == "order_id") {
-            for (const string &value: property->getValues()) {
+            for (const string& value: property->getValues()) {
                 if (stoi(value) == id) {
                     areLinesFoundForTheId = true;
                     orderIdColumn = property;
@@ -39,7 +39,7 @@ map<string, int> ProductsRepository::getForOrderId(int id) {
         string name;
         int amount;
 
-        for (Property *property: allLines) {
+        for (Property* property: allLines) {
             if (property->getValues().size() < maxAmountOfLines) break;
 
             string value = property->getValues().at(i);
@@ -58,13 +58,13 @@ map<string, int> ProductsRepository::getForOrderId(int id) {
     return result;
 }
 
-void ProductsRepository::save(const map<string, int> &products, int orderId) {
+void ProductsRepository::save(const map<string, int>& products, int orderId) {
     string orderIdString = to_string(orderId);
 
-    for (auto &product: products) {
-        auto *name = new Property("name", {product.first});
-        auto *amount = new Property("amount", {to_string(product.second)});
-        auto *orderIdProperty = new Property("order_id", {orderIdString});
+    for (auto& product: products) {
+        auto* name = new Property("name", {product.first});
+        auto* amount = new Property("amount", {to_string(product.second)});
+        auto* orderIdProperty = new Property("order_id", {orderIdString});
 
         csvFileService->write({name, amount, orderIdProperty});
     }

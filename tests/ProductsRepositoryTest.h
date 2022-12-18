@@ -9,7 +9,7 @@ using namespace std;
 
 class ProductsRepositoryTest {
 public:
-    static void shouldWriteProductsToFile(const string &filePath) {
+    static void shouldWriteProductsToFile(const string& filePath) {
         cout << "Saving & writing pair<string, int> to " << filePath << endl;
 
         ProductsRepository productsRepository(filePath);
@@ -21,7 +21,7 @@ public:
         productsRepository.save(products, 1);
     }
 
-    static void shouldGetAllProductsForSpecificOrderFromFile(const string &filePath) {
+    static void shouldGetAllProductsForSpecificOrderFromFile(const string& filePath) {
         cout << "Getting products for order with id=1 from " << filePath << endl;
 
         ProductsRepository productsRepository(filePath);

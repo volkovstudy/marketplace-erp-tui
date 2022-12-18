@@ -11,7 +11,7 @@ public:
         cout << "Saving & writing Client to " << filePath << endl;
 
         ClientRepository clientRepository(std::move(filePath));
-        auto *client = new Client(1, "test client", "test.client@example.com");
+        auto* client = new Client(1, "test client", "test.client@example.com");
 
         clientRepository.save(client);
     }
@@ -21,7 +21,7 @@ public:
 
         ClientRepository clientRepository(std::move(filePath));
 
-        vector<Client *> suppliers = clientRepository.getAll();
+        vector<Client*> suppliers = clientRepository.getAll();
 
         assert(!suppliers.empty());
     }
@@ -31,7 +31,7 @@ public:
 
         ClientRepository clientRepository(std::move(filePath));
 
-        Client *client = clientRepository.getById(1);
+        Client* client = clientRepository.getById(1);
 
         assert(client != nullptr);
     }

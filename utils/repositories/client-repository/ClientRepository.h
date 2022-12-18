@@ -7,15 +7,15 @@
 
 class ClientRepository {
 private:
-    vector<Client *> clients{};
+    vector<Client*> clients{};
 public:
     explicit ClientRepository(string filePath);
 
-    vector<Client *> getAll();
+    vector<Client*> getAll();
 
-    Client *getById(int id);
+    Client* getById(int id);
 
-    void save(Client *client);
+    void save(Client* client);
 };
 
 

@@ -3,20 +3,20 @@
 #include <utility>
 #include "../../csvfileservices/csvfileservice/CsvFileService.h"
 
-CsvFileService *fileService;
+CsvFileService* fileService;
 
 ClientRepository::ClientRepository(string filePath) {
     fileService = new CsvFileService(std::move(filePath));
 }
 
-vector<Client *> ClientRepository::getAll() {
+vector<Client*> ClientRepository::getAll() {
     if (!clients.empty()) return clients;
 
-    vector<Client *> result;
-    vector<Property *> allLines = fileService->getAllLines();
+    vector<Client*> result;
+    vector<Property*> allLines = fileService->getAllLines();
 
     int maxAmountOfLines = 0;
-    for (Property *property: allLines) {
+    for (Property* property: allLines) {
         int amountOfLines = (int) property->getValues().size();
         maxAmountOfLines = max(maxAmountOfLines, amountOfLines);
     }
@@ -25,7 +25,7 @@ vector<Client *> ClientRepository::getAll() {
         int id = 0;
         string fullName, email;
 
-        for (Property *property: allLines) {
+        for (Property* property: allLines) {
             if (property->getValues().size() < maxAmountOfLines) break;
 
             string value = property->getValues().at(i);
@@ -39,7 +39,7 @@ vector<Client *> ClientRepository::getAll() {
                 email = value;
         }
 
-        auto *client = new Client(id, fullName, email);
+        auto* client = new Client(id, fullName, email);
         result.push_back(client);
     }
 
@@ -48,24 +48,24 @@ vector<Client *> ClientRepository::getAll() {
     return clients;
 }
 
-void write(Client *client) {
-    auto *id = new Property("id", {to_string(client->getId())});
-    auto *fullName = new Property("fullName", {client->getFullName()});
-    auto *email = new Property("email", {client->getEmail()});
+void write(Client* client) {
+    auto* id = new Property("id", {to_string(client->getId())});
+    auto* fullName = new Property("fullName", {client->getFullName()});
+    auto* email = new Property("email", {client->getEmail()});
 
     fileService->write({id, fullName, email});
 }
 
-void ClientRepository::save(Client *client) {
+void ClientRepository::save(Client* client) {
     clients.push_back(client);
 
     write(client);
 }
 
-Client *ClientRepository::getById(int id) {
+Client* ClientRepository::getById(int id) {
     if (clients.empty()) getAll();
 
-    for (Client *client: clients) {
+    for (Client* client: clients) {
         if (client->getId() == id)
             return client;
     }

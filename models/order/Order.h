@@ -8,24 +8,24 @@
 class Order {
 private:
     int id;
-    Client *client;
+    Client* client;
     map<string, int> products;
 public:
-    Order(Client *client, const map<string, int> &products);
+    Order(Client* client, const map<string, int>& products);
 
-    Order(int id, Client *client, const map<string, int> &products);
+    Order(int id, Client* client, const map<string, int>& products);
 
     int getId() const;
 
     void setId(int id);
 
-    Client *getClient() const;
+    Client* getClient() const;
 
-    void setClient(Client *client);
+    void setClient(Client* client);
 
-    const map<string, int> &getProducts() const;
+    const map<string, int>& getProducts() const;
 
-    void setProducts(const map<string, int> &products);
+    void setProducts(const map<string, int>& products);
 };
 
 

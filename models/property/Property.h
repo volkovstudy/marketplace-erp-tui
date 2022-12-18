@@ -11,13 +11,15 @@ private:
     string fieldName;
     vector<string> values;
 public:
-    Property(string fieldName, const vector<string> &values);
+    Property(string fieldName, const vector<string>& values);
 
-    const string &getFieldName() const;
-    void setFieldName(const string &fieldName);
+    const string& getFieldName() const;
 
-    const vector<string> &getValues() const;
-    void setValues(const vector<string> &values);
+    void setFieldName(const string& fieldName);
+
+    const vector<string>& getValues() const;
+
+    void setValues(const vector<string>& values);
 };
 
 

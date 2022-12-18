@@ -8,12 +8,12 @@
 class ConfigurationService {
 private:
     int currentId = 0;
-    CsvFileService *csvFileService;
+    CsvFileService* csvFileService;
 
     explicit ConfigurationService(string filePath);
 
 public:
-    static ConfigurationService *getInstance(string filePath);
+    static ConfigurationService* getInstance(string filePath);
 
     int getNextId();
 

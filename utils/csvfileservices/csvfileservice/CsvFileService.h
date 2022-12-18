@@ -12,15 +12,15 @@ private:
 public:
     explicit CsvFileService(string filePath);
 
-    vector<Property *> getAllLines();
+    vector<Property*> getAllLines();
 
-    void write(vector<Property *> properties);
+    void write(vector<Property*> properties);
 
-    void eraseAndWrite(vector<Property *> properties);
+    void eraseAndWrite(vector<Property*> properties);
 
-    const string &getFilePath() const;
+    const string& getFilePath() const;
 
-    void setFilePath(const string &newFilePath);
+    void setFilePath(const string& newFilePath);
 };
 
 

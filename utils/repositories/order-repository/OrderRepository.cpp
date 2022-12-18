@@ -2,30 +2,30 @@
 
 #include <utility>
 
-OrderRepository::OrderRepository(string filePath, ClientRepository *clientRepository,
-                                 ProductsRepository *productsRepository) :
+OrderRepository::OrderRepository(string filePath, ClientRepository* clientRepository,
+                                 ProductsRepository* productsRepository) :
         clientRepository(clientRepository),
         productsRepository(productsRepository) {
     csvFileService = new CsvFileService(std::move(filePath));
 }
 
-vector<Order *> OrderRepository::getAll() {
+vector<Order*> OrderRepository::getAll() {
     if (!orders.empty()) return orders;
 
-    vector<Order *> result;
-    vector<Property *> allLines = csvFileService->getAllLines();
+    vector<Order*> result;
+    vector<Property*> allLines = csvFileService->getAllLines();
 
     int maxAmountOfLines = 0;
-    for (Property *property: allLines) {
+    for (Property* property: allLines) {
         int amountOfLines = (int) property->getValues().size();
         maxAmountOfLines = max(maxAmountOfLines, amountOfLines);
     }
 
     for (int i = 0; i < maxAmountOfLines; ++i) {
         int id = 0;
-        Client *client;
+        Client* client;
 
-        for (Property *property: allLines) {
+        for (Property* property: allLines) {
             if (property->getValues().size() < maxAmountOfLines) break;
 
             string value = property->getValues().at(i);
@@ -39,7 +39,7 @@ vector<Order *> OrderRepository::getAll() {
 
         map<string, int> products = productsRepository->getForOrderId(id);
 
-        auto *order = new Order(id, client, products);
+        auto* order = new Order(id, client, products);
         result.push_back(order);
     }
 
@@ -48,16 +48,16 @@ vector<Order *> OrderRepository::getAll() {
     return orders;
 }
 
-void write(Order *order, CsvFileService *csvFileService, ProductsRepository *productsRepository) {
-    auto *id = new Property("id", {to_string(order->getId())});
-    auto *clientId = new Property("client_id", {to_string(order->getClient()->getId())});
+void write(Order* order, CsvFileService* csvFileService, ProductsRepository* productsRepository) {
+    auto* id = new Property("id", {to_string(order->getId())});
+    auto* clientId = new Property("client_id", {to_string(order->getClient()->getId())});
 
     csvFileService->write({id, clientId});
 
     productsRepository->save(order->getProducts(), order->getId());
 }
 
-void OrderRepository::save(Order *order) {
+void OrderRepository::save(Order* order) {
     orders.push_back(order);
 
     write(order, csvFileService, productsRepository);

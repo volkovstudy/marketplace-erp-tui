@@ -18,14 +18,14 @@ void deleteFiles();
 
 void testCsvFileService(string filePath);
 
-void testConfigurationService(const string &filePath);
+void testConfigurationService(const string& filePath);
 
-void testClientRepository(const string &filePath);
+void testClientRepository(const string& filePath);
 
-void testProductsRepository(const string &filePath);
+void testProductsRepository(const string& filePath);
 
-void testOrderRepository(const string &filePathForOrders, const string &filePathForClients,
-                         const string &filePathForProducts);
+void testOrderRepository(const string& filePathForOrders, const string& filePathForClients,
+                         const string& filePathForProducts);
 
 int main() {
     deleteFiles();
@@ -55,25 +55,25 @@ void testCsvFileService(string filePath) {
     CsvFileServiceTest::shouldWritePropertiesToFile(std::move(filePath));
 }
 
-void testConfigurationService(const string &filePath) {
+void testConfigurationService(const string& filePath) {
     cout << "Testing ConfigurationService:" << endl;
     ConfigurationServiceTest::shouldReturnOne(filePath);
     ConfigurationServiceTest::shouldSaveNewCurrentId(filePath);
 }
 
-void testClientRepository(const string &filePath) {
+void testClientRepository(const string& filePath) {
     ClientRepositoryTest::shouldWriteClientToFile(filePath);
     ClientRepositoryTest::shouldGetAllClientsFromFile(filePath);
     ClientRepositoryTest::shouldGetClientByIdOne(filePath);
 }
 
-void testProductsRepository(const string &filePath) {
+void testProductsRepository(const string& filePath) {
     ProductsRepositoryTest::shouldWriteProductsToFile(filePath);
     ProductsRepositoryTest::shouldGetAllProductsForSpecificOrderFromFile(filePath);
 }
 
-void testOrderRepository(const string &filePathForOrders, const string &filePathForClients,
-                         const string &filePathForProducts) {
+void testOrderRepository(const string& filePathForOrders, const string& filePathForClients,
+                         const string& filePathForProducts) {
     OrderRepositoryTest::shouldWriteOrderToFile(filePathForOrders, filePathForClients, filePathForProducts);
     OrderRepositoryTest::shouldGetAllOrdersFromFile(filePathForOrders, filePathForClients, filePathForProducts);
 }

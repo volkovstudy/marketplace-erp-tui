@@ -21,18 +21,18 @@ void Client::setId(int id) {
     Client::id = id;
 }
 
-const string &Client::getFullName() const {
+const string& Client::getFullName() const {
     return fullName;
 }
 
-void Client::setFullName(const string &fullName) {
+void Client::setFullName(const string& fullName) {
     Client::fullName = fullName;
 }
 
-const string &Client::getEmail() const {
+const string& Client::getEmail() const {
     return email;
 }
 
-void Client::setEmail(const string &email) {
+void Client::setEmail(const string& email) {
     Client::email = email;
 }

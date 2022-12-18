@@ -3,7 +3,7 @@
 
 
 #include <vector>
-#include "../../../public-entities/client/Client.h"
+#include "../../../models/client/Client.h"
 
 class ClientRepository {
 private:

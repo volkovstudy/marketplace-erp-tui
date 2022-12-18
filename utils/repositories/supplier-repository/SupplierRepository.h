@@ -3,7 +3,7 @@
 
 
 #include "../../csvfileservices/csvfileservice/CsvFileService.h"
-#include "../../../public-entities/supplier/Supplier.h"
+#include "../../../models/supplier/Supplier.h"
 
 class SupplierRepository {
 private:

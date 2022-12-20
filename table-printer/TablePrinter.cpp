@@ -8,7 +8,7 @@ using namespace std;
 
 void printHorizontalLine(int length);
 
-void printHeaderWithNameOfTable(const string& tableName, int lineLength);
+void printTableName(const string& tableName, int lineLength);
 
 void printHorizontalLine(int length) {
     for (int i = 0; i < length; ++i) {
@@ -17,7 +17,7 @@ void printHorizontalLine(int length) {
     cout << endl;
 }
 
-void printHeaderWithNameOfTable(const string& tableName, int lineLength) {
+void printTableName(const string& tableName, int lineLength) {
     int lengthOfIndent = lineLength / 2;
 
     cout << "|";

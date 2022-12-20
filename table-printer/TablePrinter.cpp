@@ -8,6 +8,8 @@ using namespace std;
 
 void printHorizontalLine(int length);
 
+void printHeader(int lineLength, const string& tableName);
+
 void printTableName(const string& tableName, int lineLength);
 
 void printHorizontalLine(int length) {
@@ -15,6 +17,12 @@ void printHorizontalLine(int length) {
         cout << "-";
     }
     cout << endl;
+}
+
+void printHeader(int lineLength, const string& tableName) {
+    printHorizontalLine(lineLength);
+    printTableName(tableName, lineLength);
+    printHorizontalLine(lineLength);
 }
 
 void printTableName(const string& tableName, int lineLength) {

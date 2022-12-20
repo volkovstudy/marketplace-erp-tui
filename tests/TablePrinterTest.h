@@ -8,6 +8,8 @@ public:
     static void shouldPrintVectorOfClients() {
         vector<Client*> clients;
         clients.push_back(new Client("Very long testing name", "very.long.testing.email@example.com"));
+        clients.push_back(new Client("Very very very long name for testing class",
+                                     "very.very.very.long.email.for.testing.class@example.com"));
         clients.push_back(new Client("Test name", "test@example.com"));
         clients.push_back(new Client("Petr", "petya@example.com"));
 

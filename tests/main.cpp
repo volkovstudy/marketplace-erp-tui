@@ -87,4 +87,8 @@ void testTablePrinter() {
     cout << endl;
     TablePrinterTest::shouldPrintVectorOfClients();
     cout << endl;
+
+    cout << endl;
+    TablePrinterTest::shouldPrintVectorOfOrders();
+    cout << endl;
 }

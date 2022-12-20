@@ -5,6 +5,7 @@
 #include "ClientRepositoryTest.h"
 #include "ProductsRepositoryTest.h"
 #include "OrderRepositoryTest.h"
+#include "TablePrinterTest.h"
 
 #define fileForCsvFileServiceTest "tests/csv-file-service-test.csv"
 #define fileForConfigurationServiceTest "tests/configuration-test.csv"
@@ -27,6 +28,8 @@ void testProductsRepository(const string& filePath);
 void testOrderRepository(const string& filePathForOrders, const string& filePathForClients,
                          const string& filePathForProducts);
 
+void testTablePrinter();
+
 int main() {
     deleteFiles();
 
@@ -39,6 +42,8 @@ int main() {
     testProductsRepository(fileForProductsRepositoryTest);
 
     testOrderRepository(fileForOrderRepositoryTest, fileForClientRepositoryTest, fileForProductsRepositoryTest);
+
+    testTablePrinter();
 
     return 0;
 }
@@ -76,4 +81,10 @@ void testOrderRepository(const string& filePathForOrders, const string& filePath
                          const string& filePathForProducts) {
     OrderRepositoryTest::shouldWriteOrderToFile(filePathForOrders, filePathForClients, filePathForProducts);
     OrderRepositoryTest::shouldGetAllOrdersFromFile(filePathForOrders, filePathForClients, filePathForProducts);
+}
+
+void testTablePrinter() {
+    cout << endl;
+    TablePrinterTest::shouldPrintVectorOfClients();
+    cout << endl;
 }

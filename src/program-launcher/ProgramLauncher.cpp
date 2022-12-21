@@ -14,14 +14,14 @@
 using namespace std;
 
 void printProgramSections();
-void getChoiceAndExecute();
 
-[[noreturn]] void ProgramLauncher::start() {
+void ProgramLauncher::start() {
     cout << "Hello! ";
     printProgramSections();
 
     while (true) {
-        getChoiceAndExecute();
+        bool doesUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
+        if (doesUserWantToLeft) return;
 
         cout << endl << endl << "You came back to the main section." << endl;
         printProgramSections();
@@ -36,7 +36,7 @@ void printProgramSections() {
     cout << "(Q)uit;" << endl;
 }
 
-void getChoiceAndExecute() {
+bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
     do {
         cout << endl << "Your choice (C, O, Q): ";
 
@@ -54,9 +54,11 @@ void getChoiceAndExecute() {
             break;
         } else if (program == quitProgram) {
             cout << endl << "Bye!" << endl;
-            ::exit(0);
+            return true;
         } else {
             cout << endl << "Wrong input. Try again." << endl;
         }
     } while (true);
+
+    return false;
 }

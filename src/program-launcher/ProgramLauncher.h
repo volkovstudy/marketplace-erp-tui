@@ -4,7 +4,9 @@
 
 class ProgramLauncher {
 public:
-    [[noreturn]] static void start();
+    static void start();
+private:
+    static bool getChoiceAndExecuteActionAndReturnQuitResult();
 };
 
 

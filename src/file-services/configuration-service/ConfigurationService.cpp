@@ -3,6 +3,8 @@
 
 #define currentIdColumn "current_id"
 
+string mainConfiguration;
+
 ConfigurationService* instance;
 
 ConfigurationService::ConfigurationService(string filePath) {
@@ -33,4 +35,12 @@ void ConfigurationService::save() {
     auto* property = new Property(currentIdColumn, {to_string(currentId)});
 
     csvFileService->eraseAndWrite({property});
+}
+
+string ConfigurationService::getMainConfigFilePath() {
+    return mainConfiguration;
+}
+
+void ConfigurationService::setMainConfigFilePath(string newFilePath) {
+    mainConfiguration = std::move(newFilePath);
 }

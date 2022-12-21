@@ -11,12 +11,12 @@ private:
     CsvFileService* csvFileService;
 
     explicit ConfigurationService(string filePath);
-
 public:
     static ConfigurationService* getInstance(string filePath);
+    static string getMainConfigFilePath();
+    static void setMainConfigFilePath(string newFilePath);
 
     int getNextId();
-
     void save();
 };
 

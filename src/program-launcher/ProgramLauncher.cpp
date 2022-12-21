@@ -3,6 +3,10 @@
 #include <cctype>
 #include <string>
 
+#define clientsManagementProgram "c"
+#define ordersManagementProgram "o"
+#define quitProgram "q"
+
 using namespace std;
 
 void toLowerCase(string* line);

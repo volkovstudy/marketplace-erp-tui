@@ -1,11 +1,14 @@
 #include "Order.h"
-
-int ORDER_COUNT;
+#include "../../file-services/configuration-service/ConfigurationService.h"
 
 Order::Order(Client* client, const map<string, int>& products) :
         client(client),
         products(products) {
-    id = ++ORDER_COUNT;
+    ConfigurationService* configurationService = ConfigurationService::getInstance(
+            ConfigurationService::getMainConfigFilePath());
+
+    id = configurationService->getNextId();
+    configurationService->save();
 }
 
 Order::Order(int id, Client* client, const map<string, int>& products) :

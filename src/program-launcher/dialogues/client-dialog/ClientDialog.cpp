@@ -4,6 +4,7 @@
 
 #include "../../../utils/Utils.h"
 #include "../../../repositories/client-repository/ClientRepository.h"
+#include "../../../table-printer/TablePrinter.h"
 
 #define tab "\t"
 #define pathToClientsFile "marketplace-erp/clients.csv"
@@ -55,6 +56,7 @@ bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
             addNewClient();
             break;
         } else if (program == listAllClientsProgramChar) {
+            listAllClients();
             break;
         } else if (program == quitProgramChar) {
             cout << endl << "You left clients management section." << endl;
@@ -117,4 +119,29 @@ void saveClient(Client client) {
     ClientRepository clientRepository(pathToClientsFile);
 
     clientRepository.save(&client);
+}
+
+void ClientDialog::listAllClients() {
+    ClientRepository clientRepository(pathToClientsFile);
+    vector<Client*> clients = clientRepository.getAll();
+
+    cout << "All clients:" << endl;
+    TablePrinter::printVector(clients);
+
+    cout << endl << "What do you want to do?" << endl;
+    cout << "(Q)uit;" << endl;
+
+    do {
+        cout << endl << "Your choice (Q): ";
+
+        string program;
+        cin >> program;
+        Utils::toLowerCase(&program);
+
+        if (program == quitProgramChar) {
+            return;
+        } else {
+            cout << endl << "Wrong input. Try again." << endl;
+        }
+    } while (true);
 }

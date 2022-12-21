@@ -3,6 +3,8 @@
 
 
 class ProgramLauncher {
+public:
+    static void start();
 };
 
 

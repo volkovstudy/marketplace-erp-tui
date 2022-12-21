@@ -5,11 +5,11 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(marketplace-erp-tui
         main.cpp
-        models/client/Client.cpp models/client/Client.h
-        models/order/Order.cpp models/order/Order.h
-        models/property/Property.cpp models/property/Property.h
-        file-services/csv-file-service/CsvFileService.cpp file-services/csv-file-service/CsvFileService.h
-        file-services/configuration-service/ConfigurationService.cpp file-services/configuration-service/ConfigurationService.h
-        repositories/client-repository/ClientRepository.cpp repositories/client-repository/ClientRepository.h
-        repositories/products-repository/ProductsRepository.cpp repositories/products-repository/ProductsRepository.h
+        src/models/client/Client.cpp src/models/client/Client.h
+        src/models/order/Order.cpp src/models/order/Order.h
+        src/models/property/Property.cpp src/models/property/Property.h
+        src/file-services/csv-file-service/CsvFileService.cpp src/file-services/csv-file-service/CsvFileService.h
+        src/file-services/configuration-service/ConfigurationService.cpp src/file-services/configuration-service/ConfigurationService.h
+        src/repositories/client-repository/ClientRepository.cpp src/repositories/client-repository/ClientRepository.h
+        src/repositories/products-repository/ProductsRepository.cpp src/repositories/products-repository/ProductsRepository.h
         )

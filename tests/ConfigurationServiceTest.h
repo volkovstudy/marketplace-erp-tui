@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cassert>
-#include "../file-services/configuration-service/ConfigurationService.h"
+#include "../src/file-services/configuration-service/ConfigurationService.h"
 
 using namespace std;
 

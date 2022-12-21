@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cassert>
-#include "../repositories/client-repository/ClientRepository.h"
+#include "../src/repositories/client-repository/ClientRepository.h"
 
 class ClientRepositoryTest {
 public:

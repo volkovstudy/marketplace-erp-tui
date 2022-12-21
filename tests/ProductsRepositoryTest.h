@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cassert>
-#include "../repositories/products-repository/ProductsRepository.h"
+#include "../src/repositories/products-repository/ProductsRepository.h"
 
 using namespace std;
 

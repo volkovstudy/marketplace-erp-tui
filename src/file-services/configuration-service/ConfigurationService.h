@@ -18,6 +18,8 @@ public:
 
     int getNextId();
     void save();
+
+    virtual ~ConfigurationService();
 };
 
 

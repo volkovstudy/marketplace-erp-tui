@@ -44,3 +44,7 @@ string ConfigurationService::getMainConfigFilePath() {
 void ConfigurationService::setMainConfigFilePath(string newFilePath) {
     mainConfiguration = std::move(newFilePath);
 }
+
+ConfigurationService::~ConfigurationService() {
+    instance->save();
+}

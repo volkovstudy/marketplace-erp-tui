@@ -4,7 +4,7 @@
 
 class ProgramLauncher {
 public:
-    static void start();
+    [[noreturn]] static void start();
 };
 
 

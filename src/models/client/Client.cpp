@@ -1,13 +1,16 @@
 #include "Client.h"
+#include "../../file-services/configuration-service/ConfigurationService.h"
 
 #include <utility>
-
-int CLIENT_AMOUNT;
 
 Client::Client(string fullName, string email) :
         fullName(std::move(fullName)),
         email(std::move(email)) {
-    Client::id = ++CLIENT_AMOUNT;
+    ConfigurationService* configurationService = ConfigurationService::getInstance(
+            ConfigurationService::getMainConfigFilePath());
+
+    id = configurationService->getNextId();
+    configurationService->save();
 }
 
 Client::Client(int id, string fullName, string email) : id(id), fullName(std::move(fullName)),

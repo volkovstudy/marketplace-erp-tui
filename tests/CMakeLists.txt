@@ -22,4 +22,5 @@ add_executable(marketplace-erp-tui-tests
         ../src/table-printer/TablePrinter.cpp ../src/table-printer/TablePrinter.h
         ../src/program-launcher/ProgramLauncher.cpp ../src/program-launcher/ProgramLauncher.h
         ../src/program-launcher/dialogues/client-dialog/ClientDialog.cpp ../src/program-launcher/dialogues/client-dialog/ClientDialog.h
+        ../src/utils/Utils.cpp ../src/utils/Utils.h
         )

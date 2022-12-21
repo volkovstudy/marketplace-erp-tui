@@ -20,4 +20,5 @@ add_executable(marketplace-erp-tui-tests
         ../src/repositories/order-repository/OrderRepository.cpp ../src/repositories/order-repository/OrderRepository.h
         ../src/repositories/products-repository/ProductsRepository.cpp ../src/repositories/products-repository/ProductsRepository.h
         ../src/table-printer/TablePrinter.cpp ../src/table-printer/TablePrinter.h
+        ../src/program-launcher/ProgramLauncher.cpp ../src/program-launcher/ProgramLauncher.h
         )

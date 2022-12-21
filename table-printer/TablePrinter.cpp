@@ -165,13 +165,24 @@ void printHeader(int lineLength, const string& tableName) {
     printHorizontalLine(lineLength);
 }
 
+bool isOdd(int number) {
+    return number % 2 != 0;
+}
+
 void printTableName(const string& tableName, int lineLength) {
     int lengthOfIndent = lineLength / 2;
+
+    bool isLengthOdd = isOdd(lineLength);
+    if (isLengthOdd) lengthOfIndent++;
 
     cout << "|";
     cout.width(lengthOfIndent);
     cout << tableName;
-    cout.width(lengthOfIndent - 1); // -1 => because begins printing after all width
+
+    if (isLengthOdd) // -1 / -2 => because begins printing after all width
+        cout.width(lengthOfIndent - 2);
+    else
+        cout.width(lengthOfIndent - 1);
     cout << "|";
     cout << endl;
 }

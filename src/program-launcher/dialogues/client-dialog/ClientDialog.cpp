@@ -100,6 +100,8 @@ void ClientDialog::addNewClient() {
             Client client(name, email);
             saveClient(client);
 
+            cout << endl << "Client added." << endl;
+
             break;
         } else if (program == editChar) {
             Utils::printDelimiter();

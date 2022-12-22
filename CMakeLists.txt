@@ -18,4 +18,5 @@ add_executable(marketplace-erp-tui
         src/program-launcher/dialogues/client-dialog/ClientDialog.cpp src/program-launcher/dialogues/client-dialog/ClientDialog.h
         src/utils/Utils.cpp src/utils/Utils.h
         src/program-launcher/dialogues/orders-dialog/OrdersDialog.cpp src/program-launcher/dialogues/orders-dialog/OrdersDialog.h
+        src/program-launcher/dialogues/client-dialog/client-adding-dialog/ClientAddingDialog.cpp src/program-launcher/dialogues/client-dialog/client-adding-dialog/ClientAddingDialog.h
         )

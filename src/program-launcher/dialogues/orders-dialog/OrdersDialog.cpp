@@ -254,7 +254,16 @@ void readAndSaveProduct(map<string, int>& products) {
 
 void printProducts(map<string, int>& products) {
     for (pair<string, int> product: products) {
-        cout << product.first << " - " << product.second << endl;
+        int amount = product.second;
+
+        cout << product.first << " - " << amount;
+
+        if (amount == 1)
+            cout << " unit";
+        else
+            cout << " units";
+
+        cout << endl;
     }
 }
 

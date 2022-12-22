@@ -23,8 +23,6 @@
 #define editChar "e"
 #define cancelChar "c"
 
-#define sectionName "orders management"
-
 using namespace std;
 
 void getInformationAboutOrder(Client& client, map<string, int>& products);
@@ -49,7 +47,7 @@ void OrdersDialog::openManagementDialog() {
 
         Utils::printDelimiter();
 
-        cout << "You came back to the " << sectionName << " section." << endl;
+        cout << "You came back to the orders management section." << endl;
         printSectionVariants();
     } while (true);
 }
@@ -79,7 +77,7 @@ bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
             listAllOrders();
             break;
         } else if (program == quitProgramChar) {
-            cout << endl << "You left " << sectionName " section." << endl;
+            cout << endl << "You left orders management section." << endl;
             return true;
         } else {
             cout << endl << "Wrong input. Try again." << endl;

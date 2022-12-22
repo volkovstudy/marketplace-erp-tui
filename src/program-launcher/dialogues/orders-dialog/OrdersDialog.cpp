@@ -49,7 +49,7 @@ void OrdersDialog::openManagementDialog() {
 
         Utils::printDelimiter();
 
-        cout << endl << endl << "You came back to the " << sectionName << " section." << endl;
+        cout << "You came back to the " << sectionName << " section." << endl;
         printSectionVariants();
     } while (true);
 }
@@ -90,7 +90,7 @@ bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
 }
 
 void OrdersDialog::addNewOrder() {
-    cout << endl << "Now you're going to add new order." << endl << endl;
+    cout << "Now you're going to add new order." << endl << endl;
 
     Client& client = *new Client("", "");
     map<string, int> products{};
@@ -106,7 +106,7 @@ void OrdersDialog::addNewOrder() {
     do {
         Utils::printDelimiter();
 
-        cout << endl << "Well, check the information about new order:" << endl << endl;
+        cout << "Well, check the information about new order:" << endl << endl;
         cout << "Client:" << endl << makeClientLine(client) << endl << endl;
         cout << "Products:" << endl;
         printProducts(products);
@@ -124,7 +124,6 @@ void OrdersDialog::addNewOrder() {
             break;
         } else if (program == editChar) {
             Utils::printDelimiter();
-            cout << endl;
             getInformationAboutOrder(client, products);
         } else if (program == cancelChar) {
             cout << endl << "You left adding new order." << endl;
@@ -265,8 +264,6 @@ void saveOrder(Order& order) {
 }
 
 void OrdersDialog::listAllOrders() {
-    cout << endl;
-
     ClientRepository clientRepository(pathToClientsFile);
     ProductsRepository productsRepository(pathToProductsFile);
     OrderRepository orderRepository(pathToOrdersFile, &clientRepository, &productsRepository);

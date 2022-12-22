@@ -36,7 +36,7 @@ void ClientDialog::openManagementDialog() {
 
         Utils::printDelimiter();
 
-        cout << endl << endl << "You came back to the clients management section." << endl;
+        cout << "You came back to the clients management section." << endl;
         printSectionVariants();
     } while (true);
 }
@@ -85,7 +85,7 @@ void ClientDialog::addNewClient() {
     do {
         Utils::printDelimiter();
 
-        cout << endl << "Well, check the information about new client:" << endl;
+        cout << "Well, check the information about new client:" << endl;
         cout << "Name" << tab << name << endl;
         cout << "Email" << tab << email << endl;
 
@@ -132,8 +132,6 @@ void saveClient(Client client) {
 }
 
 void ClientDialog::listAllClients() {
-    cout << endl;
-
     ClientRepository clientRepository(pathToClientsFile);
     vector<Client*> clients = clientRepository.getAll();
 

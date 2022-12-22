@@ -23,7 +23,7 @@ void ProgramLauncher::start() {
         bool doesUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
         if (doesUserWantToLeft) return;
 
-        cout << endl << endl << "You came back to the main section." << endl;
+        cout << "You came back to the main section." << endl;
         printProgramSections();
     }
 }
@@ -46,12 +46,10 @@ bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
 
         if (program == clientsManagementProgram) {
             Utils::printDelimiter();
-            cout << endl << endl;
             ClientDialog::openManagementDialog();
             break;
         } else if (program == ordersManagementProgram) {
             Utils::printDelimiter();
-            cout << endl << endl;
             OrdersDialog::openManagementDialog();
             break;
         } else if (program == quitProgram) {

@@ -99,7 +99,7 @@ void OrdersDialog::addNewOrder() {
     try {
         getInformationAboutOrder(client, products);
     } catch (exception& exception) {
-        cout << "There're no clients! Add new client!" << endl;
+        cout << "There are no clients! Add new client!" << endl;
         return;
     }
 

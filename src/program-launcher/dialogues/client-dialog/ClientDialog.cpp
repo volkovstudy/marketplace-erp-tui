@@ -122,8 +122,15 @@ void saveClient(Client client) {
 }
 
 void ClientDialog::listAllClients() {
+    cout << endl;
+
     ClientRepository clientRepository(pathToClientsFile);
     vector<Client*> clients = clientRepository.getAll();
+
+    if (clients.empty()) {
+        cout << "There are no clients!" << endl;
+        return;
+    }
 
     cout << "All clients:" << endl;
     TablePrinter::printVector(clients);

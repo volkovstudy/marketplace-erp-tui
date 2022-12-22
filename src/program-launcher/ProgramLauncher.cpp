@@ -45,10 +45,12 @@ bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
         Utils::toLowerCase(&program);
 
         if (program == clientsManagementProgram) {
+            Utils::printDelimiter();
             cout << endl << endl;
             ClientDialog::openManagementDialog();
             break;
         } else if (program == ordersManagementProgram) {
+            Utils::printDelimiter();
             cout << endl << endl;
             OrdersDialog::openManagementDialog();
             break;

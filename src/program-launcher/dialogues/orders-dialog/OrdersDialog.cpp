@@ -42,7 +42,12 @@ void OrdersDialog::openManagementDialog() {
     do {
         bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
 
-        if (isUserWantToLeft) return;
+        if (isUserWantToLeft) {
+            Utils::printDelimiter();
+            return;
+        }
+
+        Utils::printDelimiter();
 
         cout << endl << endl << "You came back to the " << sectionName << " section." << endl;
         printSectionVariants();
@@ -66,9 +71,11 @@ bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
         Utils::toLowerCase(&program);
 
         if (program == addNewOrderProgramChar) {
+            Utils::printDelimiter();
             addNewOrder();
             break;
         } else if (program == listAllOrdersProgramChar) {
+            Utils::printDelimiter();
             listAllOrders();
             break;
         } else if (program == quitProgramChar) {
@@ -97,6 +104,8 @@ void OrdersDialog::addNewOrder() {
     }
 
     do {
+        Utils::printDelimiter();
+
         cout << endl << "Well, check the information about new order:" << endl << endl;
         cout << "Client:" << endl << makeClientLine(client) << endl << endl;
         cout << "Products:" << endl;
@@ -114,6 +123,7 @@ void OrdersDialog::addNewOrder() {
             saveOrder(order);
             break;
         } else if (program == editChar) {
+            Utils::printDelimiter();
             cout << endl;
             getInformationAboutOrder(client, products);
         } else if (program == cancelChar) {

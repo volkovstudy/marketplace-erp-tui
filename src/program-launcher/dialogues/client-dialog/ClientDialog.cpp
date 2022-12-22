@@ -29,7 +29,12 @@ void ClientDialog::openManagementDialog() {
     do {
         bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
 
-        if (isUserWantToLeft) return;
+        if (isUserWantToLeft) {
+            Utils::printDelimiter();
+            return;
+        }
+
+        Utils::printDelimiter();
 
         cout << endl << endl << "You came back to the clients management section." << endl;
         printSectionVariants();
@@ -53,9 +58,11 @@ bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
         Utils::toLowerCase(&program);
 
         if (program == addNewClientProgramChar) {
+            Utils::printDelimiter();
             addNewClient();
             break;
         } else if (program == listAllClientsProgramChar) {
+            Utils::printDelimiter();
             listAllClients();
             break;
         } else if (program == quitProgramChar) {
@@ -76,6 +83,8 @@ void ClientDialog::addNewClient() {
     getInformationAboutClient(name, email);
 
     do {
+        Utils::printDelimiter();
+
         cout << endl << "Well, check the information about new client:" << endl;
         cout << "Name" << tab << name << endl;
         cout << "Email" << tab << email << endl;
@@ -93,6 +102,7 @@ void ClientDialog::addNewClient() {
 
             break;
         } else if (program == editChar) {
+            Utils::printDelimiter();
             getInformationAboutClient(name, email);
         } else if (program == cancelChar) {
             cout << endl << "You left adding new client." << endl;

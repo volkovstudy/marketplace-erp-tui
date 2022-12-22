@@ -124,6 +124,9 @@ void OrdersDialog::addNewOrder() {
             break;
         } else if (program == editChar) {
             Utils::printDelimiter();
+
+            products = {};
+
             getInformationAboutOrder(client, products);
         } else if (program == cancelChar) {
             cout << endl << "You left adding new order." << endl;

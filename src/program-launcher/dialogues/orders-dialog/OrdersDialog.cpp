@@ -4,6 +4,7 @@
 #include "../../../models/order/Order.h"
 #include "../../../repositories/client-repository/ClientRepository.h"
 #include "../../../repositories/order-repository/OrderRepository.h"
+#include "../../../table-printer/TablePrinter.h"
 
 #include <iostream>
 #include <sstream>
@@ -68,6 +69,7 @@ bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
             addNewOrder();
             break;
         } else if (program == listAllOrdersProgramChar) {
+            listAllOrders();
             break;
         } else if (program == quitProgramChar) {
             cout << endl << "You left " << sectionName " section." << endl;
@@ -250,4 +252,39 @@ void saveOrder(Order& order) {
     OrderRepository orderRepository(pathToOrdersFile, &clientRepository, &productsRepository);
 
     orderRepository.save(&order);
+}
+
+void OrdersDialog::listAllOrders() {
+    cout << endl;
+
+    ClientRepository clientRepository(pathToClientsFile);
+    ProductsRepository productsRepository(pathToProductsFile);
+    OrderRepository orderRepository(pathToOrdersFile, &clientRepository, &productsRepository);
+
+    vector<Order*> orders = orderRepository.getAll();
+
+    if (orders.empty()) {
+        cout << "There are no orders!" << endl;
+        return;
+    }
+
+    cout << "All orders:" << endl;
+    TablePrinter::printVector(orders);
+
+    cout << endl << "What do you want to do?" << endl;
+    cout << "(Q)uit;" << endl;
+
+    do {
+        cout << endl << "Your choice (Q): ";
+
+        string program;
+        cin >> program;
+        Utils::toLowerCase(&program);
+
+        if (program == quitProgramChar) {
+            return;
+        } else {
+            cout << endl << "Wrong input. Try again." << endl;
+        }
+    } while (true);
 }

@@ -32,7 +32,7 @@ void saveOrder(Order& order);
 void OrderAddingDialog::addOrder() {
     cout << "Now you're going to add new order." << endl << endl;
 
-    Client& client = *new Client("", "");
+    Client& client = *new Client(-1, "", "");
     map<string, int> products{};
 
     try {

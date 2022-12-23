@@ -6,16 +6,14 @@
 #include "../../models/client/Client.h"
 
 class ClientRepository {
-private:
-    vector<Client*> clients{};
 public:
     explicit ClientRepository(string filePath);
 
     vector<Client*> getAll();
-
     Client* getById(int id);
-
     void save(Client* client);
+private:
+    vector<Client*> clients{};
 };
 
 

@@ -8,18 +8,17 @@
 #include "../products-repository/ProductsRepository.h"
 
 class OrderRepository {
-private:
-    vector<Order*> orders{};
-    CsvFileService* csvFileService;
-    ClientRepository* clientRepository;
-    ProductsRepository* productsRepository;
 public:
     explicit OrderRepository(string filePath, ClientRepository* clientRepository,
                              ProductsRepository* productsRepository);
 
     vector<Order*> getAll();
-
     void save(Order* order);
+private:
+    vector<Order*> orders{};
+    CsvFileService* csvFileService;
+    ClientRepository* clientRepository;
+    ProductsRepository* productsRepository;
 };
 
 

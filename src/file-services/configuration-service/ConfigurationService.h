@@ -6,11 +6,6 @@
 #include "../csv-file-service/CsvFileService.h"
 
 class ConfigurationService {
-private:
-    int currentId = 0;
-    CsvFileService* csvFileService;
-
-    explicit ConfigurationService(string filePath);
 public:
     static ConfigurationService* getInstance(string filePath);
     static string getMainConfigFilePath();
@@ -20,6 +15,12 @@ public:
     void save();
 
     virtual ~ConfigurationService();
+private:
+    explicit ConfigurationService(string filePath);
+
+    int currentId = 0;
+    CsvFileService* csvFileService;
+
 };
 
 

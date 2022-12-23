@@ -4,6 +4,17 @@
 using namespace std;
 
 class CsvFileServiceTest {
+public:
+    static void shouldWritePropertiesToFile(string filePath) {
+        cout << "Writing properties to " << filePath << endl;
+
+        CsvFileService csvFileService(std::move(filePath));
+
+        vector<Property*> properties = givenThreeProperties();
+
+        csvFileService.write(properties);
+    }
+
 private:
     static vector<Property*> givenThreeProperties() {
         vector<string> names;
@@ -28,16 +39,5 @@ private:
         properties.push_back(age);
 
         return properties;
-    }
-
-public:
-    static void shouldWritePropertiesToFile(string filePath) {
-        cout << "Writing properties to " << filePath << endl;
-
-        CsvFileService csvFileService(std::move(filePath));
-
-        vector<Property*> properties = givenThreeProperties();
-
-        csvFileService.write(properties);
     }
 };

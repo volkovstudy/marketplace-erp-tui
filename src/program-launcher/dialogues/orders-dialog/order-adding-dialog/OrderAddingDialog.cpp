@@ -60,6 +60,9 @@ void OrderAddingDialog::addOrder() {
         if (program == yesChar) {
             Order order(&client, products);
             saveOrder(order);
+
+            cout << endl << "Order saved." << endl;
+
             break;
         } else if (program == editChar) {
             Utils::printDelimiter();

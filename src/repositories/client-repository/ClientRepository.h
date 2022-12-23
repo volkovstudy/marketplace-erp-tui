@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "../../models/client/Client.h"
+#include "../../file-services/csv-file-service/CsvFileService.h"
 
 class ClientRepository {
 public:
@@ -13,6 +14,7 @@ public:
     Client* getById(int id);
     void save(Client* client);
 private:
+    CsvFileService csvFileService;
     vector<Client*> clients{};
 };
 

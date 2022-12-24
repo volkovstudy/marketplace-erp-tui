@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <map>
 
 #define indentLength 10
 
@@ -61,11 +62,11 @@ string makeClientLine(Client& client) {
     return clientLine.str();
 }
 
-string makeProductLine(const pair<string, int>& product) {
-    int amount = product.second;
+string makeProductLine(Product* product) {
+    int amount = product->getAmount();
 
     stringstream productLine;
-    productLine << product.first << " - " << product.second;
+    productLine << product->getName() << " - " << amount;
 
     if (amount == 1) {
         productLine << " unit";
@@ -94,7 +95,7 @@ void TablePrinter::printVector(const vector<Order*>& orders) {
         maxLengthOfClientLine = max(maxLengthOfClientLine, (int) clientLine.length());
 
         vector<string> productsLines;
-        for (pair<string, int> product: order->getProducts()) {
+        for (Product* product: order->getProducts()) {
             string productLine = makeProductLine(product);
             maxLengthOfProductLine = max(maxLengthOfProductLine, (int) productLine.length());
 

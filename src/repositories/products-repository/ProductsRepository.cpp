@@ -6,8 +6,8 @@ ProductsRepository::ProductsRepository(string filePath) {
     ProductsRepository::csvFileService = new CsvFileService(std::move(filePath));
 }
 
-map<string, int> ProductsRepository::getForOrderId(int id) {
-    map<string, int> result;
+vector<Product*> ProductsRepository::getForOrderId(int id) {
+    vector<Product*> result;
     vector<Property*> allLines = csvFileService->getAllLines();
 
     int maxAmountOfLines = 0;
@@ -51,19 +51,19 @@ map<string, int> ProductsRepository::getForOrderId(int id) {
                 amount = stoi(value);
         }
 
-        pair<string, int> product(name, amount);
-        result.insert(product);
+        Product* product = new Product(name, amount);
+        result.push_back(product);
     }
 
     return result;
 }
 
-void ProductsRepository::save(const map<string, int>& products, int orderId) {
+void ProductsRepository::save(vector<Product*> products, int orderId) {
     string orderIdString = to_string(orderId);
 
-    for (auto& product: products) {
-        auto* name = new Property("name", {product.first});
-        auto* amount = new Property("amount", {to_string(product.second)});
+    for (Product* product: products) {
+        auto* name = new Property("name", {product->getName()});
+        auto* amount = new Property("amount", {to_string(product->getAmount())});
         auto* orderIdProperty = new Property("order_id", {orderIdString});
 
         csvFileService->write({name, amount, orderIdProperty});

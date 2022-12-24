@@ -4,13 +4,14 @@
 
 #include <map>
 #include "../../file-services/csv-file-service/CsvFileService.h"
+#include "../../models/product/Product.h"
 
 class ProductsRepository {
 public:
     explicit ProductsRepository(string filePath);
 
-    map<string, int> getForOrderId(int id);
-    void save(const map<string, int>& products, int orderId);
+    vector<Product*> getForOrderId(int id);
+    void save(vector<Product*> products, int orderId);
 private:
     CsvFileService* csvFileService;
 };

@@ -13,6 +13,7 @@ add_executable(marketplace-erp-tui-tests
         TablePrinterTest.h
         ../src/models/client/Client.cpp ../src/models/client/Client.h
         ../src/models/order/Order.cpp ../src/models/order/Order.h
+        ../src/models/product/Product.cpp ../src/models/product/Product.h
         ../src/models/property/Property.cpp ../src/models/property/Property.h
         ../src/file-services/csv-file-service/CsvFileService.cpp ../src/file-services/csv-file-service/CsvFileService.h
         ../src/file-services/configuration-service/ConfigurationService.cpp ../src/file-services/configuration-service/ConfigurationService.h

@@ -23,9 +23,9 @@ using namespace std;
 
 vector<Client*> getAllClients();
 string makeClientLine(const Client& client);
-void getInformationAboutOrder(Client& client, vector<Product*> products);
+void getInformationAboutOrder(Client& client, vector<Product*>& products);
 void printAllClients();
-void readAndSaveProduct(vector<Product*> products);
+void readAndSaveProduct(vector<Product*>& products);
 void printProducts(vector<Product*> products);
 void saveOrder(Order& order);
 
@@ -79,7 +79,7 @@ void OrderAddingDialog::addOrder() {
     } while (true);
 }
 
-void getInformationAboutOrder(Client& client, vector<Product*> products) {
+void getInformationAboutOrder(Client& client, vector<Product*>& products) {
     vector<Client*> clients = getAllClients();
 
     if (clients.empty()) {
@@ -152,7 +152,7 @@ void printAllClients() {
     }
 }
 
-void readAndSaveProduct(vector<Product*> products) {
+void readAndSaveProduct(vector<Product*>& products) {
     string name;
     cout << "Name: ";
     do {

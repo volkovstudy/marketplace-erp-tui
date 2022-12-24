@@ -33,22 +33,22 @@ private:
         vector<Order*> orders;
         vector<Client*> clients = givenFourClients();
 
-        map<string, int> products1;
-        products1["tomato"] = 5;
-        products1["cucumbers"] = 2;
+        vector<Product*> products1;
+        products1.push_back(new Product("tomato", 5));
+        products1.push_back(new Product("cucumbers", 2));
         orders.push_back(new Order(1, clients.at(0), products1));
 
-        map<string, int> products2;
-        products2["tv"] = 1;
-        products2["playstation"] = 1;
+        vector<Product*> products2;
+        products2.push_back(new Product("tv", 1));
+        products2.push_back(new Product("playstation", 1));
         orders.push_back(new Order(2, clients.at(1), products2));
 
-        map<string, int> products3;
-        products3["table"] = 1;
+        vector<Product*> products3;
+        products3.push_back(new Product("table", 1));
         orders.push_back(new Order(3, clients.at(2), products3));
 
-        map<string, int> products4;
-        products4["Long product"] = 1000;
+        vector<Product*> products4;
+        products4.push_back(new Product("Long product", 1000));
         orders.push_back(new Order(4, clients.at(3), products4));
 
         return orders;

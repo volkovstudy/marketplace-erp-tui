@@ -23,17 +23,17 @@ using namespace std;
 
 vector<Client*> getAllClients();
 string makeClientLine(const Client& client);
-void getInformationAboutOrder(Client& client, map<string, int>& products);
+void getInformationAboutOrder(Client& client, vector<Product*> products);
 void printAllClients();
-void readAndSaveProduct(map<string, int>& products);
-void printProducts(map<string, int>& products);
+void readAndSaveProduct(vector<Product*> products);
+void printProducts(vector<Product*> products);
 void saveOrder(Order& order);
 
 void OrderAddingDialog::addOrder() {
     cout << "Now you're going to add new order." << endl << endl;
 
     Client& client = *new Client(-1, "", "");
-    map<string, int> products{};
+    vector<Product*> products{};
 
     try {
         getInformationAboutOrder(client, products);
@@ -79,7 +79,7 @@ void OrderAddingDialog::addOrder() {
     } while (true);
 }
 
-void getInformationAboutOrder(Client& client, map<string, int>& products) {
+void getInformationAboutOrder(Client& client, vector<Product*> products) {
     vector<Client*> clients = getAllClients();
 
     if (clients.empty()) {
@@ -152,7 +152,7 @@ void printAllClients() {
     }
 }
 
-void readAndSaveProduct(map<string, int>& products) {
+void readAndSaveProduct(vector<Product*> products) {
     string name;
     cout << "Name: ";
     do {
@@ -177,14 +177,15 @@ void readAndSaveProduct(map<string, int>& products) {
         }
     } while (amount < 0);
 
-    products[name] = amount;
+    Product* product = new Product(name, amount);
+    products.push_back(product);
 }
 
-void printProducts(map<string, int>& products) {
-    for (pair<string, int> product: products) {
-        int amount = product.second;
+void printProducts(vector<Product*> products) {
+    for (Product* product: products) {
+        int amount = product->getAmount();
 
-        cout << product.first << " - " << amount;
+        cout << product->getName() << " - " << amount;
 
         if (amount == 1)
             cout << " unit";

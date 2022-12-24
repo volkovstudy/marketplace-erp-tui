@@ -62,8 +62,17 @@ string makeClientLine(Client& client) {
 }
 
 string makeProductLine(const pair<string, int>& product) {
+    int amount = product.second;
+
     stringstream productLine;
-    productLine << product.first << " - " << product.second << " units";
+    productLine << product.first << " - " << product.second;
+
+    if (amount == 1) {
+        productLine << " unit";
+    } else {
+        productLine << " units";
+    }
+
     return productLine.str();
 }
 

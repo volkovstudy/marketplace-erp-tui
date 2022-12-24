@@ -37,7 +37,7 @@ vector<Order*> OrderRepository::getAll() {
                 client = clientRepository->getById(stoi(value));
         }
 
-        map<string, int> products = productsRepository->getForOrderId(id);
+        vector<Product*> products = productsRepository->getForOrderId(id);
 
         auto* order = new Order(id, client, products);
         result.push_back(order);

@@ -22,9 +22,9 @@ public:
         auto* client = new Client(2, "client for order testing", "order.testing@example.com");
         clientRepository->save(client);
 
-        map<string, int> products;
-        products.insert(pair<string, int>("playstation", 1));
-        products.insert(pair<string, int>("tv", 1));
+        vector<Product*> products;
+        products.push_back(new Product("playstation", 1));
+        products.push_back(new Product("tv", 1));
 
         auto* order = new Order(2, client, products);
 

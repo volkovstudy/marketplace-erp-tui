@@ -1,7 +1,7 @@
 #include "Order.h"
 #include "../../file-services/configuration-service/ConfigurationService.h"
 
-Order::Order(Client* client, const map<string, int>& products) :
+Order::Order(Client* client, vector<Product*> products) :
         client(client),
         products(products) {
     ConfigurationService* configurationService = ConfigurationService::getInstance(
@@ -11,7 +11,7 @@ Order::Order(Client* client, const map<string, int>& products) :
     configurationService->save();
 }
 
-Order::Order(int id, Client* client, const map<string, int>& products) :
+Order::Order(int id, Client* client, vector<Product*> products) :
         id(id),
         client(client),
         products(products) {}
@@ -32,10 +32,10 @@ void Order::setClient(Client* client) {
     Order::client = client;
 }
 
-const map<string, int>& Order::getProducts() const {
+vector<Product*> Order::getProducts() const {
     return products;
 }
 
-void Order::setProducts(const map<string, int>& products) {
+void Order::setProducts(vector<Product*> products) {
     Order::products = products;
 }

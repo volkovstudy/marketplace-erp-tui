@@ -13,10 +13,10 @@ public:
         cout << "Saving & writing pair<string, int> to " << filePath << endl;
 
         ProductsRepository productsRepository(filePath);
-        map<string, int> products;
-        products.insert(pair<string, int>("tomato", 10));
-        products.insert(pair<string, int>("cucumbers", 3));
-        products.insert(pair<string, int>("tv", 1));
+        vector<Product*> products;
+        products.push_back(new Product("tomato", 10));
+        products.push_back(new Product("cucumbers", 3));
+        products.push_back(new Product("tv", 1));
 
         productsRepository.save(products, 1);
     }
@@ -26,7 +26,7 @@ public:
 
         ProductsRepository productsRepository(filePath);
 
-        map<string, int> products = productsRepository.getForOrderId(1);
+        vector<Product*> products = productsRepository.getForOrderId(1);
 
         assert(!products.empty());
     }

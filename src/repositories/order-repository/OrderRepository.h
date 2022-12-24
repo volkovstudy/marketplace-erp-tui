@@ -9,8 +9,10 @@
 
 class OrderRepository {
 public:
-    explicit OrderRepository(string filePath, ClientRepository* clientRepository,
-                             ProductsRepository* productsRepository);
+    explicit OrderRepository(string filePath,
+                             ClientRepository* clientRepository,
+                             ProductsRepository* productsRepository
+    );
 
     vector<Order*> getAll();
     void save(Order* order);

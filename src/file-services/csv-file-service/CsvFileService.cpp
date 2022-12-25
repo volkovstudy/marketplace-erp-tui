@@ -102,7 +102,7 @@ vector<Property*> CsvFileService::getAllLines() {
     return allLines;
 }
 
-vector<string> writeColumnNamesToFile(ofstream& fileWriter, vector<string> columnNames) {
+void writeColumnNamesToFile(ofstream& fileWriter, vector<string> columnNames) {
     for (int i = 0; i < columnNames.size(); ++i) {
         string columnName = columnNames.at(i);
 

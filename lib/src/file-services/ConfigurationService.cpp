@@ -3,27 +3,42 @@
 #include <string>
 #include <utility>
 
-#define currentIdColumn "current_id"
+namespace {
 
-std::string mainConfiguration;
+static const std::string kCurrentIdColumn = "current_id";
 
-ConfigurationService* instance;
+static ConfigurationService* instance;
+static std::string mainConfiguration;
 
-ConfigurationService::ConfigurationService(std::string filePath) {
-  csvFileService = new CsvFileService(std::move(filePath));
+}  // namespace
 
-  for (Property* property : csvFileService->getAllLines()) {
-    if (property->getFieldName() == currentIdColumn) {
-      currentId = stoi(property->getValues().at(0));
+ConfigurationService::ConfigurationService(const std::string& filePath)
+    : csvFileService(filePath) {
+  for (Property* property : csvFileService.getAllLines()) {
+    if (property->getFieldName() == kCurrentIdColumn) {
+      int element = std::stoi(property->getValues().at(0));
+      currentId = element;
       break;
     }
   }
 }
 
-ConfigurationService* ConfigurationService::getInstance(std::string filePath) {
-  if (instance == nullptr)
-    instance = new ConfigurationService(std::move(filePath));
+ConfigurationService::~ConfigurationService() { instance->save(); }
+
+ConfigurationService* ConfigurationService::getInstance(
+    const std::string& filePath) {
+  if (instance == nullptr) instance = new ConfigurationService(filePath);
+
   return instance;
+}
+
+std::string ConfigurationService::getMainConfigFilePath() {
+  return mainConfiguration;
+}
+
+void ConfigurationService::setMainConfigFilePath(
+    const std::string& newFilePath) {
+  mainConfiguration = newFilePath;
 }
 
 int ConfigurationService::getNextId() {
@@ -34,17 +49,7 @@ int ConfigurationService::getNextId() {
 }
 
 void ConfigurationService::save() {
-  auto* property = new Property(currentIdColumn, {std::to_string(currentId)});
+  auto* property = new Property(kCurrentIdColumn, {std::to_string(currentId)});
 
-  csvFileService->eraseAndWrite({property});
+  csvFileService.eraseAndWrite({property});
 }
-
-std::string ConfigurationService::getMainConfigFilePath() {
-  return mainConfiguration;
-}
-
-void ConfigurationService::setMainConfigFilePath(std::string newFilePath) {
-  mainConfiguration = std::move(newFilePath);
-}
-
-ConfigurationService::~ConfigurationService() { instance->save(); }

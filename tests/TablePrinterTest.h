@@ -1,7 +1,7 @@
 #ifndef MARKETPLACE_ERP_TUI_TESTS_TABLEPRINTERTEST_H
 #define MARKETPLACE_ERP_TUI_TESTS_TABLEPRINTERTEST_H
 
-#include "../src/table-printer/TablePrinter.h"
+#include "table-printer/TablePrinter.h"
 
 class TablePrinterTest {
 public:

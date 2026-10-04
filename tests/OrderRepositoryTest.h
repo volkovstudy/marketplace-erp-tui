@@ -5,7 +5,7 @@
 #include <iostream>
 #include <utility>
 #include <cassert>
-#include "../src/repositories/order-repository/OrderRepository.h"
+#include "repositories/order-repository/OrderRepository.h"
 
 using namespace std;
 

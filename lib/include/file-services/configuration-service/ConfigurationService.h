@@ -1,27 +1,23 @@
-#ifndef MARKETPLACE_ERP_TUI_CONFIGURATIONSERVICE_H
-#define MARKETPLACE_ERP_TUI_CONFIGURATIONSERVICE_H
-
+#pragma once
 
 #include <utility>
+
 #include "file-services/csv-file-service/CsvFileService.h"
 
 class ConfigurationService {
-public:
-    static ConfigurationService* getInstance(string filePath);
-    static string getMainConfigFilePath();
-    static void setMainConfigFilePath(string newFilePath);
+ public:
+  static ConfigurationService* getInstance(string filePath);
+  static string getMainConfigFilePath();
+  static void setMainConfigFilePath(string newFilePath);
 
-    int getNextId();
-    void save();
+  int getNextId();
+  void save();
 
-    virtual ~ConfigurationService();
-private:
-    explicit ConfigurationService(string filePath);
+  virtual ~ConfigurationService();
 
-    int currentId = 0;
-    CsvFileService* csvFileService;
+ private:
+  explicit ConfigurationService(string filePath);
 
+  int currentId = 0;
+  CsvFileService* csvFileService;
 };
-
-
-#endif

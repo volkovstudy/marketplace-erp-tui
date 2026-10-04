@@ -1,16 +1,12 @@
-#ifndef MARKETPLACE_ERP_TUI_ORDERSDIALOG_H
-#define MARKETPLACE_ERP_TUI_ORDERSDIALOG_H
-
+#pragma once
 
 class OrdersDialog {
-public:
-    static void openManagementDialog();
-    static void addNewOrder();
-    static void listAllOrders();
-private:
-    static void printSectionVariants();
-    static bool getChoiceAndExecuteActionAndReturnQuitResult();
+ public:
+  static void openManagementDialog();
+  static void addNewOrder();
+  static void listAllOrders();
+
+ private:
+  static void printSectionVariants();
+  static bool getChoiceAndExecuteActionAndReturnQuitResult();
 };
-
-
-#endif

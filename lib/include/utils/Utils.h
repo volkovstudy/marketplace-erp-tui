@@ -1,16 +1,11 @@
-#ifndef MARKETPLACE_ERP_TUI_UTILS_H
-#define MARKETPLACE_ERP_TUI_UTILS_H
-
+#pragma once
 
 #include <string>
 
 using namespace std;
 
 class Utils {
-public:
-    static void toLowerCase(string* line);
-    static void printDelimiter();
+ public:
+  static void toLowerCase(string* line);
+  static void printDelimiter();
 };
-
-
-#endif

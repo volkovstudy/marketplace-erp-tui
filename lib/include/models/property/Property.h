@@ -1,5 +1,4 @@
-#ifndef MARKETPLACE_ERP_TUI_PROPERTY_H
-#define MARKETPLACE_ERP_TUI_PROPERTY_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -7,18 +6,16 @@
 using namespace std;
 
 class Property {
-public:
-    Property(string fieldName, const vector<string>& values);
+ public:
+  Property(string fieldName, const vector<string>& values);
 
-    const string& getFieldName() const;
-    void setFieldName(const string& fieldName);
+  const string& getFieldName() const;
+  void setFieldName(const string& fieldName);
 
-    const vector<string>& getValues() const;
-    void setValues(const vector<string>& values);
-private:
-    string fieldName;
-    vector<string> values;
+  const vector<string>& getValues() const;
+  void setValues(const vector<string>& values);
+
+ private:
+  string fieldName;
+  vector<string> values;
 };
-
-
-#endif

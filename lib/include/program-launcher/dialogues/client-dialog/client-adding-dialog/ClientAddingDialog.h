@@ -1,11 +1,6 @@
-#ifndef MARKETPLACE_ERP_TUI_CLIENTADDINGDIALOG_H
-#define MARKETPLACE_ERP_TUI_CLIENTADDINGDIALOG_H
-
+#pragma once
 
 class ClientAddingDialog {
-public:
-    static void addClient();
+ public:
+  static void addClient();
 };
-
-
-#endif

@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 
-#include "program-launcher/dialogues/client-dialog/ClientDialog.h"
-#include "program-launcher/dialogues/orders-dialog/OrdersDialog.h"
+#include "program-launcher/dialogues/client/ClientDialog.h"
+#include "program-launcher/dialogues/order/OrdersDialog.h"
 #include "utils/Utils.h"
 
 #define clientsManagementProgram "c"

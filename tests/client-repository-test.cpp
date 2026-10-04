@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "repositories/client-repository/ClientRepository.h"
+#include "repositories/ClientRepository.h"
 
 namespace fs = std::filesystem;
 

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "models/client/Client.h"
+#include "models/Client.h"
 #include "table-printer/TablePrinter.h"
 
 namespace {

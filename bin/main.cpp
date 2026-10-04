@@ -1,6 +1,6 @@
 #include <dirent.h>
 
-#include "file-services/configuration-service/ConfigurationService.h"
+#include "file-services/ConfigurationService.h"
 #include "program-launcher/ProgramLauncher.h"
 
 static const std::string mainDirectory = "marketplace-erp";

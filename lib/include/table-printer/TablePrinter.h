@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "models/client/Client.h"
-#include "models/order/Order.h"
+#include "models/Client.h"
+#include "models/Order.h"
 
 class TablePrinter {
  public:

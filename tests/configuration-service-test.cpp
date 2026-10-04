@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-#include "file-services/configuration-service/ConfigurationService.h"
+#include "file-services/ConfigurationService.h"
 
 namespace fs = std::filesystem;
 

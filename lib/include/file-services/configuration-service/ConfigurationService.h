@@ -1,14 +1,15 @@
 #pragma once
 
+#include <string>
 #include <utility>
 
 #include "file-services/csv-file-service/CsvFileService.h"
 
 class ConfigurationService {
  public:
-  static ConfigurationService* getInstance(string filePath);
-  static string getMainConfigFilePath();
-  static void setMainConfigFilePath(string newFilePath);
+  static ConfigurationService* getInstance(std::string filePath);
+  static std::string getMainConfigFilePath();
+  static void setMainConfigFilePath(std::string newFilePath);
 
   int getNextId();
   void save();
@@ -16,7 +17,7 @@ class ConfigurationService {
   virtual ~ConfigurationService();
 
  private:
-  explicit ConfigurationService(string filePath);
+  explicit ConfigurationService(std::string filePath);
 
   int currentId = 0;
   CsvFileService* csvFileService;

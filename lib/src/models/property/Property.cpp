@@ -1,23 +1,21 @@
 #include "models/property/Property.h"
 
+#include <string>
 #include <utility>
+#include <vector>
 
-Property::Property(string fieldName, const vector<string>& values) :
-        fieldName(std::move(fieldName)),
-        values(values) {}
+Property::Property(std::string fieldName,
+                   const std::vector<std::string>& values)
+    : fieldName(std::move(fieldName)), values(values) {}
 
-const string& Property::getFieldName() const {
-    return fieldName;
+const std::string& Property::getFieldName() const { return fieldName; }
+
+void Property::setFieldName(const std::string& newFieldName) {
+  Property::fieldName = newFieldName;
 }
 
-void Property::setFieldName(const string& newFieldName) {
-    Property::fieldName = newFieldName;
-}
+const std::vector<std::string>& Property::getValues() const { return values; }
 
-const vector<string>& Property::getValues() const {
-    return values;
-}
-
-void Property::setValues(const vector<string>& newValues) {
-    Property::values = newValues;
+void Property::setValues(const std::vector<std::string>& newValues) {
+  Property::values = newValues;
 }

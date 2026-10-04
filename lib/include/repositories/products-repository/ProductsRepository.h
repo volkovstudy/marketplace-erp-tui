@@ -1,16 +1,17 @@
 #pragma once
 
-#include <map>
+#include <string>
+#include <vector>
 
 #include "file-services/csv-file-service/CsvFileService.h"
 #include "models/product/Product.h"
 
 class ProductsRepository {
  public:
-  explicit ProductsRepository(string filePath);
+  explicit ProductsRepository(std::string filePath);
 
-  vector<Product*> getForOrderId(int id);
-  void save(vector<Product*> products, int orderId);
+  std::vector<Product*> getForOrderId(int id);
+  void save(std::vector<Product*> products, int orderId);
 
  private:
   CsvFileService* csvFileService;

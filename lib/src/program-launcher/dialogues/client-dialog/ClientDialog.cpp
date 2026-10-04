@@ -1,11 +1,13 @@
 #include "program-launcher/dialogues/client-dialog/ClientDialog.h"
 
 #include <iostream>
+#include <string>
+#include <vector>
 
-#include "utils/Utils.h"
+#include "program-launcher/dialogues/client-dialog/client-adding-dialog/ClientAddingDialog.h"
 #include "repositories/client-repository/ClientRepository.h"
 #include "table-printer/TablePrinter.h"
-#include "program-launcher/dialogues/client-dialog/client-adding-dialog/ClientAddingDialog.h"
+#include "utils/Utils.h"
 
 #define pathToClientsFile "marketplace-erp/clients.csv"
 
@@ -17,92 +19,90 @@
 #define editChar "e"
 #define cancelChar "c"
 
-using namespace std;
-
 void ClientDialog::openManagementDialog() {
-    cout << "You opened clients management section. ";
+  std::cout << "You opened clients management section. ";
+  printSectionVariants();
+
+  do {
+    bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
+
+    if (isUserWantToLeft) {
+      Utils::printDelimiter();
+      return;
+    }
+
+    Utils::printDelimiter();
+
+    std::cout << "You came back to the clients management section."
+              << std::endl;
     printSectionVariants();
-
-    do {
-        bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
-
-        if (isUserWantToLeft) {
-            Utils::printDelimiter();
-            return;
-        }
-
-        Utils::printDelimiter();
-
-        cout << "You came back to the clients management section." << endl;
-        printSectionVariants();
-    } while (true);
+  } while (true);
 }
 
 void ClientDialog::printSectionVariants() {
-    cout << "What do you want to do?" << endl << endl;
+  std::cout << "What do you want to do?" << std::endl << std::endl;
 
-    cout << "(A)dd new client;" << endl;
-    cout << "(L)ist all clients;" << endl;
-    cout << "(Q)uit from the section;" << endl;
+  std::cout << "(A)dd new client;" << std::endl;
+  std::cout << "(L)ist all clients;" << std::endl;
+  std::cout << "(Q)uit from the section;" << std::endl;
 }
 
-void ClientDialog::addNewClient() {
-    ClientAddingDialog::addClient();
-}
+void ClientDialog::addNewClient() { ClientAddingDialog::addClient(); }
 
 bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
-    do {
-        cout << endl << "Your choice (A, L, Q): ";
+  do {
+    std::cout << std::endl << "Your choice (A, L, Q): ";
 
-        string program;
-        cin >> program;
-        Utils::toLowerCase(&program);
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
 
-        if (program == addNewClientProgramChar) {
-            Utils::printDelimiter();
-            addNewClient();
-            break;
-        } else if (program == listAllClientsProgramChar) {
-            Utils::printDelimiter();
-            listAllClients();
-            break;
-        } else if (program == quitProgramChar) {
-            cout << endl << "You left clients management section." << endl;
-            return true;
-        } else {
-            cout << endl << "Wrong input. Try again." << endl;
-        }
-    } while (true);
+    if (program == addNewClientProgramChar) {
+      Utils::printDelimiter();
+      addNewClient();
+      break;
+    } else if (program == listAllClientsProgramChar) {
+      Utils::printDelimiter();
+      listAllClients();
+      break;
+    } else if (program == quitProgramChar) {
+      std::cout << std::endl
+                << "You left clients management section." << std::endl;
+      return true;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  } while (true);
 
-    return false;
+  return false;
 }
 
 void ClientDialog::listAllClients() {
-    ClientRepository clientRepository(pathToClientsFile);
-    vector<Client*> clients = clientRepository.getAll();
+  ClientRepository clientRepository(pathToClientsFile);
+  std::vector<Client*> clients = clientRepository.getAll();
 
-    if (clients.empty()) {
-        cout << "There are no clients!" << endl;
-        return;
+  if (clients.empty()) {
+    std::cout << "There are no clients!" << std::endl;
+    return;
+  }
+
+  std::cout << "All clients:" << std::endl;
+  TablePrinter::printVector(clients);
+
+  std::cout << std::endl << "What do you want to do?" << std::endl;
+  std::cout << "(Q)uit;" << std::endl;
+
+  do {
+    std::cout << std::endl << "Your choice (Q): ";
+
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
+
+    if (program == quitProgramChar) {
+      return;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
     }
-
-    cout << "All clients:" << endl;
-    TablePrinter::printVector(clients);
-
-    cout << endl << "What do you want to do?" << endl;
-    cout << "(Q)uit;" << endl;
-
-    do {
-        cout << endl << "Your choice (Q): ";
-
-        string program;
-        cin >> program;
-        Utils::toLowerCase(&program);
-
-        if (program == quitProgramChar) {
-            return;
-        } else {
-            cout << endl << "Wrong input. Try again." << endl;
-        }
-    } while (true);
+  } while (true);
 }

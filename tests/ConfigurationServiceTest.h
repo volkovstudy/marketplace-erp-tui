@@ -2,15 +2,14 @@
 
 #include <cassert>
 #include <iostream>
+#include <string>
 
 #include "file-services/configuration-service/ConfigurationService.h"
 
-using namespace std;
-
 class ConfigurationServiceTest {
  public:
-  static void shouldReturnOne(const string& filePath) {
-    cout << "Getting next id by from " << filePath << endl;
+  static void shouldReturnOne(const std::string& filePath) {
+    std::cout << "Getting next id by from " << filePath << std::endl;
 
     ConfigurationService* configurationService =
         ConfigurationService::getInstance(filePath);
@@ -19,14 +18,14 @@ class ConfigurationServiceTest {
     assert(1 == expected);
   }
 
-  static void shouldSaveNewCurrentId(const string& filePath) {
-    cout << "Saving new current id and getting next id from " << filePath
-         << " ";
+  static void shouldSaveNewCurrentId(const std::string& filePath) {
+    std::cout << "Saving new current id and getting next id from " << filePath
+              << " ";
 
     ConfigurationService* configurationService =
         ConfigurationService::getInstance(filePath);
     configurationService->save();
 
-    cout << "<<< Check it. In file should not be 0!" << endl;
+    std::cout << "<<< Check it. In file should not be 0!" << std::endl;
   }
 };

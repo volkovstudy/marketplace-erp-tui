@@ -1,10 +1,11 @@
+#include <string>
 #include <utility>
 
-#include "CsvFileServiceTest.h"
-#include "ConfigurationServiceTest.h"
 #include "ClientRepositoryTest.h"
-#include "ProductsRepositoryTest.h"
+#include "ConfigurationServiceTest.h"
+#include "CsvFileServiceTest.h"
 #include "OrderRepositoryTest.h"
+#include "ProductsRepositoryTest.h"
 #include "TablePrinterTest.h"
 
 #define fileForCsvFileServiceTest "tests/csv-file-service-test.csv"
@@ -13,82 +14,86 @@
 #define fileForProductsRepositoryTest "tests/products-test.csv"
 #define fileForOrderRepositoryTest "tests/orders-test.csv"
 
-using namespace std;
-
 void deleteFiles();
 
-void testCsvFileService(string filePath);
+void testCsvFileService(std::string filePath);
 
-void testConfigurationService(const string& filePath);
+void testConfigurationService(const std::string& filePath);
 
-void testClientRepository(const string& filePath);
+void testClientRepository(const std::string& filePath);
 
-void testProductsRepository(const string& filePath);
+void testProductsRepository(const std::string& filePath);
 
-void testOrderRepository(const string& filePathForOrders, const string& filePathForClients,
-                         const string& filePathForProducts);
+void testOrderRepository(const std::string& filePathForOrders,
+                         const std::string& filePathForClients,
+                         const std::string& filePathForProducts);
 
 void testTablePrinter();
 
 int main() {
-    deleteFiles();
+  deleteFiles();
 
-    testCsvFileService(fileForCsvFileServiceTest);
+  testCsvFileService(fileForCsvFileServiceTest);
 
-    testConfigurationService(fileForConfigurationServiceTest);
+  testConfigurationService(fileForConfigurationServiceTest);
 
-    testClientRepository(fileForClientRepositoryTest);
+  testClientRepository(fileForClientRepositoryTest);
 
-    testProductsRepository(fileForProductsRepositoryTest);
+  testProductsRepository(fileForProductsRepositoryTest);
 
-    testOrderRepository(fileForOrderRepositoryTest, fileForClientRepositoryTest, fileForProductsRepositoryTest);
+  testOrderRepository(fileForOrderRepositoryTest, fileForClientRepositoryTest,
+                      fileForProductsRepositoryTest);
 
-    testTablePrinter();
+  testTablePrinter();
 
-    return 0;
+  return 0;
 }
 
 void deleteFiles() {
-    remove(fileForCsvFileServiceTest);
-    remove(fileForConfigurationServiceTest);
-    remove(fileForClientRepositoryTest);
-    remove(fileForProductsRepositoryTest);
-    remove(fileForOrderRepositoryTest);
+  remove(fileForCsvFileServiceTest);
+  remove(fileForConfigurationServiceTest);
+  remove(fileForClientRepositoryTest);
+  remove(fileForProductsRepositoryTest);
+  remove(fileForOrderRepositoryTest);
 }
 
-void testCsvFileService(string filePath) {
-    CsvFileServiceTest::shouldWritePropertiesToFile(std::move(filePath));
+void testCsvFileService(std::string filePath) {
+  CsvFileServiceTest::shouldWritePropertiesToFile(std::move(filePath));
 }
 
-void testConfigurationService(const string& filePath) {
-    cout << "Testing ConfigurationService:" << endl;
-    ConfigurationServiceTest::shouldReturnOne(filePath);
-    ConfigurationServiceTest::shouldSaveNewCurrentId(filePath);
+void testConfigurationService(const std::string& filePath) {
+  std::cout << "Testing ConfigurationService:" << std::endl;
+  ConfigurationServiceTest::shouldReturnOne(filePath);
+  ConfigurationServiceTest::shouldSaveNewCurrentId(filePath);
 }
 
-void testClientRepository(const string& filePath) {
-    ClientRepositoryTest::shouldWriteClientToFile(filePath);
-    ClientRepositoryTest::shouldGetAllClientsFromFile(filePath);
-    ClientRepositoryTest::shouldGetClientByIdOne(filePath);
+void testClientRepository(const std::string& filePath) {
+  ClientRepositoryTest::shouldWriteClientToFile(filePath);
+  ClientRepositoryTest::shouldGetAllClientsFromFile(filePath);
+  ClientRepositoryTest::shouldGetClientByIdOne(filePath);
 }
 
-void testProductsRepository(const string& filePath) {
-    ProductsRepositoryTest::shouldWriteProductsToFile(filePath);
-    ProductsRepositoryTest::shouldGetAllProductsForSpecificOrderFromFile(filePath);
+void testProductsRepository(const std::string& filePath) {
+  ProductsRepositoryTest::shouldWriteProductsToFile(filePath);
+  ProductsRepositoryTest::shouldGetAllProductsForSpecificOrderFromFile(
+      filePath);
 }
 
-void testOrderRepository(const string& filePathForOrders, const string& filePathForClients,
-                         const string& filePathForProducts) {
-    OrderRepositoryTest::shouldWriteOrderToFile(filePathForOrders, filePathForClients, filePathForProducts);
-    OrderRepositoryTest::shouldGetAllOrdersFromFile(filePathForOrders, filePathForClients, filePathForProducts);
+void testOrderRepository(const std::string& filePathForOrders,
+                         const std::string& filePathForClients,
+                         const std::string& filePathForProducts) {
+  OrderRepositoryTest::shouldWriteOrderToFile(
+      filePathForOrders, filePathForClients, filePathForProducts);
+  OrderRepositoryTest::shouldGetAllOrdersFromFile(
+      filePathForOrders, filePathForClients, filePathForProducts);
 }
 
 void testTablePrinter() {
-    cout << endl;
-    TablePrinterTest::shouldPrintVectorOfClients();
-    cout << endl;
+  std::cout << std::endl;
+  TablePrinterTest::shouldPrintVectorOfClients();
+  std::cout << std::endl;
 
-    cout << endl;
-    TablePrinterTest::shouldPrintVectorOfOrders();
-    cout << endl;
+  std::cout << std::endl;
+  TablePrinterTest::shouldPrintVectorOfOrders();
+  std::cout << std::endl;
 }

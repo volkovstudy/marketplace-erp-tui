@@ -7,13 +7,13 @@
 
 class ClientRepository {
  public:
-  explicit ClientRepository(string filePath);
+  explicit ClientRepository(std::string filePath);
 
-  vector<Client*> getAll();
+  std::vector<Client*> getAll();
   Client* getById(int id);
   void save(Client* client);
 
  private:
   CsvFileService csvFileService;
-  vector<Client*> clients{};
+  std::vector<Client*> clients{};
 };

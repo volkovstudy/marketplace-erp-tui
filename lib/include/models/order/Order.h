@@ -7,8 +7,8 @@
 
 class Order {
  public:
-  Order(Client* client, vector<Product*> products);
-  Order(int id, Client* client, vector<Product*> products);
+  Order(Client* client, std::vector<Product*> products);
+  Order(int id, Client* client, std::vector<Product*> products);
 
   int getId() const;
   void setId(int id);
@@ -16,11 +16,11 @@ class Order {
   Client* getClient() const;
   void setClient(Client* client);
 
-  vector<Product*> getProducts() const;
-  void setProducts(vector<Product*> products);
+  std::vector<Product*> getProducts() const;
+  void setProducts(std::vector<Product*> products);
 
  private:
   int id;
   Client* client;
-  vector<Product*> products;
+  std::vector<Product*> products;
 };

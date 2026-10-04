@@ -1,19 +1,14 @@
 #include "models/product/Product.h"
 
-Product::Product(const string& name, int amount) : name_(name), amount_(amount) {}
+#include <string>
 
-const string& Product::getName() const {
-    return name_;
-}
+Product::Product(const std::string& name, int amount)
+    : name_(name), amount_(amount) {}
 
-void Product::setName(const string& name) {
-    name_ = name;
-}
+const std::string& Product::getName() const { return name_; }
 
-int Product::getAmount() const {
-    return amount_;
-}
+void Product::setName(const std::string& name) { name_ = name; }
 
-void Product::setAmount(int amount) {
-    amount_ = amount;
-}
+int Product::getAmount() const { return amount_; }
+
+void Product::setAmount(int amount) { amount_ = amount; }

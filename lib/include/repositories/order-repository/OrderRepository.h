@@ -7,14 +7,15 @@
 
 class OrderRepository {
  public:
-  explicit OrderRepository(string filePath, ClientRepository* clientRepository,
+  explicit OrderRepository(std::string filePath,
+                           ClientRepository* clientRepository,
                            ProductsRepository* productsRepository);
 
-  vector<Order*> getAll();
+  std::vector<Order*> getAll();
   void save(Order* order);
 
  private:
-  vector<Order*> orders{};
+  std::vector<Order*> orders{};
   CsvFileService* csvFileService;
   ClientRepository* clientRepository;
   ProductsRepository* productsRepository;

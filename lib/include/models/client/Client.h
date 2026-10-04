@@ -2,24 +2,22 @@
 
 #include <string>
 
-using namespace std;
-
 class Client {
  public:
-  Client(string fullName, string email);
-  Client(int id, string fullName, string email);
+  Client(std::string fullName, std::string email);
+  Client(int id, std::string fullName, std::string email);
 
   int getId() const;
   void setId(int id);
 
-  const string& getFullName() const;
-  void setFullName(const string& fullName);
+  const std::string& getFullName() const;
+  void setFullName(const std::string& fullName);
 
-  const string& getEmail() const;
-  void setEmail(const string& email);
+  const std::string& getEmail() const;
+  void setEmail(const std::string& email);
 
  private:
   int id;
-  string fullName;
-  string email;
+  std::string fullName;
+  std::string email;
 };

@@ -1,18 +1,17 @@
 #include "utils/Utils.h"
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
+#include <string>
 
-using namespace std;
-
-void Utils::toLowerCase(string* line) {
-    transform(line->begin(), line->end(), line->begin(),
-              [](unsigned char c) { return tolower(c); }
-    );
+void Utils::toLowerCase(std::string* line) {
+  std::transform(line->begin(), line->end(), line->begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 }
 
 void Utils::printDelimiter() {
-    cout << endl;
-    cout << "--------------------------------------------------------" << endl;
-    cout << endl;
+  std::cout << std::endl;
+  std::cout << "--------------------------------------------------------"
+            << std::endl;
+  std::cout << std::endl;
 }

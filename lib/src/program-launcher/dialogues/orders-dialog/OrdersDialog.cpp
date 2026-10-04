@@ -1,11 +1,14 @@
 #include "program-launcher/dialogues/orders-dialog/OrdersDialog.h"
-#include "utils/Utils.h"
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "program-launcher/dialogues/orders-dialog/order-adding-dialog/OrderAddingDialog.h"
 #include "repositories/client-repository/ClientRepository.h"
 #include "repositories/order-repository/OrderRepository.h"
 #include "table-printer/TablePrinter.h"
-#include "program-launcher/dialogues/orders-dialog/order-adding-dialog/OrderAddingDialog.h"
-
-#include <iostream>
+#include "utils/Utils.h"
 
 #define pathToClientsFile "marketplace-erp/clients.csv"
 #define pathToOrdersFile "marketplace-erp/orders.csv"
@@ -15,95 +18,93 @@
 #define listAllOrdersProgramChar "l"
 #define quitProgramChar "q"
 
-using namespace std;
-
 void OrdersDialog::openManagementDialog() {
-    cout << "You opened orders management section. ";
+  std::cout << "You opened orders management section. ";
+  printSectionVariants();
+
+  do {
+    bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
+
+    if (isUserWantToLeft) {
+      Utils::printDelimiter();
+      return;
+    }
+
+    Utils::printDelimiter();
+
+    std::cout << "You came back to the orders management section." << std::endl;
     printSectionVariants();
-
-    do {
-        bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
-
-        if (isUserWantToLeft) {
-            Utils::printDelimiter();
-            return;
-        }
-
-        Utils::printDelimiter();
-
-        cout << "You came back to the orders management section." << endl;
-        printSectionVariants();
-    } while (true);
+  } while (true);
 }
 
 void OrdersDialog::printSectionVariants() {
-    cout << "What do you want to do?" << endl << endl;
+  std::cout << "What do you want to do?" << std::endl << std::endl;
 
-    cout << "(A)dd new order;" << endl;
-    cout << "(L)ist all orders;" << endl;
-    cout << "(Q)uit from the section;" << endl;
+  std::cout << "(A)dd new order;" << std::endl;
+  std::cout << "(L)ist all orders;" << std::endl;
+  std::cout << "(Q)uit from the section;" << std::endl;
 }
 
 bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
-    do {
-        cout << endl << "Your choice (A, L, Q): ";
+  do {
+    std::cout << std::endl << "Your choice (A, L, Q): ";
 
-        string program;
-        cin >> program;
-        Utils::toLowerCase(&program);
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
 
-        if (program == addNewOrderProgramChar) {
-            Utils::printDelimiter();
-            addNewOrder();
-            break;
-        } else if (program == listAllOrdersProgramChar) {
-            Utils::printDelimiter();
-            listAllOrders();
-            break;
-        } else if (program == quitProgramChar) {
-            cout << endl << "You left orders management section." << endl;
-            return true;
-        } else {
-            cout << endl << "Wrong input. Try again." << endl;
-        }
-    } while (true);
+    if (program == addNewOrderProgramChar) {
+      Utils::printDelimiter();
+      addNewOrder();
+      break;
+    } else if (program == listAllOrdersProgramChar) {
+      Utils::printDelimiter();
+      listAllOrders();
+      break;
+    } else if (program == quitProgramChar) {
+      std::cout << std::endl
+                << "You left orders management section." << std::endl;
+      return true;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  } while (true);
 
-    return false;
+  return false;
 }
 
-void OrdersDialog::addNewOrder() {
-    OrderAddingDialog::addOrder();
-}
+void OrdersDialog::addNewOrder() { OrderAddingDialog::addOrder(); }
 
 void OrdersDialog::listAllOrders() {
-    ClientRepository clientRepository(pathToClientsFile);
-    ProductsRepository productsRepository(pathToProductsFile);
-    OrderRepository orderRepository(pathToOrdersFile, &clientRepository, &productsRepository);
+  ClientRepository clientRepository(pathToClientsFile);
+  ProductsRepository productsRepository(pathToProductsFile);
+  OrderRepository orderRepository(pathToOrdersFile, &clientRepository,
+                                  &productsRepository);
 
-    vector<Order*> orders = orderRepository.getAll();
+  std::vector<Order*> orders = orderRepository.getAll();
 
-    if (orders.empty()) {
-        cout << "There are no orders!" << endl;
-        return;
+  if (orders.empty()) {
+    std::cout << "There are no orders!" << std::endl;
+    return;
+  }
+
+  std::cout << "All orders:" << std::endl;
+  TablePrinter::printVector(orders);
+
+  std::cout << std::endl << "What do you want to do?" << std::endl;
+  std::cout << "(Q)uit;" << std::endl;
+
+  do {
+    std::cout << std::endl << "Your choice (Q): ";
+
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
+
+    if (program == quitProgramChar) {
+      return;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
     }
-
-    cout << "All orders:" << endl;
-    TablePrinter::printVector(orders);
-
-    cout << endl << "What do you want to do?" << endl;
-    cout << "(Q)uit;" << endl;
-
-    do {
-        cout << endl << "Your choice (Q): ";
-
-        string program;
-        cin >> program;
-        Utils::toLowerCase(&program);
-
-        if (program == quitProgramChar) {
-            return;
-        } else {
-            cout << endl << "Wrong input. Try again." << endl;
-        }
-    } while (true);
+  } while (true);
 }

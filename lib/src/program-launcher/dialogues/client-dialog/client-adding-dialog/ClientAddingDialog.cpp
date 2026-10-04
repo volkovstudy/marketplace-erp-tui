@@ -1,9 +1,11 @@
 #include "program-launcher/dialogues/client-dialog/client-adding-dialog/ClientAddingDialog.h"
-#include "utils/Utils.h"
-#include "models/client/Client.h"
-#include "repositories/client-repository/ClientRepository.h"
 
 #include <iostream>
+#include <string>
+
+#include "models/client/Client.h"
+#include "repositories/client-repository/ClientRepository.h"
+#include "utils/Utils.h"
 
 #define pathToClientsFile "marketplace-erp/clients.csv"
 
@@ -13,64 +15,62 @@
 #define editChar "e"
 #define cancelChar "c"
 
-using namespace std;
-
-void getInformationAboutClient(string& name, string& email);
+void getInformationAboutClient(std::string& name, std::string& email);
 void saveClient(Client client);
 
 void ClientAddingDialog::addClient() {
-    cout << "Now you're going to add new client." << endl;
+  std::cout << "Now you're going to add new client." << std::endl;
 
-    string name, email;
-    getInformationAboutClient(name, email);
+  std::string name, email;
+  getInformationAboutClient(name, email);
 
-    do {
-        Utils::printDelimiter();
+  do {
+    Utils::printDelimiter();
 
-        cout << "Well, check the information about new client:" << endl;
-        cout << "Name" << tab << name << endl;
-        cout << "Email" << tab << email << endl;
+    std::cout << "Well, check the information about new client:" << std::endl;
+    std::cout << "Name" << tab << name << std::endl;
+    std::cout << "Email" << tab << email << std::endl;
 
-        cout << endl << "Is it right?" << endl;
-        cout << "(Y)es, (E)dit, (C)ancel: ";
+    std::cout << std::endl << "Is it right?" << std::endl;
+    std::cout << "(Y)es, (E)dit, (C)ancel: ";
 
-        string program;
-        cin >> program;
-        Utils::toLowerCase(&program);
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
 
-        if (program == yesChar) {
-            Client client(name, email);
-            saveClient(client);
+    if (program == yesChar) {
+      Client client(name, email);
+      saveClient(client);
 
-            cout << endl << "Client added." << endl;
+      std::cout << std::endl << "Client added." << std::endl;
 
-            break;
-        } else if (program == editChar) {
-            Utils::printDelimiter();
-            getInformationAboutClient(name, email);
-        } else if (program == cancelChar) {
-            cout << endl << "You left adding new client." << endl;
-            return;
-        } else {
-            cout << endl << "Wrong input. Try again." << endl;
-        }
-    } while (true);
+      break;
+    } else if (program == editChar) {
+      Utils::printDelimiter();
+      getInformationAboutClient(name, email);
+    } else if (program == cancelChar) {
+      std::cout << std::endl << "You left adding new client." << std::endl;
+      return;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  } while (true);
 }
 
-void getInformationAboutClient(string& name, string& email) {
-    cout << "Write the name: ";
-    do {
-        getline(cin, name);
-    } while (name.empty());
+void getInformationAboutClient(std::string& name, std::string& email) {
+  std::cout << "Write the name: ";
+  do {
+    std::getline(std::cin, name);
+  } while (name.empty());
 
-    cout << "Write the email: ";
-    do {
-        cin >> email;
-    } while (email.empty());
+  std::cout << "Write the email: ";
+  do {
+    std::cin >> email;
+  } while (email.empty());
 }
 
 void saveClient(Client client) {
-    ClientRepository clientRepository(pathToClientsFile);
+  ClientRepository clientRepository(pathToClientsFile);
 
-    clientRepository.save(&client);
+  clientRepository.save(&client);
 }

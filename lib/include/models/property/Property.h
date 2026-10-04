@@ -3,19 +3,17 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 class Property {
  public:
-  Property(string fieldName, const vector<string>& values);
+  Property(std::string fieldName, const std::vector<std::string>& values);
 
-  const string& getFieldName() const;
-  void setFieldName(const string& fieldName);
+  const std::string& getFieldName() const;
+  void setFieldName(const std::string& fieldName);
 
-  const vector<string>& getValues() const;
-  void setValues(const vector<string>& values);
+  const std::vector<std::string>& getValues() const;
+  void setValues(const std::vector<std::string>& values);
 
  private:
-  string fieldName;
-  vector<string> values;
+  std::string fieldName;
+  std::vector<std::string> values;
 };

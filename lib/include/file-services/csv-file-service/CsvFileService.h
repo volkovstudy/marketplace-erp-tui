@@ -1,21 +1,20 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "models/property/Property.h"
 
-using namespace std;
-
 class CsvFileService {
  public:
-  explicit CsvFileService(string filePath);
+  explicit CsvFileService(std::string filePath);
 
-  vector<Property*> getAllLines();
-  void write(vector<Property*> properties);
-  void eraseAndWrite(vector<Property*> properties);
-  const string& getFilePath() const;
-  void setFilePath(const string& newFilePath);
+  std::vector<Property*> getAllLines();
+  void write(std::vector<Property*> properties);
+  void eraseAndWrite(std::vector<Property*> properties);
+  const std::string& getFilePath() const;
+  void setFilePath(const std::string& newFilePath);
 
  private:
-  string filePath;
+  std::string filePath;
 };

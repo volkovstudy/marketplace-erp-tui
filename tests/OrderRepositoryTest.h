@@ -2,18 +2,18 @@
 
 #include <cassert>
 #include <iostream>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "repositories/order-repository/OrderRepository.h"
 
-using namespace std;
-
 class OrderRepositoryTest {
  public:
-  static void shouldWriteOrderToFile(string filePathForOrders,
-                                     string filePathForClients,
-                                     string filePathForProducts) {
-    cout << "Saving & writing Order to " << filePathForOrders << endl;
+  static void shouldWriteOrderToFile(std::string filePathForOrders,
+                                     std::string filePathForClients,
+                                     std::string filePathForProducts) {
+    std::cout << "Saving & writing Order to " << filePathForOrders << std::endl;
 
     auto* clientRepository =
         new ClientRepository(std::move(filePathForClients));
@@ -26,7 +26,7 @@ class OrderRepositoryTest {
         new Client(2, "client for order testing", "order.testing@example.com");
     clientRepository->save(client);
 
-    vector<Product*> products;
+    std::vector<Product*> products;
     products.push_back(new Product("playstation", 1));
     products.push_back(new Product("tv", 1));
 
@@ -35,10 +35,10 @@ class OrderRepositoryTest {
     orderRepository.save(order);
   }
 
-  static void shouldGetAllOrdersFromFile(string filePathForOrders,
-                                         string filePathForClients,
-                                         string filePathForProducts) {
-    cout << "Getting all orders from " << filePathForOrders << endl;
+  static void shouldGetAllOrdersFromFile(std::string filePathForOrders,
+                                         std::string filePathForClients,
+                                         std::string filePathForProducts) {
+    std::cout << "Getting all orders from " << filePathForOrders << std::endl;
 
     auto* clientRepository =
         new ClientRepository(std::move(filePathForClients));
@@ -47,7 +47,7 @@ class OrderRepositoryTest {
     OrderRepository orderRepository(std::move(filePathForOrders),
                                     clientRepository, productsRepository);
 
-    vector<Order*> orders = orderRepository.getAll();
+    std::vector<Order*> orders = orderRepository.getAll();
 
     assert(!orders.empty());
   }

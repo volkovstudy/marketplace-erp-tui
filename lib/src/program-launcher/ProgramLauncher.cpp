@@ -3,62 +3,60 @@
 #include <iostream>
 #include <string>
 
-#include "utils/Utils.h"
 #include "program-launcher/dialogues/client-dialog/ClientDialog.h"
 #include "program-launcher/dialogues/orders-dialog/OrdersDialog.h"
+#include "utils/Utils.h"
 
 #define clientsManagementProgram "c"
 #define ordersManagementProgram "o"
 #define quitProgram "q"
 
-using namespace std;
-
 void printProgramSections();
 
 void ProgramLauncher::start() {
-    cout << "Hello! ";
+  std::cout << "Hello! ";
+  printProgramSections();
+
+  while (true) {
+    bool doesUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
+    if (doesUserWantToLeft) return;
+
+    std::cout << "You came back to the main section." << std::endl;
     printProgramSections();
-
-    while (true) {
-        bool doesUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
-        if (doesUserWantToLeft) return;
-
-        cout << "You came back to the main section." << endl;
-        printProgramSections();
-    }
+  }
 }
 
 void printProgramSections() {
-    cout << "What do you want to open?" << endl << endl;
+  std::cout << "What do you want to open?" << std::endl << std::endl;
 
-    cout << "(C)lients management;" << endl;
-    cout << "(O)rders management;" << endl;
-    cout << "(Q)uit;" << endl;
+  std::cout << "(C)lients management;" << std::endl;
+  std::cout << "(O)rders management;" << std::endl;
+  std::cout << "(Q)uit;" << std::endl;
 }
 
 bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
-    do {
-        cout << endl << "Your choice (C, O, Q): ";
+  do {
+    std::cout << std::endl << "Your choice (C, O, Q): ";
 
-        string program;
-        cin >> program;
-        Utils::toLowerCase(&program);
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
 
-        if (program == clientsManagementProgram) {
-            Utils::printDelimiter();
-            ClientDialog::openManagementDialog();
-            break;
-        } else if (program == ordersManagementProgram) {
-            Utils::printDelimiter();
-            OrdersDialog::openManagementDialog();
-            break;
-        } else if (program == quitProgram) {
-            cout << endl << "Bye!" << endl;
-            return true;
-        } else {
-            cout << endl << "Wrong input. Try again." << endl;
-        }
-    } while (true);
+    if (program == clientsManagementProgram) {
+      Utils::printDelimiter();
+      ClientDialog::openManagementDialog();
+      break;
+    } else if (program == ordersManagementProgram) {
+      Utils::printDelimiter();
+      OrdersDialog::openManagementDialog();
+      break;
+    } else if (program == quitProgram) {
+      std::cout << std::endl << "Bye!" << std::endl;
+      return true;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  } while (true);
 
-    return false;
+  return false;
 }

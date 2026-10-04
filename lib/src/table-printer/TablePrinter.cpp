@@ -1,198 +1,210 @@
 #include "table-printer/TablePrinter.h"
 
+#include <algorithm>
 #include <iostream>
-#include <sstream>
 #include <map>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #define indentLength 10
 
-using namespace std;
-
 void printHorizontalLine(int length);
 
-void printHeader(int lineLength, const string& tableName);
+void printHeader(int lineLength, const std::string& tableName);
 
-void printTableName(const string& tableName, int lineLength);
+void printTableName(const std::string& tableName, int lineLength);
 
-void TablePrinter::printVector(const vector<Client*>& clients) {
-    int maxLengthOfName = 0, maxLengthOfEmail = 0;
-    for (Client* client: clients) {
-        int nameLength = (int) client->getFullName().length();
-        maxLengthOfName = max(maxLengthOfName, nameLength);
+void TablePrinter::printVector(const std::vector<Client*>& clients) {
+  int maxLengthOfName = 0, maxLengthOfEmail = 0;
+  for (Client* client : clients) {
+    int nameLength = (int)client->getFullName().length();
+    maxLengthOfName = std::max(maxLengthOfName, nameLength);
 
-        int emailLength = (int) client->getEmail().length();
-        maxLengthOfEmail = max(maxLengthOfEmail, emailLength);
-    }
+    int emailLength = (int)client->getEmail().length();
+    maxLengthOfEmail = std::max(maxLengthOfEmail, emailLength);
+  }
 
-    // indentLength * 2 => because of left & right indent
-    // + 3 => because of three '|' characters in header
-    int lineLength = maxLengthOfName + maxLengthOfEmail + (indentLength * 2) + 3;
-    printHeader(lineLength, "*Clients*");
+  // indentLength * 2 => because of left & right indent
+  // + 3 => because of three '|' characters in header
+  int lineLength = maxLengthOfName + maxLengthOfEmail + (indentLength * 2) + 3;
+  printHeader(lineLength, "*Clients*");
 
-    cout << "|";
-    cout.width(maxLengthOfName + indentLength);
-    cout << "NAME " << " |";
+  std::cout << "|";
+  std::cout.width(maxLengthOfName + indentLength);
+  std::cout << "NAME " << " |";
 
-    cout.width(maxLengthOfEmail + indentLength - 2); // -2 => because of two spaces in next line
-    cout << "EMAIL " << " |";
-    cout << endl;
+  std::cout.width(maxLengthOfEmail + indentLength -
+                  2);  // -2 => because of two spaces in next line
+  std::cout << "EMAIL " << " |";
+  std::cout << std::endl;
 
-    printHorizontalLine(lineLength);
+  printHorizontalLine(lineLength);
 
-    for (Client* client: clients) {
-        cout << "| ";
-        cout.width(maxLengthOfName + indentLength - 1);
-        cout << right;
-        cout << client->getFullName();
-        cout << " |";
+  for (Client* client : clients) {
+    std::cout << "| ";
+    std::cout.width(maxLengthOfName + indentLength - 1);
+    std::cout << std::right;
+    std::cout << client->getFullName();
+    std::cout << " |";
 
-        cout.width(maxLengthOfEmail + indentLength -
-                   2); // -2 => because of one space in " |" in NAME column & one space in the end
-        cout << right;
-        cout << client->getEmail();
-        cout << " |" << endl;
-    }
+    std::cout.width(maxLengthOfEmail + indentLength -
+                    2);  // -2 => because of one space in " |" in NAME column &
+                         // one space in the end
+    std::cout << std::right;
+    std::cout << client->getEmail();
+    std::cout << " |" << std::endl;
+  }
 
-    printHorizontalLine(lineLength);
+  printHorizontalLine(lineLength);
 }
 
-string makeClientLine(Client& client) {
-    stringstream clientLine;
-    clientLine << client.getFullName() << " <" << client.getEmail() << ">";
-    return clientLine.str();
+std::string makeClientLine(Client& client) {
+  std::stringstream clientLine;
+  clientLine << client.getFullName() << " <" << client.getEmail() << ">";
+  return clientLine.str();
 }
 
-string makeProductLine(Product* product) {
-    int amount = product->getAmount();
+std::string makeProductLine(Product* product) {
+  int amount = product->getAmount();
 
-    stringstream productLine;
-    productLine << product->getName() << " - " << amount;
+  std::stringstream productLine;
+  productLine << product->getName() << " - " << amount;
 
-    if (amount == 1) {
-        productLine << " unit";
-    } else {
-        productLine << " units";
-    }
+  if (amount == 1) {
+    productLine << " unit";
+  } else {
+    productLine << " units";
+  }
 
-    return productLine.str();
+  return productLine.str();
 }
 
-void TablePrinter::printVector(const vector<Order*>& orders) {
-    map<Order*, string> idStrings;
-    map<Order*, string> clientLines;
-    map<Order*, vector<string>> productLines;
+void TablePrinter::printVector(const std::vector<Order*>& orders) {
+  std::map<Order*, std::string> idStrings;
+  std::map<Order*, std::string> clientLines;
+  std::map<Order*, std::vector<std::string>> productLines;
 
-    int maxLengthOfId = 0, maxLengthOfClientLine = 0, maxLengthOfProductLine = 0;
-    for (Order* order: orders) {
-        string idString = to_string(order->getId());
-        idStrings[order] = idString;
-        int idLength = (int) idString.length();
-        maxLengthOfId = max(maxLengthOfId, idLength);
+  int maxLengthOfId = 0, maxLengthOfClientLine = 0, maxLengthOfProductLine = 0;
+  for (Order* order : orders) {
+    std::string idString = std::to_string(order->getId());
+    idStrings[order] = idString;
+    int idLength = (int)idString.length();
+    maxLengthOfId = std::max(maxLengthOfId, idLength);
 
-        Client client = *(order->getClient());
-        string clientLine = makeClientLine(client);
-        clientLines[order] = clientLine;
-        maxLengthOfClientLine = max(maxLengthOfClientLine, (int) clientLine.length());
+    Client client = *(order->getClient());
+    std::string clientLine = makeClientLine(client);
+    clientLines[order] = clientLine;
+    maxLengthOfClientLine =
+        std::max(maxLengthOfClientLine, (int)clientLine.length());
 
-        vector<string> productsLines;
-        for (Product* product: order->getProducts()) {
-            string productLine = makeProductLine(product);
-            maxLengthOfProductLine = max(maxLengthOfProductLine, (int) productLine.length());
+    std::vector<std::string> productsLines;
+    for (Product* product : order->getProducts()) {
+      std::string productLine = makeProductLine(product);
+      maxLengthOfProductLine =
+          std::max(maxLengthOfProductLine, (int)productLine.length());
 
-            productsLines.push_back(productLine);
-        }
-        productLines[order] = productsLines;
+      productsLines.push_back(productLine);
     }
+    productLines[order] = productsLines;
+  }
 
-    // indentLength * 2 => because of left & right indent
-    // + 4 => because of four '|' characters in header
-    // + 4 => because of spaces before '|' characters in header
-    int lineLength = maxLengthOfId + maxLengthOfClientLine + maxLengthOfProductLine + (indentLength * 2) + 4 + 4;
-    printHeader(lineLength, "*Orders*");
+  // indentLength * 2 => because of left & right indent
+  // + 4 => because of four '|' characters in header
+  // + 4 => because of spaces before '|' characters in header
+  int lineLength = maxLengthOfId + maxLengthOfClientLine +
+                   maxLengthOfProductLine + (indentLength * 2) + 4 + 4;
+  printHeader(lineLength, "*Orders*");
 
-    cout << "|";
-    cout.width(maxLengthOfId + indentLength);
-    cout << "ID " << " |";
+  std::cout << "|";
+  std::cout.width(maxLengthOfId + indentLength);
+  std::cout << "ID " << " |";
 
-    cout.width(maxLengthOfClientLine + 1); // +1 => because of 1 space in " |"
-    cout << "CLIENT " << " |";
+  std::cout.width(maxLengthOfClientLine +
+                  1);  // +1 => because of 1 space in " |"
+  std::cout << "CLIENT " << " |";
 
-    cout.width(maxLengthOfProductLine + indentLength);
-    cout << "PRODUCTS " << " |";
-    cout << endl;
+  std::cout.width(maxLengthOfProductLine + indentLength);
+  std::cout << "PRODUCTS " << " |";
+  std::cout << std::endl;
+
+  printHorizontalLine(lineLength);
+
+  int widthForId = maxLengthOfId + indentLength;
+  // +1 => because we need a space after previous '|' in ID column AND because
+  // we don't have indent there
+  int widthForClient = maxLengthOfClientLine + 1;
+  int widthForProducts = maxLengthOfProductLine + indentLength;
+
+  for (Order* order : orders) {
+    std::cout << "|";
+
+    std::cout.width(widthForId);
+    std::cout << std::right << idStrings[order] << " |";
+
+    std::cout.width(widthForClient);
+    std::cout << std::right << clientLines[order] << " |";
+
+    std::vector<std::string> productsLines = productLines[order];
+    std::cout.width(widthForProducts);
+    std::cout << std::right
+              << (productsLines.empty() ? "" : productsLines.at(0)) << " |"
+              << std::endl;
+
+    // Starts from 1 because we've already printed the first line
+    for (int i = 1; i < productsLines.size(); ++i) {
+      std::string productLine = productsLines.at(i);
+
+      std::cout << "|";
+
+      std::cout.width(
+          widthForId +
+          2);  // +2 => because of the need to move the '|' to the right
+      std::cout << std::right << "|";
+
+      std::cout.width(
+          widthForClient +
+          2);  // +2 => because of the need to move the '|' to the right
+      std::cout << std::right << "|";
+
+      std::cout.width(widthForProducts);
+      std::cout << std::right;
+      std::cout << productLine << " |" << std::endl;
+    }
 
     printHorizontalLine(lineLength);
-
-    int widthForId = maxLengthOfId + indentLength;
-    // +1 => because we need a space after previous '|' in ID column AND because we don't have indent there
-    int widthForClient = maxLengthOfClientLine + 1;
-    int widthForProducts = maxLengthOfProductLine + indentLength;
-
-    for (Order* order: orders) {
-        cout << "|";
-
-        cout.width(widthForId);
-        cout << right << idStrings[order] << " |";
-
-        cout.width(widthForClient);
-        cout << right << clientLines[order] << " |";
-
-        vector<string> productsLines = productLines[order];
-        cout.width(widthForProducts);
-        cout << right << (productsLines.empty() ? "" : productsLines.at(0)) << " |" << endl;
-
-        // Starts from 1 because we've already printed the first line
-        for (int i = 1; i < productsLines.size(); ++i) {
-            string productLine = productsLines.at(i);
-
-            cout << "|";
-
-            cout.width(widthForId + 2); // +2 => because of the need to move the '|' to the right
-            cout << right << "|";
-
-            cout.width(widthForClient + 2); // +2 => because of the need to move the '|' to the right
-            cout << right << "|";
-
-            cout.width(widthForProducts);
-            cout << right;
-            cout << productLine << " |" << endl;
-        }
-
-        printHorizontalLine(lineLength);
-    }
+  }
 }
 
 void printHorizontalLine(int length) {
-    for (int i = 0; i < length; ++i) {
-        cout << "-";
-    }
-    cout << endl;
+  for (int i = 0; i < length; ++i) {
+    std::cout << "-";
+  }
+  std::cout << std::endl;
 }
 
-void printHeader(int lineLength, const string& tableName) {
-    printHorizontalLine(lineLength);
-    printTableName(tableName, lineLength);
-    printHorizontalLine(lineLength);
+void printHeader(int lineLength, const std::string& tableName) {
+  printHorizontalLine(lineLength);
+  printTableName(tableName, lineLength);
+  printHorizontalLine(lineLength);
 }
 
-bool isOdd(int number) {
-    return number % 2 != 0;
-}
+bool isOdd(int number) { return number % 2 != 0; }
 
-void printTableName(const string& tableName, int lineLength) {
-    int lengthOfIndent = lineLength / 2;
+void printTableName(const std::string& tableName, int lineLength) {
+  int lengthOfIndent = lineLength / 2;
 
-    bool isLengthOdd = isOdd(lineLength);
-    if (isLengthOdd) lengthOfIndent++;
+  bool isLengthOdd = isOdd(lineLength);
+  if (isLengthOdd) lengthOfIndent++;
 
-    cout << "|";
-    cout.width(lengthOfIndent);
-    cout << tableName;
+  std::cout << "|";
+  std::cout.width(lengthOfIndent);
+  std::cout << tableName;
 
-    if (isLengthOdd) // -1 / -2 => because begins printing after all width
-        cout.width(lengthOfIndent - 2);
-    else
-        cout.width(lengthOfIndent - 1);
-    cout << "|";
-    cout << endl;
+  if (isLengthOdd)  // -1 / -2 => because begins printing after all width
+    std::cout.width(lengthOfIndent - 2);
+  else
+    std::cout.width(lengthOfIndent - 1);
+  std::cout << "|";
+  std::cout << std::endl;
 }

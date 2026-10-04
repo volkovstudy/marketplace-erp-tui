@@ -1,31 +1,29 @@
 #include <dirent.h>
-#include "src/program-launcher/ProgramLauncher.h"
+
 #include "src/file-services/configuration-service/ConfigurationService.h"
+#include "src/program-launcher/ProgramLauncher.h"
 
-#define mainDirectory "marketplace-erp"
+static const std::string mainDirectory = "marketplace-erp";
 
-using namespace std;
-
-void createDirectoryIfDoesNotExist(const string& name);
+void createDirectoryIfDoesNotExist(const std::string& name);
 
 int main() {
-    createDirectoryIfDoesNotExist(mainDirectory);
+  createDirectoryIfDoesNotExist(mainDirectory);
 
-    string configFilePath = mainDirectory"/config.csv";
-    ConfigurationService::setMainConfigFilePath(configFilePath);
+  std::string configFilePath = mainDirectory + "/config.csv";
+  ConfigurationService::setMainConfigFilePath(configFilePath);
 
-    ProgramLauncher::start();
+  ProgramLauncher::start();
 
-    return 0;
+  return 0;
 }
 
-void createDirectoryIfDoesNotExist(const string& name) {
-    DIR* dir = opendir(name.c_str());
+void createDirectoryIfDoesNotExist(const std::string& name) {
+  DIR* dir = opendir(name.c_str());
 
-    string command = "mkdir ";
-    command += name;
+  const std::string command = "mkdir " + name;
 
-    if (!dir) {
-        ::system(command.c_str());
-    }
+  if (!dir) {
+    ::system(command.c_str());
+  }
 }

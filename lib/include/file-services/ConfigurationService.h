@@ -14,7 +14,7 @@ class ConfigurationService {
   int getNextId();
   void save();
 
-  virtual ~ConfigurationService();
+  ~ConfigurationService();
 
  private:
   explicit ConfigurationService(std::string filePath);

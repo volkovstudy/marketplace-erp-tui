@@ -7,71 +7,77 @@
 #include "repositories/ClientRepository.h"
 #include "utils/Utils.h"
 
-#define pathToClientsFile "marketplace-erp/clients.csv"
-
-#define tab "\t"
-
-#define yesChar "y"
-#define editChar "e"
-#define cancelChar "c"
-
 namespace {
 
-void getInformationAboutClient(std::string& name, std::string& email) {
-  std::cout << "Write the name: ";
-  do {
-    std::getline(std::cin, name);
-  } while (name.empty());
+const static char kTab = '\t';
 
-  std::cout << "Write the email: ";
-  do {
-    std::cin >> email;
-  } while (email.empty());
-}
-
-void saveClient(Client client) {
-  ClientRepository clientRepository(pathToClientsFile);
-
-  clientRepository.save(&client);
-}
+const static char yesChar = 'y';
+const static char editChar = 'e';
+const static char cancelChar = 'c';
 
 }  // namespace
 
+ClientAddingDialog::ClientAddingDialog(std::ostream& out, std::istream& in,
+                                       ClientRepository& repo)
+    : out_(out), in_(in), repo_(repo) {}
+
 void ClientAddingDialog::addClient() {
-  std::cout << "Now you're going to add new client." << std::endl;
+  out_ << "Now you're going to add new client." << std::endl;
 
-  std::string name, email;
-  getInformationAboutClient(name, email);
+  Client client = readClientDetails();
 
-  do {
+  while (true) {
     utils::printDelimiter();
 
-    std::cout << "Well, check the information about new client:" << std::endl;
-    std::cout << "Name" << tab << name << std::endl;
-    std::cout << "Email" << tab << email << std::endl;
+    out_ << "Well, check the information about new client:" << std::endl;
+    out_ << "Name" << kTab << client.getFullName() << std::endl;
+    out_ << "Email" << kTab << client.getEmail() << std::endl;
 
-    std::cout << std::endl << "Is it right?" << std::endl;
-    std::cout << "(Y)es, (E)dit, (C)ancel: ";
+    out_ << std::endl << "Is it right?" << std::endl;
+    out_ << "(Y)es, (E)dit, (C)ancel: ";
 
-    std::string program;
-    std::cin >> program;
-    utils::toLowerCase(program);
+    std::string input;
+    in_ >> input;
 
-    if (program == yesChar) {
-      Client client(name, email);
-      saveClient(client);
-
-      std::cout << std::endl << "Client added." << std::endl;
-
-      break;
-    } else if (program == editChar) {
-      utils::printDelimiter();
-      getInformationAboutClient(name, email);
-    } else if (program == cancelChar) {
-      std::cout << std::endl << "You left adding new client." << std::endl;
-      return;
-    } else {
-      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    if (input.empty()) {
+      out_ << std::endl << "Wrong input. Try again." << std::endl;
     }
-  } while (true);
+
+    char program = std::tolower(input[0]);
+
+    switch (program) {
+      case yesChar:
+        repo_.save(&client);
+        out_ << std::endl << "Client added." << std::endl;
+        return;
+
+      case editChar:
+        utils::printDelimiter();
+        client = readClientDetails();
+        break;
+
+      case cancelChar:
+        out_ << std::endl << "You left adding new client." << std::endl;
+        return;
+
+      default:
+        out_ << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  }
+}
+
+Client ClientAddingDialog::readClientDetails() {
+  std::string name, email;
+
+  out_ << "Write the name: ";
+  while (name.empty()) {
+    std::getline(in_, name);
+  }
+
+  out_ << "Write the email: ";
+  while (email.empty()) {
+    in_ >> email;
+  }
+
+  return Client(name, email);
 }

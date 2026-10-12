@@ -47,8 +47,8 @@ bool ProgramLauncher::handleUserChoice() {
     if (program == kClientsManagementProgram) {
       utils::printDelimiter();
 
-      ClientDialog dialog;
-      dialog.openManagementDialog();
+      ClientDialog dialog(out_, in_, client_repo_);
+      dialog.openManagement();
 
       return false;
     } else if (program == kOrdersManagementProgram) {

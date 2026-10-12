@@ -1,6 +1,8 @@
 #include "program-launcher/dialogues/client/ClientDialog.h"
 
-#include <iostream>
+#include <algorithm>
+#include <istream>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -9,34 +11,24 @@
 #include "table-printer/TablePrinter.h"
 #include "utils/Utils.h"
 
-#define pathToClientsFile "marketplace-erp/clients.csv"
+const static char kAddNewClientProgramChar = 'a';
+const static char kListAllClientsProgramChar = 'l';
+const static char kQuitProgramChar = 'q';
 
-#define addNewClientProgramChar "a"
-#define listAllClientsProgramChar "l"
-#define quitProgramChar "q"
+const static char kYesChar = 'y';
+const static char kEditChar = 'e';
+const static char kCancelChar = 'c';
 
-#define yesChar "y"
-#define editChar "e"
-#define cancelChar "c"
+ClientDialog::ClientDialog(std::ostream& out, std::istream& in,
+                           ClientRepository& repo)
+    : out_(out), in_(in), repo_(repo) {}
 
-namespace {
-
-void printSectionVariants() {
-  std::cout << "What do you want to do?" << std::endl << std::endl;
-
-  std::cout << "(A)dd new client;" << std::endl;
-  std::cout << "(L)ist all clients;" << std::endl;
-  std::cout << "(Q)uit from the section;" << std::endl;
-}
-
-}  // namespace
-
-void ClientDialog::openManagementDialog() {
-  std::cout << "You opened clients management section. ";
+void ClientDialog::openManagement() {
+  out_ << "You opened clients management section. ";
   printSectionVariants();
 
-  do {
-    bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
+  while (true) {
+    bool isUserWantToLeft = handleUserChoice();
 
     if (isUserWantToLeft) {
       utils::printDelimiter();
@@ -45,72 +37,92 @@ void ClientDialog::openManagementDialog() {
 
     utils::printDelimiter();
 
-    std::cout << "You came back to the clients management section."
-              << std::endl;
+    out_ << "You came back to the clients management section." << std::endl;
     printSectionVariants();
-  } while (true);
+  }
 }
 
 void ClientDialog::addNewClient() {
-  ClientAddingDialog dialog;
+  ClientAddingDialog dialog(out_, in_, repo_);
   dialog.addClient();
 }
 
 void ClientDialog::listAllClients() {
-  ClientRepository clientRepository(pathToClientsFile);
-  std::vector<Client*> clients = clientRepository.getAll();
+  std::vector<Client*> clients = repo_.getAll();
 
   if (clients.empty()) {
-    std::cout << "There are no clients!" << std::endl;
+    out_ << "There are no clients!" << std::endl;
     return;
   }
 
-  std::cout << "All clients:" << std::endl;
+  out_ << "All clients:" << std::endl;
   TablePrinter printer;
   printer.printVector(clients);
 
-  std::cout << std::endl << "What do you want to do?" << std::endl;
-  std::cout << "(Q)uit;" << std::endl;
+  out_ << std::endl << "What do you want to do?" << std::endl;
+  out_ << "(Q)uit;" << std::endl;
 
-  do {
-    std::cout << std::endl << "Your choice (Q): ";
+  while (true) {
+    out_ << std::endl << "Your choice (Q): ";
 
-    std::string program;
-    std::cin >> program;
-    utils::toLowerCase(program);
+    std::string input;
+    in_ >> input;
 
-    if (program == quitProgramChar) {
-      return;
-    } else {
-      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    if (input.empty()) {
+      out_ << std::endl << "Wrong input. Try again." << std::endl;
     }
-  } while (true);
+
+    char program = std::tolower(input[0]);
+
+    switch (program) {
+      case kQuitProgramChar:
+        return;
+
+      default:
+        out_ << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  }
 }
 
-bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
-  do {
-    std::cout << std::endl << "Your choice (A, L, Q): ";
+void ClientDialog::printSectionVariants() {
+  out_ << "What do you want to do?" << std::endl << std::endl;
 
-    std::string program;
-    std::cin >> program;
-    utils::toLowerCase(program);
+  out_ << "(A)dd new client;" << std::endl;
+  out_ << "(L)ist all clients;" << std::endl;
+  out_ << "(Q)uit from the section;" << std::endl;
+}
 
-    if (program == addNewClientProgramChar) {
-      utils::printDelimiter();
-      addNewClient();
-      break;
-    } else if (program == listAllClientsProgramChar) {
-      utils::printDelimiter();
-      listAllClients();
-      break;
-    } else if (program == quitProgramChar) {
-      std::cout << std::endl
-                << "You left clients management section." << std::endl;
-      return true;
-    } else {
-      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+bool ClientDialog::handleUserChoice() {
+  while (true) {
+    out_ << std::endl << "Your choice (A, L, Q): ";
+
+    std::string input;
+    in_ >> input;
+
+    if (input.empty()) {
+      out_ << std::endl << "Wrong input. Try again." << std::endl;
     }
-  } while (true);
 
-  return false;
+    char program = std::tolower(input[0]);
+
+    switch (program) {
+      case kAddNewClientProgramChar:
+        utils::printDelimiter();
+        addNewClient();
+        return false;
+
+      case kListAllClientsProgramChar:
+        utils::printDelimiter();
+        listAllClients();
+        return false;
+
+      case kQuitProgramChar:
+        out_ << std::endl
+             << "You left clients management section." << std::endl;
+        return true;
+
+      default:
+        out_ << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  }
 }

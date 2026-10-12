@@ -1,6 +1,7 @@
 #include "program-launcher/ProgramLauncher.h"
 
-#include <iostream>
+#include <istream>
+#include <ostream>
 #include <string>
 
 #include "program-launcher/dialogues/client/ClientDialog.h"
@@ -11,22 +12,36 @@
 #define ordersManagementProgram "o"
 #define quitProgram "q"
 
-namespace {
+ProgramLauncher::ProgramLauncher(std::ostream& out, std::istream& in)
+    : out_(out), in_(in) {}
 
-void printProgramSections() {
-  std::cout << "What do you want to open?" << std::endl << std::endl;
+void ProgramLauncher::start() {
+  out_ << "Hello! ";
+  printProgramSections();
 
-  std::cout << "(C)lients management;" << std::endl;
-  std::cout << "(O)rders management;" << std::endl;
-  std::cout << "(Q)uit;" << std::endl;
+  while (true) {
+    bool doesUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
+    if (doesUserWantToLeft) return;
+
+    out_ << "You came back to the main section." << std::endl;
+    printProgramSections();
+  }
 }
 
-bool getChoiceAndExecuteActionAndReturnQuitResult() {
+void ProgramLauncher::printProgramSections() {
+  out_ << "What do you want to open?" << std::endl << std::endl;
+
+  out_ << "(C)lients management;" << std::endl;
+  out_ << "(O)rders management;" << std::endl;
+  out_ << "(Q)uit;" << std::endl;
+}
+
+bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
   do {
-    std::cout << std::endl << "Your choice (C, O, Q): ";
+    out_ << std::endl << "Your choice (C, O, Q): ";
 
     std::string program;
-    std::cin >> program;
+    in_ >> program;
     utils::toLowerCase(program);
 
     if (program == clientsManagementProgram) {
@@ -44,27 +59,12 @@ bool getChoiceAndExecuteActionAndReturnQuitResult() {
 
       break;
     } else if (program == quitProgram) {
-      std::cout << std::endl << "Bye!" << std::endl;
+      out_ << std::endl << "Bye!" << std::endl;
       return true;
     } else {
-      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+      out_ << std::endl << "Wrong input. Try again." << std::endl;
     }
   } while (true);
 
   return false;
-}
-
-}  // namespace
-
-void ProgramLauncher::start() {
-  std::cout << "Hello! ";
-  printProgramSections();
-
-  while (true) {
-    bool doesUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
-    if (doesUserWantToLeft) return;
-
-    std::cout << "You came back to the main section." << std::endl;
-    printProgramSections();
-  }
 }

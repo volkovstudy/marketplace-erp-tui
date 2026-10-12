@@ -1,5 +1,7 @@
 #include <dirent.h>
 
+#include <iostream>
+
 #include "file-services/ConfigurationService.h"
 #include "program-launcher/ProgramLauncher.h"
 
@@ -13,7 +15,7 @@ int main() {
   std::string configFilePath = mainDirectory + "/config.csv";
   ConfigurationService::setMainConfigFilePath(configFilePath);
 
-  ProgramLauncher launcher;
+  ProgramLauncher launcher(std::cout, std::cin);
   launcher.start();
 
   return 0;

@@ -13,7 +13,8 @@ int main() {
   std::string configFilePath = mainDirectory + "/config.csv";
   ConfigurationService::setMainConfigFilePath(configFilePath);
 
-  ProgramLauncher::start();
+  ProgramLauncher launcher;
+  launcher.start();
 
   return 0;
 }

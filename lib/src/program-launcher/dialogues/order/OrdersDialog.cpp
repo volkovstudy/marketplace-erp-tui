@@ -18,6 +18,18 @@
 #define listAllOrdersProgramChar "l"
 #define quitProgramChar "q"
 
+namespace {
+
+void printSectionVariants() {
+  std::cout << "What do you want to do?" << std::endl << std::endl;
+
+  std::cout << "(A)dd new order;" << std::endl;
+  std::cout << "(L)ist all orders;" << std::endl;
+  std::cout << "(Q)uit from the section;" << std::endl;
+}
+
+}  // namespace
+
 void OrdersDialog::openManagementDialog() {
   std::cout << "You opened orders management section. ";
   printSectionVariants();
@@ -37,43 +49,10 @@ void OrdersDialog::openManagementDialog() {
   } while (true);
 }
 
-void OrdersDialog::printSectionVariants() {
-  std::cout << "What do you want to do?" << std::endl << std::endl;
-
-  std::cout << "(A)dd new order;" << std::endl;
-  std::cout << "(L)ist all orders;" << std::endl;
-  std::cout << "(Q)uit from the section;" << std::endl;
+void OrdersDialog::addNewOrder() {
+  OrderAddingDialog dialog;
+  dialog.addOrder();
 }
-
-bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
-  do {
-    std::cout << std::endl << "Your choice (A, L, Q): ";
-
-    std::string program;
-    std::cin >> program;
-    Utils::toLowerCase(&program);
-
-    if (program == addNewOrderProgramChar) {
-      Utils::printDelimiter();
-      addNewOrder();
-      break;
-    } else if (program == listAllOrdersProgramChar) {
-      Utils::printDelimiter();
-      listAllOrders();
-      break;
-    } else if (program == quitProgramChar) {
-      std::cout << std::endl
-                << "You left orders management section." << std::endl;
-      return true;
-    } else {
-      std::cout << std::endl << "Wrong input. Try again." << std::endl;
-    }
-  } while (true);
-
-  return false;
-}
-
-void OrdersDialog::addNewOrder() { OrderAddingDialog::addOrder(); }
 
 void OrdersDialog::listAllOrders() {
   ClientRepository clientRepository(pathToClientsFile);
@@ -107,4 +86,32 @@ void OrdersDialog::listAllOrders() {
       std::cout << std::endl << "Wrong input. Try again." << std::endl;
     }
   } while (true);
+}
+
+bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
+  do {
+    std::cout << std::endl << "Your choice (A, L, Q): ";
+
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
+
+    if (program == addNewOrderProgramChar) {
+      Utils::printDelimiter();
+      addNewOrder();
+      break;
+    } else if (program == listAllOrdersProgramChar) {
+      Utils::printDelimiter();
+      listAllOrders();
+      break;
+    } else if (program == quitProgramChar) {
+      std::cout << std::endl
+                << "You left orders management section." << std::endl;
+      return true;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  } while (true);
+
+  return false;
 }

@@ -19,6 +19,18 @@
 #define editChar "e"
 #define cancelChar "c"
 
+namespace {
+
+void printSectionVariants() {
+  std::cout << "What do you want to do?" << std::endl << std::endl;
+
+  std::cout << "(A)dd new client;" << std::endl;
+  std::cout << "(L)ist all clients;" << std::endl;
+  std::cout << "(Q)uit from the section;" << std::endl;
+}
+
+}  // namespace
+
 void ClientDialog::openManagementDialog() {
   std::cout << "You opened clients management section. ";
   printSectionVariants();
@@ -39,42 +51,9 @@ void ClientDialog::openManagementDialog() {
   } while (true);
 }
 
-void ClientDialog::printSectionVariants() {
-  std::cout << "What do you want to do?" << std::endl << std::endl;
-
-  std::cout << "(A)dd new client;" << std::endl;
-  std::cout << "(L)ist all clients;" << std::endl;
-  std::cout << "(Q)uit from the section;" << std::endl;
-}
-
-void ClientDialog::addNewClient() { ClientAddingDialog::addClient(); }
-
-bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
-  do {
-    std::cout << std::endl << "Your choice (A, L, Q): ";
-
-    std::string program;
-    std::cin >> program;
-    Utils::toLowerCase(&program);
-
-    if (program == addNewClientProgramChar) {
-      Utils::printDelimiter();
-      addNewClient();
-      break;
-    } else if (program == listAllClientsProgramChar) {
-      Utils::printDelimiter();
-      listAllClients();
-      break;
-    } else if (program == quitProgramChar) {
-      std::cout << std::endl
-                << "You left clients management section." << std::endl;
-      return true;
-    } else {
-      std::cout << std::endl << "Wrong input. Try again." << std::endl;
-    }
-  } while (true);
-
-  return false;
+void ClientDialog::addNewClient() {
+  ClientAddingDialog dialog;
+  dialog.addClient();
 }
 
 void ClientDialog::listAllClients() {
@@ -105,4 +84,32 @@ void ClientDialog::listAllClients() {
       std::cout << std::endl << "Wrong input. Try again." << std::endl;
     }
   } while (true);
+}
+
+bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
+  do {
+    std::cout << std::endl << "Your choice (A, L, Q): ";
+
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
+
+    if (program == addNewClientProgramChar) {
+      Utils::printDelimiter();
+      addNewClient();
+      break;
+    } else if (program == listAllClientsProgramChar) {
+      Utils::printDelimiter();
+      listAllClients();
+      break;
+    } else if (program == quitProgramChar) {
+      std::cout << std::endl
+                << "You left clients management section." << std::endl;
+      return true;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  } while (true);
+
+  return false;
 }

@@ -2,5 +2,5 @@
 
 class ClientAddingDialog {
  public:
-  static void addClient();
+  void addClient();
 };

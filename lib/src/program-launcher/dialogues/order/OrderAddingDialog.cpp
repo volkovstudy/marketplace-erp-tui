@@ -22,65 +22,69 @@
 #define editChar "e"
 #define cancelChar "c"
 
-std::vector<Client*> getAllClients();
-std::string makeClientLine(const Client& client);
-void getInformationAboutOrder(Client& client, std::vector<Product*>& products);
-void printAllClients();
-void readAndSaveProduct(std::vector<Product*>& products);
-void printProducts(std::vector<Product*> products);
-void saveOrder(Order& order);
+namespace {
 
-void OrderAddingDialog::addOrder() {
-  std::cout << "Now you're going to add new order." << std::endl << std::endl;
+std::vector<Client*> getAllClients() {
+  ClientRepository clientRepository(pathToClientsFile);
 
-  Client& client = *new Client(-1, "", "");
-  std::vector<Product*> products{};
+  return clientRepository.getAll();
+}
 
-  try {
-    getInformationAboutOrder(client, products);
-  } catch (std::exception& exception) {
-    std::cout << "There are no clients! Add new client!" << std::endl;
-    return;
+std::string makeClientLine(const Client& client) {
+  std::stringstream clientLine;
+  clientLine << client.getFullName() << " <" << client.getEmail() << ">";
+
+  return clientLine.str();
+}
+
+void printAllClients() {
+  std::vector<Client*> clients = getAllClients();
+
+  std::vector<std::string> clientLines;
+  for (int i = 0; i < clients.size(); ++i) {
+    Client* client = clients.at(i);
+
+    std::string clientLine = makeClientLine(*client);
+
+    std::stringstream fullClientLine;
+    int clientNo = i + 1;
+    fullClientLine << clientNo << ") " << clientLine;
+
+    clientLines.push_back(fullClientLine.str());
   }
 
+  for (const std::string& line : clientLines) {
+    std::cout << line << std::endl;
+  }
+}
+
+void readAndSaveProduct(std::vector<Product*>& products) {
+  std::string name;
+  std::cout << "Name: ";
   do {
-    Utils::printDelimiter();
+    std::getline(std::cin, name);
+  } while (name.empty());
 
-    std::cout << "Well, check the information about new order:" << std::endl
-              << std::endl;
-    std::cout << "Client:" << std::endl
-              << makeClientLine(client) << std::endl
-              << std::endl;
-    std::cout << "Products:" << std::endl;
-    printProducts(products);
+  int amount;
+  do {
+    std::cout << "Amount: ";
 
-    std::cout << std::endl << "Is it right?" << std::endl;
-    std::cout << "(Y)es, (E)dit, (C)ancel: ";
+    std::string inputAmount;
+    std::cin >> inputAmount;
 
-    std::string program;
-    std::cin >> program;
-    Utils::toLowerCase(&program);
-
-    if (program == yesChar) {
-      Order order(&client, products);
-      saveOrder(order);
-
-      std::cout << std::endl << "Order saved." << std::endl;
-
-      break;
-    } else if (program == editChar) {
-      Utils::printDelimiter();
-
-      products = {};
-
-      getInformationAboutOrder(client, products);
-    } else if (program == cancelChar) {
-      std::cout << std::endl << "You left adding new order." << std::endl;
-      return;
-    } else {
-      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    try {
+      amount = stoi(inputAmount);
+    } catch (std::invalid_argument& invalidArgument) {
+      amount = -1;
+      std::cout << "Write a number!" << std::endl;
+    } catch (std::out_of_range& outOfRange) {
+      amount = -1;
+      std::cout << "Write a smaller number!" << std::endl;
     }
-  } while (true);
+  } while (amount < 0);
+
+  Product* product = new Product(name, amount);
+  products.push_back(product);
 }
 
 void getInformationAboutOrder(Client& client, std::vector<Product*>& products) {
@@ -135,56 +139,6 @@ void getInformationAboutOrder(Client& client, std::vector<Product*>& products) {
   } while (true);
 }
 
-void printAllClients() {
-  std::vector<Client*> clients = getAllClients();
-
-  std::vector<std::string> clientLines;
-  for (int i = 0; i < clients.size(); ++i) {
-    Client* client = clients.at(i);
-
-    std::string clientLine = makeClientLine(*client);
-
-    std::stringstream fullClientLine;
-    int clientNo = i + 1;
-    fullClientLine << clientNo << ") " << clientLine;
-
-    clientLines.push_back(fullClientLine.str());
-  }
-
-  for (const std::string& line : clientLines) {
-    std::cout << line << std::endl;
-  }
-}
-
-void readAndSaveProduct(std::vector<Product*>& products) {
-  std::string name;
-  std::cout << "Name: ";
-  do {
-    std::getline(std::cin, name);
-  } while (name.empty());
-
-  int amount;
-  do {
-    std::cout << "Amount: ";
-
-    std::string inputAmount;
-    std::cin >> inputAmount;
-
-    try {
-      amount = stoi(inputAmount);
-    } catch (std::invalid_argument& invalidArgument) {
-      amount = -1;
-      std::cout << "Write a number!" << std::endl;
-    } catch (std::out_of_range& outOfRange) {
-      amount = -1;
-      std::cout << "Write a smaller number!" << std::endl;
-    }
-  } while (amount < 0);
-
-  Product* product = new Product(name, amount);
-  products.push_back(product);
-}
-
 void printProducts(std::vector<Product*> products) {
   for (Product* product : products) {
     int amount = product->getAmount();
@@ -208,15 +162,57 @@ void saveOrder(Order& order) {
   orderRepository.save(&order);
 }
 
-std::vector<Client*> getAllClients() {
-  ClientRepository clientRepository(pathToClientsFile);
+}  // namespace
 
-  return clientRepository.getAll();
-}
+void OrderAddingDialog::addOrder() {
+  std::cout << "Now you're going to add new order." << std::endl << std::endl;
 
-std::string makeClientLine(const Client& client) {
-  std::stringstream clientLine;
-  clientLine << client.getFullName() << " <" << client.getEmail() << ">";
+  Client& client = *new Client(-1, "", "");
+  std::vector<Product*> products{};
 
-  return clientLine.str();
+  try {
+    getInformationAboutOrder(client, products);
+  } catch (std::exception& exception) {
+    std::cout << "There are no clients! Add new client!" << std::endl;
+    return;
+  }
+
+  do {
+    Utils::printDelimiter();
+
+    std::cout << "Well, check the information about new order:" << std::endl
+              << std::endl;
+    std::cout << "Client:" << std::endl
+              << makeClientLine(client) << std::endl
+              << std::endl;
+    std::cout << "Products:" << std::endl;
+    printProducts(products);
+
+    std::cout << std::endl << "Is it right?" << std::endl;
+    std::cout << "(Y)es, (E)dit, (C)ancel: ";
+
+    std::string program;
+    std::cin >> program;
+    Utils::toLowerCase(&program);
+
+    if (program == yesChar) {
+      Order order(&client, products);
+      saveOrder(order);
+
+      std::cout << std::endl << "Order saved." << std::endl;
+
+      break;
+    } else if (program == editChar) {
+      Utils::printDelimiter();
+
+      products = {};
+
+      getInformationAboutOrder(client, products);
+    } else if (program == cancelChar) {
+      std::cout << std::endl << "You left adding new order." << std::endl;
+      return;
+    } else {
+      std::cout << std::endl << "Wrong input. Try again." << std::endl;
+    }
+  } while (true);
 }

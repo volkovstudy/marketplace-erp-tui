@@ -2,5 +2,5 @@
 
 class OrderAddingDialog {
  public:
-  static void addOrder();
+  void addOrder();
 };

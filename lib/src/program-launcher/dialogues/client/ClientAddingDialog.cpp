@@ -15,8 +15,27 @@
 #define editChar "e"
 #define cancelChar "c"
 
-void getInformationAboutClient(std::string& name, std::string& email);
-void saveClient(Client client);
+namespace {
+
+void getInformationAboutClient(std::string& name, std::string& email) {
+  std::cout << "Write the name: ";
+  do {
+    std::getline(std::cin, name);
+  } while (name.empty());
+
+  std::cout << "Write the email: ";
+  do {
+    std::cin >> email;
+  } while (email.empty());
+}
+
+void saveClient(Client client) {
+  ClientRepository clientRepository(pathToClientsFile);
+
+  clientRepository.save(&client);
+}
+
+}  // namespace
 
 void ClientAddingDialog::addClient() {
   std::cout << "Now you're going to add new client." << std::endl;
@@ -55,22 +74,4 @@ void ClientAddingDialog::addClient() {
       std::cout << std::endl << "Wrong input. Try again." << std::endl;
     }
   } while (true);
-}
-
-void getInformationAboutClient(std::string& name, std::string& email) {
-  std::cout << "Write the name: ";
-  do {
-    std::getline(std::cin, name);
-  } while (name.empty());
-
-  std::cout << "Write the email: ";
-  do {
-    std::cin >> email;
-  } while (email.empty());
-}
-
-void saveClient(Client client) {
-  ClientRepository clientRepository(pathToClientsFile);
-
-  clientRepository.save(&client);
 }

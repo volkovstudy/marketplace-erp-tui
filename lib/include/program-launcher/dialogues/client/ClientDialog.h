@@ -2,11 +2,10 @@
 
 class ClientDialog {
  public:
-  static void openManagementDialog();
-  static void addNewClient();
-  static void listAllClients();
+  void openManagementDialog();
+  void addNewClient();
+  void listAllClients();
 
  private:
-  static void printSectionVariants();
-  static bool getChoiceAndExecuteActionAndReturnQuitResult();
+  bool getChoiceAndExecuteActionAndReturnQuitResult();
 };

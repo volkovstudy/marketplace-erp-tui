@@ -20,7 +20,7 @@ void ProgramLauncher::start() {
   printProgramSections();
 
   while (true) {
-    bool doesUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
+    bool doesUserWantToLeft = handleUserChoice();
     if (doesUserWantToLeft) return;
 
     out_ << "You came back to the main section." << std::endl;
@@ -36,8 +36,8 @@ void ProgramLauncher::printProgramSections() {
   out_ << "(Q)uit;" << std::endl;
 }
 
-bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
-  do {
+bool ProgramLauncher::handleUserChoice() {
+  while (true) {
     out_ << std::endl << "Your choice (C, O, Q): ";
 
     std::string program;
@@ -50,21 +50,19 @@ bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
       ClientDialog dialog;
       dialog.openManagementDialog();
 
-      break;
+      return false;
     } else if (program == kOrdersManagementProgram) {
       utils::printDelimiter();
 
       OrdersDialog dialog;
       dialog.openManagementDialog();
 
-      break;
+      return false;
     } else if (program == kQuitProgram) {
       out_ << std::endl << "Bye!" << std::endl;
       return true;
     } else {
       out_ << std::endl << "Wrong input. Try again." << std::endl;
     }
-  } while (true);
-
-  return false;
+  }
 }

@@ -11,7 +11,7 @@ class ProgramLauncher {
 
  private:
   void printProgramSections();
-  bool getChoiceAndExecuteActionAndReturnQuitResult();
+  bool handleUserChoice();
 
   std::ostream& out_;
   std::istream& in_;

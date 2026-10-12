@@ -39,11 +39,11 @@ void ClientDialog::openManagementDialog() {
     bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
 
     if (isUserWantToLeft) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
       return;
     }
 
-    Utils::printDelimiter();
+    utils::printDelimiter();
 
     std::cout << "You came back to the clients management section."
               << std::endl;
@@ -77,7 +77,7 @@ void ClientDialog::listAllClients() {
 
     std::string program;
     std::cin >> program;
-    Utils::toLowerCase(&program);
+    utils::toLowerCase(&program);
 
     if (program == quitProgramChar) {
       return;
@@ -93,14 +93,14 @@ bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
 
     std::string program;
     std::cin >> program;
-    Utils::toLowerCase(&program);
+    utils::toLowerCase(&program);
 
     if (program == addNewClientProgramChar) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
       addNewClient();
       break;
     } else if (program == listAllClientsProgramChar) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
       listAllClients();
       break;
     } else if (program == quitProgramChar) {

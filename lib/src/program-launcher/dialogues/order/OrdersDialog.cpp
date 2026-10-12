@@ -38,11 +38,11 @@ void OrdersDialog::openManagementDialog() {
     bool isUserWantToLeft = getChoiceAndExecuteActionAndReturnQuitResult();
 
     if (isUserWantToLeft) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
       return;
     }
 
-    Utils::printDelimiter();
+    utils::printDelimiter();
 
     std::cout << "You came back to the orders management section." << std::endl;
     printSectionVariants();
@@ -79,7 +79,7 @@ void OrdersDialog::listAllOrders() {
 
     std::string program;
     std::cin >> program;
-    Utils::toLowerCase(&program);
+    utils::toLowerCase(&program);
 
     if (program == quitProgramChar) {
       return;
@@ -95,14 +95,14 @@ bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
 
     std::string program;
     std::cin >> program;
-    Utils::toLowerCase(&program);
+    utils::toLowerCase(&program);
 
     if (program == addNewOrderProgramChar) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
       addNewOrder();
       break;
     } else if (program == listAllOrdersProgramChar) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
       listAllOrders();
       break;
     } else if (program == quitProgramChar) {

@@ -44,7 +44,7 @@ void ClientAddingDialog::addClient() {
   getInformationAboutClient(name, email);
 
   do {
-    Utils::printDelimiter();
+    utils::printDelimiter();
 
     std::cout << "Well, check the information about new client:" << std::endl;
     std::cout << "Name" << tab << name << std::endl;
@@ -55,7 +55,7 @@ void ClientAddingDialog::addClient() {
 
     std::string program;
     std::cin >> program;
-    Utils::toLowerCase(&program);
+    utils::toLowerCase(&program);
 
     if (program == yesChar) {
       Client client(name, email);
@@ -65,7 +65,7 @@ void ClientAddingDialog::addClient() {
 
       break;
     } else if (program == editChar) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
       getInformationAboutClient(name, email);
     } else if (program == cancelChar) {
       std::cout << std::endl << "You left adding new client." << std::endl;

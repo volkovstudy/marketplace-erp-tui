@@ -27,17 +27,17 @@ bool getChoiceAndExecuteActionAndReturnQuitResult() {
 
     std::string program;
     std::cin >> program;
-    Utils::toLowerCase(&program);
+    utils::toLowerCase(&program);
 
     if (program == clientsManagementProgram) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
 
       ClientDialog dialog;
       dialog.openManagementDialog();
 
       break;
     } else if (program == ordersManagementProgram) {
-      Utils::printDelimiter();
+      utils::printDelimiter();
 
       OrdersDialog dialog;
       dialog.openManagementDialog();

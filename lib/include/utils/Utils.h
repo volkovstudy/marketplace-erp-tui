@@ -2,8 +2,10 @@
 
 #include <string>
 
-class Utils {
- public:
-  static void toLowerCase(std::string* line);
-  static void printDelimiter();
-};
+namespace utils {
+
+void toLowerCase(std::string* line);
+
+void printDelimiter();
+
+}  // namespace utils

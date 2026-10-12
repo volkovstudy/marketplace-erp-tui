@@ -8,9 +8,9 @@
 #include "program-launcher/dialogues/order/OrdersDialog.h"
 #include "utils/Utils.h"
 
-#define clientsManagementProgram "c"
-#define ordersManagementProgram "o"
-#define quitProgram "q"
+const static std::string kClientsManagementProgram = "c";
+const static std::string kOrdersManagementProgram = "o";
+const static std::string kQuitProgram = "q";
 
 ProgramLauncher::ProgramLauncher(std::ostream& out, std::istream& in)
     : out_(out), in_(in) {}
@@ -44,21 +44,21 @@ bool ProgramLauncher::getChoiceAndExecuteActionAndReturnQuitResult() {
     in_ >> program;
     utils::toLowerCase(program);
 
-    if (program == clientsManagementProgram) {
+    if (program == kClientsManagementProgram) {
       utils::printDelimiter();
 
       ClientDialog dialog;
       dialog.openManagementDialog();
 
       break;
-    } else if (program == ordersManagementProgram) {
+    } else if (program == kOrdersManagementProgram) {
       utils::printDelimiter();
 
       OrdersDialog dialog;
       dialog.openManagementDialog();
 
       break;
-    } else if (program == quitProgram) {
+    } else if (program == kQuitProgram) {
       out_ << std::endl << "Bye!" << std::endl;
       return true;
     } else {

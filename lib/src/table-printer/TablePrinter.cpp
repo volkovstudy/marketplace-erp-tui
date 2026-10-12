@@ -9,11 +9,63 @@
 
 #define indentLength 10
 
-void printHorizontalLine(int length);
+namespace {
 
-void printHeader(int lineLength, const std::string& tableName);
+void printHorizontalLine(int length) {
+  for (int i = 0; i < length; ++i) {
+    std::cout << "-";
+  }
+  std::cout << std::endl;
+}
 
-void printTableName(const std::string& tableName, int lineLength);
+bool isOdd(int number) { return number % 2 != 0; }
+
+void printTableName(const std::string& tableName, int lineLength) {
+  int lengthOfIndent = lineLength / 2;
+
+  bool isLengthOdd = isOdd(lineLength);
+  if (isLengthOdd) lengthOfIndent++;
+
+  std::cout << "|";
+  std::cout.width(lengthOfIndent);
+  std::cout << tableName;
+
+  if (isLengthOdd)  // -1 / -2 => because begins printing after all width
+    std::cout.width(lengthOfIndent - 2);
+  else
+    std::cout.width(lengthOfIndent - 1);
+  std::cout << "|";
+  std::cout << std::endl;
+}
+
+void printHeader(int lineLength, const std::string& tableName) {
+  printHorizontalLine(lineLength);
+  printTableName(tableName, lineLength);
+  printHorizontalLine(lineLength);
+}
+
+std::string makeClientLine(Client& client) {
+  std::stringstream clientLine;
+  clientLine << client.getFullName() << " <" << client.getEmail() << ">";
+  return clientLine.str();
+}
+
+std::string makeProductLine(Product* product) {
+  int amount = product->getAmount();
+
+  std::stringstream productLine;
+  productLine << product->getName() << " - " << amount;
+
+  if (amount == 1) {
+    productLine << " unit";
+  } else {
+    productLine << " units";
+  }
+
+  return productLine.str();
+}
+
+}  // namespace
 
 void TablePrinter::printVector(const std::vector<Client*>& clients) {
   int maxLengthOfName = 0, maxLengthOfEmail = 0;
@@ -57,27 +109,6 @@ void TablePrinter::printVector(const std::vector<Client*>& clients) {
   }
 
   printHorizontalLine(lineLength);
-}
-
-std::string makeClientLine(Client& client) {
-  std::stringstream clientLine;
-  clientLine << client.getFullName() << " <" << client.getEmail() << ">";
-  return clientLine.str();
-}
-
-std::string makeProductLine(Product* product) {
-  int amount = product->getAmount();
-
-  std::stringstream productLine;
-  productLine << product->getName() << " - " << amount;
-
-  if (amount == 1) {
-    productLine << " unit";
-  } else {
-    productLine << " units";
-  }
-
-  return productLine.str();
 }
 
 void TablePrinter::printVector(const std::vector<Order*>& orders) {
@@ -174,37 +205,4 @@ void TablePrinter::printVector(const std::vector<Order*>& orders) {
 
     printHorizontalLine(lineLength);
   }
-}
-
-void printHorizontalLine(int length) {
-  for (int i = 0; i < length; ++i) {
-    std::cout << "-";
-  }
-  std::cout << std::endl;
-}
-
-void printHeader(int lineLength, const std::string& tableName) {
-  printHorizontalLine(lineLength);
-  printTableName(tableName, lineLength);
-  printHorizontalLine(lineLength);
-}
-
-bool isOdd(int number) { return number % 2 != 0; }
-
-void printTableName(const std::string& tableName, int lineLength) {
-  int lengthOfIndent = lineLength / 2;
-
-  bool isLengthOdd = isOdd(lineLength);
-  if (isLengthOdd) lengthOfIndent++;
-
-  std::cout << "|";
-  std::cout.width(lengthOfIndent);
-  std::cout << tableName;
-
-  if (isLengthOdd)  // -1 / -2 => because begins printing after all width
-    std::cout.width(lengthOfIndent - 2);
-  else
-    std::cout.width(lengthOfIndent - 1);
-  std::cout << "|";
-  std::cout << std::endl;
 }

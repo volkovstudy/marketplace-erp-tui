@@ -68,7 +68,8 @@ void OrdersDialog::listAllOrders() {
   }
 
   std::cout << "All orders:" << std::endl;
-  TablePrinter::printVector(orders);
+  TablePrinter printer;
+  printer.printVector(orders);
 
   std::cout << std::endl << "What do you want to do?" << std::endl;
   std::cout << "(Q)uit;" << std::endl;

@@ -50,11 +50,13 @@ static std::vector<Order*> givenFourOrders() {
 TEST(TablePrinterTests, printClients) {
   std::vector<Client*> clients = givenFourClients();
 
-  TablePrinter::printVector(clients);
+  TablePrinter printer;
+  printer.printVector(clients);
 }
 
 TEST(TablePrinterTests, printOrders) {
   std::vector<Order*> orders = givenFourOrders();
 
-  TablePrinter::printVector(orders);
+  TablePrinter printer;
+  printer.printVector(orders);
 }

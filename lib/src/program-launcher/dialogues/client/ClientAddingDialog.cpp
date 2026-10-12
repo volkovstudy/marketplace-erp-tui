@@ -55,7 +55,7 @@ void ClientAddingDialog::addClient() {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == yesChar) {
       Client client(name, email);

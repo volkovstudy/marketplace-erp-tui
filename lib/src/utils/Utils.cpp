@@ -6,8 +6,8 @@
 
 namespace utils {
 
-void toLowerCase(std::string* line) {
-  std::transform(line->begin(), line->end(), line->begin(),
+void toLowerCase(std::string& line) {
+  std::transform(line.begin(), line.end(), line.begin(),
                  [](unsigned char c) { return std::tolower(c); });
 }
 

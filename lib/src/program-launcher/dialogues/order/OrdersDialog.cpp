@@ -79,7 +79,7 @@ void OrdersDialog::listAllOrders() {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == quitProgramChar) {
       return;
@@ -95,7 +95,7 @@ bool OrdersDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == addNewOrderProgramChar) {
       utils::printDelimiter();

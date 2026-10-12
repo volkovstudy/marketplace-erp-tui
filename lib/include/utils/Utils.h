@@ -4,7 +4,7 @@
 
 namespace utils {
 
-void toLowerCase(std::string* line);
+void toLowerCase(std::string& line);
 
 void printDelimiter();
 

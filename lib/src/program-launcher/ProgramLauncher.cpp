@@ -27,7 +27,7 @@ bool getChoiceAndExecuteActionAndReturnQuitResult() {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == clientsManagementProgram) {
       utils::printDelimiter();

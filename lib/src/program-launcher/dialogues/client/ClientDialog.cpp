@@ -77,7 +77,7 @@ void ClientDialog::listAllClients() {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == quitProgramChar) {
       return;
@@ -93,7 +93,7 @@ bool ClientDialog::getChoiceAndExecuteActionAndReturnQuitResult() {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == addNewClientProgramChar) {
       utils::printDelimiter();

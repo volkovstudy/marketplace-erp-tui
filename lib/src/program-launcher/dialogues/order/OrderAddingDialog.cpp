@@ -126,7 +126,7 @@ void getInformationAboutOrder(Client& client, std::vector<Product*>& products) {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == yesChar) {
       std::cout << std::endl;
@@ -193,7 +193,7 @@ void OrderAddingDialog::addOrder() {
 
     std::string program;
     std::cin >> program;
-    utils::toLowerCase(&program);
+    utils::toLowerCase(program);
 
     if (program == yesChar) {
       Order order(&client, products);

@@ -3,30 +3,32 @@
 #include <vector>
 
 #include "file-services/ConfigurationService.h"
+#include "models/Client.h"
+#include "models/Product.h"
 
-Order::Order(Client* client, std::vector<Product*> products)
-    : client(client), products(products) {
+Order::Order(const Client& client, const std::vector<Product>& products)
+    : client_(client), products_(products) {
   ConfigurationService* configurationService =
       ConfigurationService::getInstance(
           ConfigurationService::getMainConfigFilePath());
 
-  id = configurationService->getNextId();
+  id_ = configurationService->getNextId();
   configurationService->save();
 }
 
-Order::Order(int id, Client* client, std::vector<Product*> products)
-    : id(id), client(client), products(products) {}
+Order::Order(int id, const Client& client, const std::vector<Product>& products)
+    : id_(id), client_(client), products_(products) {}
 
-int Order::getId() const { return id; }
+int Order::getId() const { return id_; }
 
-void Order::setId(int id) { Order::id = id; }
+void Order::setId(int id) { id_ = id; }
 
-Client* Order::getClient() const { return client; }
+Client Order::getClient() const { return client_; }
 
-void Order::setClient(Client* client) { Order::client = client; }
+void Order::setClient(const Client& client) { client_ = client; }
 
-std::vector<Product*> Order::getProducts() const { return products; }
+const std::vector<Product>& Order::getProducts() const { return products_; }
 
-void Order::setProducts(std::vector<Product*> products) {
-  Order::products = products;
+void Order::setProducts(const std::vector<Product>& products) {
+  products_ = products;
 }

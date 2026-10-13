@@ -7,20 +7,21 @@
 
 class Order {
  public:
-  Order(Client* client, std::vector<Product*> products);
-  Order(int id, Client* client, std::vector<Product*> products);
+  Order() = default;
+  Order(const Client& client, const std::vector<Product>& products);
+  Order(int id, const Client& client, const std::vector<Product>& products);
 
   int getId() const;
   void setId(int id);
 
-  Client* getClient() const;
-  void setClient(Client* client);
+  Client getClient() const;
+  void setClient(const Client& client);
 
-  std::vector<Product*> getProducts() const;
-  void setProducts(std::vector<Product*> products);
+  const std::vector<Product>& getProducts() const;
+  void setProducts(const std::vector<Product>& products);
 
  private:
-  int id;
-  Client* client;
-  std::vector<Product*> products;
+  int id_ = 0;
+  Client client_{};
+  std::vector<Product> products_{};
 };

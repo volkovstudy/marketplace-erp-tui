@@ -1,33 +1,32 @@
 #include "models/Client.h"
 
 #include <string>
-#include <utility>
 
 #include "file-services/ConfigurationService.h"
 
-Client::Client(std::string fullName, std::string email)
-    : fullName(std::move(fullName)), email(std::move(email)) {
+Client::Client(const std::string& full_name, const std::string& email)
+    : full_name_(full_name), email_(email) {
   ConfigurationService* configurationService =
       ConfigurationService::getInstance(
           ConfigurationService::getMainConfigFilePath());
 
-  id = configurationService->getNextId();
+  id_ = configurationService->getNextId();
   configurationService->save();
 }
 
-Client::Client(int id, std::string fullName, std::string email)
-    : id(id), fullName(std::move(fullName)), email(std::move(email)) {}
+Client::Client(int id, const std::string& full_name, const std::string& email)
+    : id_(id), full_name_(full_name), email_(email) {}
 
-int Client::getId() const { return id; }
+int Client::getId() const { return id_; }
 
-void Client::setId(int id) { Client::id = id; }
+void Client::setId(int id) { id_ = id; }
 
-const std::string& Client::getFullName() const { return fullName; }
+const std::string& Client::getFullName() const { return full_name_; }
 
-void Client::setFullName(const std::string& fullName) {
-  Client::fullName = fullName;
+void Client::setFullName(const std::string& full_name) {
+  full_name_ = full_name;
 }
 
-const std::string& Client::getEmail() const { return email; }
+const std::string& Client::getEmail() const { return email_; }
 
-void Client::setEmail(const std::string& email) { Client::email = email; }
+void Client::setEmail(const std::string& email) { email_ = email; }

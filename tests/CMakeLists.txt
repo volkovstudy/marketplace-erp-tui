@@ -1,30 +1,35 @@
-cmake_minimum_required(VERSION 3.23)
-project(marketplace-erp-tui-tests)
+include(FetchContent)
 
-set(CMAKE_CXX_STANDARD 14)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/releases/download/v1.16.0/googletest-1.16.0.tar.gz
+        DOWNLOAD_EXTRACT_TIMESTAMP ON
+        FIND_PACKAGE_ARGS NAMES GTest
+)
 
-add_executable(marketplace-erp-tui-tests
-        main.cpp
-        CsvFileServiceTest.h
-        ConfigurationServiceTest.h
-        ClientRepositoryTest.h
-        ProductsRepositoryTest.h
-        OrderRepositoryTest.h
-        TablePrinterTest.h
-        ../src/models/client/Client.cpp ../src/models/client/Client.h
-        ../src/models/order/Order.cpp ../src/models/order/Order.h
-        ../src/models/product/Product.cpp ../src/models/product/Product.h
-        ../src/models/property/Property.cpp ../src/models/property/Property.h
-        ../src/file-services/csv-file-service/CsvFileService.cpp ../src/file-services/csv-file-service/CsvFileService.h
-        ../src/file-services/configuration-service/ConfigurationService.cpp ../src/file-services/configuration-service/ConfigurationService.h
-        ../src/repositories/client-repository/ClientRepository.cpp ../src/repositories/client-repository/ClientRepository.h
-        ../src/repositories/order-repository/OrderRepository.cpp ../src/repositories/order-repository/OrderRepository.h
-        ../src/repositories/products-repository/ProductsRepository.cpp ../src/repositories/products-repository/ProductsRepository.h
-        ../src/table-printer/TablePrinter.cpp ../src/table-printer/TablePrinter.h
-        ../src/program-launcher/ProgramLauncher.cpp ../src/program-launcher/ProgramLauncher.h
-        ../src/program-launcher/dialogues/client-dialog/ClientDialog.cpp ../src/program-launcher/dialogues/client-dialog/ClientDialog.h
-        ../src/program-launcher/dialogues/orders-dialog/OrdersDialog.cpp ../src/program-launcher/dialogues/orders-dialog/OrdersDialog.h
-        ../src/utils/Utils.cpp ../src/utils/Utils.h
-        ../src/program-launcher/dialogues/client-dialog/client-adding-dialog/ClientAddingDialog.cpp ../src/program-launcher/dialogues/client-dialog/client-adding-dialog/ClientAddingDialog.h
-        ../src/program-launcher/dialogues/orders-dialog/order-adding-dialog/OrderAddingDialog.cpp ../src/program-launcher/dialogues/orders-dialog/order-adding-dialog/OrderAddingDialog.h
-        )
+# Prevent overriding the parent project's compiler/linker
+# settings on Windows
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+add_executable(
+        marketplace-erp-tui-tests
+        client-repository-test.cpp
+        configuration-service-test.cpp
+        csv-file-service-test.cpp
+        order-repository-test.cpp
+        products-repository-test.cpp
+        table-printer-test.cpp
+)
+
+target_link_libraries(marketplace-erp-tui-tests
+        marketplace_erp_tui_lib
+        GTest::gtest_main
+        GTest::gmock_main
+)
+
+include(GoogleTest)
+
+gtest_discover_tests(marketplace-erp-tui-tests)

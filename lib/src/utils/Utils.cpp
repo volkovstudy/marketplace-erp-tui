@@ -1,10 +1,15 @@
 #include "utils/Utils.h"
 
 #include <algorithm>
+#include <charconv>
 #include <cstddef>
+#include <format>
 #include <iostream>
 #include <ranges>
+#include <stdexcept>
 #include <string>
+#include <string_view>
+#include <system_error>
 #include <vector>
 
 #include "models/Property.h"
@@ -31,6 +36,21 @@ size_t FindMaxValuesSize(const std::vector<Property>& properties) {
                       });
 
   return std::ranges::max(sizes);
+}
+
+int MapStringToInt(std::string_view str) {
+  int result{};
+
+  const char* first = str.data();
+  const char* last = first + str.size();
+
+  const auto [ptr, ec] = std::from_chars(first, last, result);
+  if (ec != std::errc{} || ptr != last) {
+    throw std::invalid_argument(
+        std::format("Failed mapping string {} to int", str));
+  }
+
+  return result;
 }
 
 }  // namespace utils

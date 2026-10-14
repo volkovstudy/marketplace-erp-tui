@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "models/Property.h"
+#include "utils/Utils.h"
 
 static const std::string kCsvDelimiter = ",";
 static const std::string kLineBreaker = "\n";
@@ -95,16 +96,6 @@ std::vector<std::reference_wrapper<const Property>> GetOrderedProps(
          std::ranges::to<std::vector>();
 }
 
-size_t FindMaxValuesSize(const std::vector<Property>& properties) {
-  if (properties.empty()) return 0;
-
-  const auto& sizes = properties | std::views::transform([](const Property& p) {
-                        return p.getValues().size();
-                      });
-
-  return std::ranges::max(sizes);
-}
-
 void WriteValues(std::ostream& out, const auto& ordered_props, size_t rows) {
   const auto cell = [](const Property& prop, size_t row) {
     const auto& values = prop.getValues();
@@ -137,7 +128,7 @@ void WriteInSpecificMode(const std::string& file_path,
   }
 
   const auto ordered_props = GetOrderedProps(properties, column_names);
-  const size_t rows = FindMaxValuesSize(properties);
+  const size_t rows = utils::FindMaxValuesSize(properties);
 
   WriteValues(writer, ordered_props, rows);
 }

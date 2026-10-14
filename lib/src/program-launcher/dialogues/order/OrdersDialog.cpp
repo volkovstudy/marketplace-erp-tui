@@ -55,12 +55,14 @@ void OrdersDialog::addNewOrder() {
 }
 
 void OrdersDialog::listAllOrders() {
-  ClientRepository clientRepository(pathToClientsFile);
-  ProductsRepository productsRepository(pathToProductsFile);
-  OrderRepository orderRepository(pathToOrdersFile, &clientRepository,
-                                  &productsRepository);
+  CsvFileService clients_csv(pathToClientsFile),
+      products_csv(pathToProductsFile), orders_csv(pathToOrdersFile);
 
-  std::vector<Order*> orders = orderRepository.getAll();
+  ClientRepository client_repo(clients_csv);
+  ProductsRepository products_repo(products_csv);
+  OrderRepository order_repo(orders_csv, client_repo, products_repo);
+
+  const std::vector<Order>& orders = order_repo.getAll();
 
   if (orders.empty()) {
     std::cout << "There are no orders!" << std::endl;

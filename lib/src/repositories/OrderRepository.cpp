@@ -2,22 +2,23 @@
 
 #include <algorithm>
 #include <string>
-#include <utility>
 #include <vector>
 
-OrderRepository::OrderRepository(std::string filePath,
-                                 ClientRepository* clientRepository,
-                                 ProductsRepository* productsRepository)
-    : clientRepository(clientRepository),
-      productsRepository(productsRepository) {
-  csvFileService = new CsvFileService(std::move(filePath));
-}
+#include "repositories/ClientRepository.h"
+#include "repositories/ProductsRepository.h"
 
-std::vector<Order*> OrderRepository::getAll() {
-  if (!orders.empty()) return orders;
+OrderRepository::OrderRepository(CsvFileService& csv_file_service,
+                                 ClientRepository& client_repo,
+                                 ProductsRepository& products_repo)
+    : csv_file_service_(csv_file_service),
+      client_repo_(client_repo),
+      products_repo_(products_repo) {}
 
-  std::vector<Order*> result;
-  std::vector<Property*> allLines = csvFileService->getAllLines();
+std::vector<Order>& OrderRepository::getAll() {
+  if (!orders_.empty()) return orders_;
+
+  std::vector<Order> result;
+  std::vector<Property*> allLines = csv_file_service_.getAllLines();
 
   int maxAmountOfLines = 0;
   for (Property* property : allLines) {
@@ -27,7 +28,7 @@ std::vector<Order*> OrderRepository::getAll() {
 
   for (int i = 0; i < maxAmountOfLines; ++i) {
     int id = 0;
-    Client* client;
+    Client client;
 
     for (Property* property : allLines) {
       if (property->getValues().size() < maxAmountOfLines) break;
@@ -36,34 +37,34 @@ std::vector<Order*> OrderRepository::getAll() {
       std::string fieldName = property->getFieldName();
 
       if (fieldName == "id") id = std::stoi(value);
-      if (fieldName == "client_id")
-        client = clientRepository->getById(std::stoi(value));
+      if (fieldName == "client_id") {
+        client = client_repo_.getById(std::stoi(value)).value_or(Client{});
+      }
     }
 
-    std::vector<Product*> products = productsRepository->getForOrderId(id);
+    std::vector<Product> products = products_repo_.getForOrderId(id);
 
-    auto* order = new Order(id, client, products);
-    result.push_back(order);
+    result.emplace_back(id, client, products);
   }
 
-  orders = result;
+  orders_ = result;
 
-  return orders;
+  return orders_;
 }
 
-void write(Order* order, CsvFileService* csvFileService,
-           ProductsRepository* productsRepository) {
-  auto* id = new Property("id", {std::to_string(order->getId())});
+void write(const Order& order, CsvFileService& csv_file_service,
+           ProductsRepository& products_repo) {
+  auto* id = new Property("id", {std::to_string(order.getId())});
   auto* clientId =
-      new Property("client_id", {std::to_string(order->getClient()->getId())});
+      new Property("client_id", {std::to_string(order.getClient().getId())});
 
-  csvFileService->write({id, clientId});
+  csv_file_service.write({id, clientId});
 
-  productsRepository->save(order->getProducts(), order->getId());
+  products_repo.save(order.getProducts(), order.getId());
 }
 
-void OrderRepository::save(Order* order) {
-  orders.push_back(order);
+void OrderRepository::save(const Order& order) {
+  orders_.push_back(order);
 
-  write(order, csvFileService, productsRepository);
+  write(order, csv_file_service_, products_repo_);
 }

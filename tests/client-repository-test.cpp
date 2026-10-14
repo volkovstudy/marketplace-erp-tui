@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "file-services/CsvFileService.h"
 #include "repositories/ClientRepository.h"
 
 namespace fs = std::filesystem;
@@ -25,24 +26,28 @@ class ClientRepositoryTests : public ::testing::Test {
 };
 
 TEST_F(ClientRepositoryTests, saveAndWriteClientToFile) {
-  ClientRepository clientRepository(file_);
-  auto* client = new Client(1, "test client", "test.client@example.com");
+  CsvFileService clients_csv{file_};
+  ClientRepository clientRepository(clients_csv);
+
+  Client client(1, "test client", "test.client@example.com");
 
   clientRepository.save(client);
 }
 
 TEST_F(ClientRepositoryTests, getAllClientsFromFile) {
-  ClientRepository clientRepository(file_);
+  CsvFileService clients_csv{file_};
+  ClientRepository clientRepository(clients_csv);
 
-  std::vector<Client*> suppliers = clientRepository.getAll();
+  const std::vector<Client>& suppliers = clientRepository.getAll();
 
   ASSERT_FALSE(suppliers.empty());
 }
 
 TEST_F(ClientRepositoryTests, getClientById) {
-  ClientRepository clientRepository(file_);
+  CsvFileService clients_csv{file_};
+  ClientRepository clientRepository(clients_csv);
 
-  Client* client = clientRepository.getById(1);
+  std::optional<Client> client = clientRepository.getById(1);
 
-  ASSERT_TRUE(client != nullptr);
+  ASSERT_TRUE(client.has_value());
 }

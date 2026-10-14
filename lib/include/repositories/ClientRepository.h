@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <vector>
 
 #include "file-services/CsvFileService.h"
@@ -7,13 +8,16 @@
 
 class ClientRepository {
  public:
-  explicit ClientRepository(std::string filePath);
+  explicit ClientRepository(CsvFileService& csv_file_service);
 
-  std::vector<Client*> getAll();
-  Client* getById(int id);
-  void save(Client* client);
+  std::vector<Client>& getAll();
+
+  std::optional<Client> getById(int id);
+
+  void save(const Client& client);
 
  private:
-  CsvFileService csvFileService;
-  std::vector<Client*> clients{};
+  std::vector<Client> clients_{};
+
+  CsvFileService& csv_file_service_;
 };

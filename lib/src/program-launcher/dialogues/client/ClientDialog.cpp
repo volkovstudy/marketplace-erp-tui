@@ -48,7 +48,7 @@ void ClientDialog::addNewClient() {
 }
 
 void ClientDialog::listAllClients() {
-  std::vector<Client*> clients = repo_.getAll();
+  const std::vector<Client>& clients = repo_.getAll();
 
   if (clients.empty()) {
     out_ << "There are no clients!" << std::endl;

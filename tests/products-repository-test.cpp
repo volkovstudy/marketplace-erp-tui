@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "file-services/CsvFileService.h"
 #include "repositories/ProductsRepository.h"
 
 namespace fs = std::filesystem;
@@ -25,20 +26,22 @@ class ProductsRepositoryTests : public ::testing::Test {
 };
 
 TEST_F(ProductsRepositoryTests, writeProductsToFile) {
-  ProductsRepository productsRepository(file_);
+  CsvFileService products_csv(file_);
+  ProductsRepository productsRepository(products_csv);
 
-  std::vector<Product*> products;
-  products.push_back(new Product("tomato", 10));
-  products.push_back(new Product("cucumbers", 3));
-  products.push_back(new Product("tv", 1));
+  std::vector<Product> products;
+  products.emplace_back("tomato", 10);
+  products.emplace_back("cucumbers", 3);
+  products.emplace_back("tv", 1);
 
   productsRepository.save(products, 1);
 }
 
 TEST_F(ProductsRepositoryTests, getAllProductsForSpecificOrderFromFile) {
-  ProductsRepository productsRepository(file_);
+  CsvFileService products_csv(file_);
+  ProductsRepository productsRepository(products_csv);
 
-  std::vector<Product*> products = productsRepository.getForOrderId(1);
+  std::vector<Product> products = productsRepository.getForOrderId(1);
 
   ASSERT_FALSE(products.empty());
 }

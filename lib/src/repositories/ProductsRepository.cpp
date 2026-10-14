@@ -5,13 +5,14 @@
 #include <utility>
 #include <vector>
 
-ProductsRepository::ProductsRepository(std::string filePath) {
-  ProductsRepository::csvFileService = new CsvFileService(std::move(filePath));
-}
+#include "file-services/CsvFileService.h"
 
-std::vector<Product*> ProductsRepository::getForOrderId(int id) {
-  std::vector<Product*> result;
-  std::vector<Property*> allLines = csvFileService->getAllLines();
+ProductsRepository::ProductsRepository(CsvFileService& csv_file_service)
+    : csv_file_service_(csv_file_service) {}
+
+std::vector<Product> ProductsRepository::getForOrderId(int id) const {
+  std::vector<Product> result;
+  std::vector<Property*> allLines = csv_file_service_.getAllLines();
 
   int maxAmountOfLines = 0;
   for (Property* property : allLines) {
@@ -52,22 +53,22 @@ std::vector<Product*> ProductsRepository::getForOrderId(int id) {
       if (fieldName == "amount") amount = stoi(value);
     }
 
-    Product* product = new Product(name, amount);
-    result.push_back(product);
+    result.emplace_back(std::move(name), amount);
   }
 
   return result;
 }
 
-void ProductsRepository::save(std::vector<Product*> products, int orderId) {
+void ProductsRepository::save(const std::vector<Product>& products,
+                              int orderId) {
   std::string orderIdString = std::to_string(orderId);
 
-  for (Product* product : products) {
-    auto* name = new Property("name", {product->getName()});
+  for (auto& product : products) {
+    auto* name = new Property("name", {product.getName()});
     auto* amount =
-        new Property("amount", {std::to_string(product->getAmount())});
+        new Property("amount", {std::to_string(product.getAmount())});
     auto* orderIdProperty = new Property("order_id", {orderIdString});
 
-    csvFileService->write({name, amount, orderIdProperty});
+    csv_file_service_.write({name, amount, orderIdProperty});
   }
 }

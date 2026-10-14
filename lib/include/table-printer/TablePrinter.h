@@ -7,6 +7,6 @@
 
 class TablePrinter {
  public:
-  void printVector(const std::vector<Client*>& clients);
-  void printVector(const std::vector<Order*>& orders);
+  void printVector(const std::vector<Client>& clients);
+  void printVector(const std::vector<Order>& orders);
 };

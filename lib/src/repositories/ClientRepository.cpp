@@ -1,18 +1,33 @@
 #include "repositories/ClientRepository.h"
 
 #include <algorithm>
+#include <optional>
 #include <string>
-#include <utility>
 #include <vector>
 
-ClientRepository::ClientRepository(std::string filePath)
-    : csvFileService(std::move(filePath)) {}
+#include "models/Client.h"
+#include "models/Property.h"
 
-std::vector<Client*> ClientRepository::getAll() {
-  if (!clients.empty()) return clients;
+namespace {
 
-  std::vector<Client*> result;
-  std::vector<Property*> allLines = csvFileService.getAllLines();
+void write(const Client& client, CsvFileService& csv_file_service) {
+  auto* id = new Property("id", {std::to_string(client.getId())});
+  auto* fullName = new Property("fullName", {client.getFullName()});
+  auto* email = new Property("email", {client.getEmail()});
+
+  csv_file_service.write({id, fullName, email});
+}
+
+}  // namespace
+
+ClientRepository::ClientRepository(CsvFileService& csv_file_service)
+    : csv_file_service_(csv_file_service) {}
+
+std::vector<Client>& ClientRepository::getAll() {
+  if (!clients_.empty()) return clients_;
+
+  std::vector<Client> result;
+  std::vector<Property*> allLines = csv_file_service_.getAllLines();
 
   int maxAmountOfLines = 0;
   for (Property* property : allLines) {
@@ -35,35 +50,26 @@ std::vector<Client*> ClientRepository::getAll() {
       if (fieldName == "email") email = value;
     }
 
-    auto* client = new Client(id, fullName, email);
-    result.push_back(client);
+    result.emplace_back(id, fullName, email);
   }
 
-  clients = result;
+  clients_ = result;
 
-  return clients;
+  return clients_;
 }
 
-void write(Client* client, CsvFileService& csvFileService) {
-  auto* id = new Property("id", {std::to_string(client->getId())});
-  auto* fullName = new Property("fullName", {client->getFullName()});
-  auto* email = new Property("email", {client->getEmail()});
+std::optional<Client> ClientRepository::getById(int id) {
+  if (clients_.empty()) getAll();
 
-  csvFileService.write({id, fullName, email});
-}
-
-void ClientRepository::save(Client* client) {
-  clients.push_back(client);
-
-  write(client, csvFileService);
-}
-
-Client* ClientRepository::getById(int id) {
-  if (clients.empty()) getAll();
-
-  for (Client* client : clients) {
-    if (client->getId() == id) return client;
+  for (auto& client : clients_) {
+    if (client.getId() == id) return client;
   }
 
-  return nullptr;
+  return std::nullopt;
+}
+
+void ClientRepository::save(const Client& client) {
+  clients_.push_back(client);
+
+  write(client, csv_file_service_);
 }

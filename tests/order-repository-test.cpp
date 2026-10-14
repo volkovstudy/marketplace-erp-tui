@@ -4,7 +4,10 @@
 #include <string>
 #include <vector>
 
+#include "file-services/CsvFileService.h"
+#include "repositories/ClientRepository.h"
 #include "repositories/OrderRepository.h"
+#include "repositories/ProductsRepository.h"
 
 namespace fs = std::filesystem;
 
@@ -33,31 +36,34 @@ class OrderRepositoryTests : public ::testing::Test {
 };
 
 TEST_F(OrderRepositoryTests, writeOrderToFile) {
-  auto* clientRepository = new ClientRepository(client_file_);
-  auto* productsRepository = new ProductsRepository(product_file_);
-  OrderRepository orderRepository(order_file_, clientRepository,
-                                  productsRepository);
+  CsvFileService clients_csv(client_file_), products_csv(product_file_),
+      orders_csv(order_file_);
 
-  auto* client =
-      new Client(2, "client for order testing", "order.testing@example.com");
-  clientRepository->save(client);
+  ClientRepository client_repo(clients_csv);
+  ProductsRepository products_repo(products_csv);
+  OrderRepository order_repo(orders_csv, client_repo, products_repo);
 
-  std::vector<Product*> products;
-  products.push_back(new Product("playstation", 1));
-  products.push_back(new Product("tv", 1));
+  Client client(2, "client for order testing", "order.testing@example.com");
+  client_repo.save(client);
 
-  auto* order = new Order(2, client, products);
+  std::vector<Product> products;
+  products.emplace_back("playstation", 1);
+  products.emplace_back("tv", 1);
 
-  orderRepository.save(order);
+  Order order(2, client, products);
+
+  order_repo.save(order);
 }
 
 TEST_F(OrderRepositoryTests, getAllOrdersFromFile) {
-  auto* clientRepository = new ClientRepository(client_file_);
-  auto* productsRepository = new ProductsRepository(product_file_);
-  OrderRepository orderRepository(order_file_, clientRepository,
-                                  productsRepository);
+  CsvFileService clients_csv(client_file_), products_csv(product_file_),
+      orders_csv(order_file_);
 
-  std::vector<Order*> orders = orderRepository.getAll();
+  ClientRepository client_repo(clients_csv);
+  ProductsRepository products_repo(products_csv);
+  OrderRepository order_repo(orders_csv, client_repo, products_repo);
+
+  const std::vector<Order>& orders = order_repo.getAll();
 
   ASSERT_FALSE(orders.empty());
 }

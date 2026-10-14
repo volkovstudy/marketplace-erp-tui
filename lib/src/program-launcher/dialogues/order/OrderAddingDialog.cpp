@@ -24,8 +24,9 @@
 
 namespace {
 
-std::vector<Client*> getAllClients() {
-  ClientRepository clientRepository(pathToClientsFile);
+std::vector<Client>& getAllClients() {
+  CsvFileService csv_file_service(pathToClientsFile);
+  ClientRepository clientRepository(csv_file_service);
 
   return clientRepository.getAll();
 }
@@ -38,13 +39,13 @@ std::string makeClientLine(const Client& client) {
 }
 
 void printAllClients() {
-  std::vector<Client*> clients = getAllClients();
+  const std::vector<Client>& clients = getAllClients();
 
   std::vector<std::string> clientLines;
   for (int i = 0; i < clients.size(); ++i) {
-    Client* client = clients.at(i);
+    Client client = clients.at(i);
 
-    std::string clientLine = makeClientLine(*client);
+    std::string clientLine = makeClientLine(client);
 
     std::stringstream fullClientLine;
     int clientNo = i + 1;
@@ -58,7 +59,7 @@ void printAllClients() {
   }
 }
 
-void readAndSaveProduct(std::vector<Product*>& products) {
+void readAndSaveProduct(std::vector<Product>& products) {
   std::string name;
   std::cout << "Name: ";
   do {
@@ -83,12 +84,11 @@ void readAndSaveProduct(std::vector<Product*>& products) {
     }
   } while (amount < 0);
 
-  Product* product = new Product(name, amount);
-  products.push_back(product);
+  products.emplace_back(name, amount);
 }
 
-void getInformationAboutOrder(Client& client, std::vector<Product*>& products) {
-  std::vector<Client*> clients = getAllClients();
+void getInformationAboutOrder(Client& client, std::vector<Product>& products) {
+  const std::vector<Client>& clients = getAllClients();
 
   if (clients.empty()) {
     throw *new std::exception;
@@ -115,7 +115,7 @@ void getInformationAboutOrder(Client& client, std::vector<Product*>& products) {
     clientNo -= 1;  // -1 => because in printing clients using index+1
   } while (clientNo < 0 || clientNo > clients.size());
 
-  client = *clients.at(clientNo);
+  client = clients.at(clientNo);
 
   std::cout << std::endl << "Write the products: " << std::endl;
 
@@ -139,11 +139,11 @@ void getInformationAboutOrder(Client& client, std::vector<Product*>& products) {
   } while (true);
 }
 
-void printProducts(std::vector<Product*> products) {
-  for (Product* product : products) {
-    int amount = product->getAmount();
+void printProducts(const std::vector<Product>& products) {
+  for (auto& product : products) {
+    int amount = product.getAmount();
 
-    std::cout << product->getName() << " - " << amount;
+    std::cout << product.getName() << " - " << amount;
 
     if (amount == 1)
       std::cout << " unit";
@@ -155,11 +155,14 @@ void printProducts(std::vector<Product*> products) {
 }
 
 void saveOrder(Order& order) {
-  OrderRepository orderRepository(pathToOrdersFile,
-                                  new ClientRepository(pathToClientsFile),
-                                  new ProductsRepository(pathToProductsFile));
+  CsvFileService clients_csv(pathToClientsFile),
+      products_csv(pathToProductsFile), orders_csv(pathToOrdersFile);
 
-  orderRepository.save(&order);
+  ClientRepository client_repo(clients_csv);
+  ProductsRepository products_repo(products_csv);
+  OrderRepository orderRepository(orders_csv, client_repo, products_repo);
+
+  orderRepository.save(order);
 }
 
 }  // namespace
@@ -168,7 +171,7 @@ void OrderAddingDialog::addOrder() {
   std::cout << "Now you're going to add new order." << std::endl << std::endl;
 
   Client& client = *new Client(-1, "", "");
-  std::vector<Product*> products{};
+  std::vector<Product> products{};
 
   try {
     getInformationAboutOrder(client, products);
@@ -196,7 +199,7 @@ void OrderAddingDialog::addOrder() {
     utils::toLowerCase(program);
 
     if (program == yesChar) {
-      Order order(&client, products);
+      Order order(client, products);
       saveOrder(order);
 
       std::cout << std::endl << "Order saved." << std::endl;

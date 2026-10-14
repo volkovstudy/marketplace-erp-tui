@@ -47,7 +47,7 @@ void ClientAddingDialog::addClient() {
 
     switch (program) {
       case yesChar:
-        repo_.save(&client);
+        repo_.save(client);
         out_ << std::endl << "Client added." << std::endl;
         return;
 

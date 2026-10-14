@@ -26,27 +26,24 @@ class CsvFileServiceTests : public ::testing::Test {
 
 namespace {
 
-static std::vector<Property*> givenThreeProperties() {
+std::vector<Property> givenThreeProperties() {
   std::vector<std::string> names;
   names.emplace_back("Tom");
   names.emplace_back("Alex");
-  auto* name = new Property("name", names);
 
   std::vector<std::string> surnames;
   surnames.emplace_back("Petrov");
   surnames.emplace_back("Kotov");
   surnames.emplace_back("Vasiliev");
-  auto* surname = new Property("surname", surnames);
 
   std::vector<std::string> ages;
   ages.emplace_back("20");
   ages.emplace_back("30");
-  auto* age = new Property("age", ages);
 
-  std::vector<Property*> properties;
-  properties.push_back(name);
-  properties.push_back(surname);
-  properties.push_back(age);
+  std::vector<Property> properties;
+  properties.emplace_back("name", names);
+  properties.emplace_back("surname", surnames);
+  properties.emplace_back("age", ages);
 
   return properties;
 }
@@ -56,7 +53,7 @@ static std::vector<Property*> givenThreeProperties() {
 TEST_F(CsvFileServiceTests, writePropertiesToFile) {
   CsvFileService csvFileService(file_);
 
-  std::vector<Property*> properties = givenThreeProperties();
+  std::vector<Property> properties = givenThreeProperties();
 
   csvFileService.write(properties);
 }

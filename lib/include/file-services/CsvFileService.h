@@ -7,14 +7,16 @@
 
 class CsvFileService {
  public:
-  explicit CsvFileService(std::string filePath);
+  explicit CsvFileService(const std::string& file_path);
 
-  std::vector<Property*> getAllLines();
-  void write(std::vector<Property*> properties);
-  void eraseAndWrite(std::vector<Property*> properties);
+  std::vector<Property> getAllLines() const;
+
+  void write(const std::vector<Property>& properties) const;
+  void eraseAndWrite(const std::vector<Property>& properties) const;
+
   const std::string& getFilePath() const;
-  void setFilePath(const std::string& newFilePath);
+  void setFilePath(const std::string& file_path);
 
  private:
-  std::string filePath;
+  std::string file_path_;
 };

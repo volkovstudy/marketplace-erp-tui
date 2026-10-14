@@ -5,15 +5,18 @@
 
 class Property {
  public:
-  Property(std::string fieldName, const std::vector<std::string>& values);
+  Property(const std::string& field_name,
+           const std::vector<std::string>& values);
+
+  void addValue(const std::string& value);
 
   const std::string& getFieldName() const;
-  void setFieldName(const std::string& fieldName);
+  void setFieldName(const std::string& field_name);
 
   const std::vector<std::string>& getValues() const;
   void setValues(const std::vector<std::string>& values);
 
  private:
-  std::string fieldName;
-  std::vector<std::string> values;
+  std::string field_name_;
+  std::vector<std::string> values_;
 };

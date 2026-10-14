@@ -10,10 +10,10 @@
 
 namespace {
 
-void write(const Client& client, CsvFileService& csv_file_service) {
-  auto* id = new Property("id", {std::to_string(client.getId())});
-  auto* fullName = new Property("fullName", {client.getFullName()});
-  auto* email = new Property("email", {client.getEmail()});
+void write(const Client& client, const CsvFileService& csv_file_service) {
+  Property id("id", {std::to_string(client.getId())});
+  Property fullName("fullName", {client.getFullName()});
+  Property email("email", {client.getEmail()});
 
   csv_file_service.write({id, fullName, email});
 }
@@ -27,11 +27,11 @@ std::vector<Client>& ClientRepository::getAll() {
   if (!clients_.empty()) return clients_;
 
   std::vector<Client> result;
-  std::vector<Property*> allLines = csv_file_service_.getAllLines();
+  std::vector<Property> allLines = csv_file_service_.getAllLines();
 
   int maxAmountOfLines = 0;
-  for (Property* property : allLines) {
-    int amountOfLines = (int)property->getValues().size();
+  for (const Property& property : allLines) {
+    int amountOfLines = (int)property.getValues().size();
     maxAmountOfLines = std::max(maxAmountOfLines, amountOfLines);
   }
 
@@ -39,11 +39,11 @@ std::vector<Client>& ClientRepository::getAll() {
     int id = 0;
     std::string fullName, email;
 
-    for (Property* property : allLines) {
-      if (property->getValues().size() < maxAmountOfLines) break;
+    for (const Property& property : allLines) {
+      if (property.getValues().size() < maxAmountOfLines) break;
 
-      std::string value = property->getValues().at(i);
-      std::string fieldName = property->getFieldName();
+      std::string value = property.getValues().at(i);
+      std::string fieldName = property.getFieldName();
 
       if (fieldName == "id") id = stoi(value);
       if (fieldName == "fullName") fullName = value;

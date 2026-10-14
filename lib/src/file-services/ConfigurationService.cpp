@@ -14,9 +14,9 @@ static std::string mainConfiguration;
 
 ConfigurationService::ConfigurationService(const std::string& filePath)
     : csvFileService(filePath) {
-  for (Property* property : csvFileService.getAllLines()) {
-    if (property->getFieldName() == kCurrentIdColumn) {
-      int element = std::stoi(property->getValues().at(0));
+  for (const Property& property : csvFileService.getAllLines()) {
+    if (property.getFieldName() == kCurrentIdColumn) {
+      int element = std::stoi(property.getValues().at(0));
       currentId = element;
       break;
     }
@@ -49,7 +49,7 @@ int ConfigurationService::getNextId() {
 }
 
 void ConfigurationService::save() {
-  auto* property = new Property(kCurrentIdColumn, {std::to_string(currentId)});
+  Property property(kCurrentIdColumn, {std::to_string(currentId)});
 
   csvFileService.eraseAndWrite({property});
 }

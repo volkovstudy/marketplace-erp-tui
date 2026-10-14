@@ -1,180 +1,189 @@
 #include "file-services/CsvFileService.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <fstream>
+#include <functional>
 #include <ios>
+#include <istream>
 #include <ostream>
+#include <ranges>
 #include <string>
-#include <utility>
+#include <string_view>
+#include <unordered_map>
 #include <vector>
 
-#define CSV_DELIMITER ","
-#define LINE_BREAKER "\n"
-#define EMPTY_VALUE ""
+#include "models/Property.h"
 
-CsvFileService::CsvFileService(std::string filePath)
-    : filePath(std::move(filePath)) {}
+static const std::string kCsvDelimiter = ",";
+static const std::string kLineBreaker = "\n";
+static const std::string kEmptyValue = "";
 
-const std::string& CsvFileService::getFilePath() const { return filePath; }
+namespace {
 
-void CsvFileService::setFilePath(const std::string& newFilePath) {
-  CsvFileService::filePath = newFilePath;
+std::vector<std::string> SplitLine(std::string_view str,
+                                   std::string_view delimiter) {
+  return std::views::split(str, delimiter) |
+         std::views::transform([](const auto& sub) {
+           return std::string{sub.begin(), sub.end()};
+         }) |
+         std::ranges::to<std::vector>();
 }
 
-std::vector<std::string> splitLine(const std::string& str,
-                                   const std::string& delimiter) {
-  std::vector<std::string> result;
+std::vector<std::string> ReadColumnNames(const std::string& file_path) {
+  std::ifstream reader(file_path);
 
-  std::string::size_type currentPosition = str.find(delimiter);
+  if (!reader.is_open()) return {};
 
-  std::string::size_type previousElementIndex = 0;
+  std::string header;
+  std::getline(reader, header);
 
-  while (currentPosition != std::string::npos) {
-    std::string delimitedLine = str.substr(
-        previousElementIndex, currentPosition - previousElementIndex);
-    result.push_back(delimitedLine);
+  if (header.empty()) return {};
 
-    previousElementIndex = currentPosition + delimiter.size();
-    currentPosition = str.find(delimiter, previousElementIndex);
+  return SplitLine(header, kCsvDelimiter);
+}
+
+std::vector<std::string> GetColumnNamesFromProps(
+    const std::vector<Property>& properties) {
+  return properties | std::views::transform(&Property::getFieldName) |
+         std::ranges::to<std::vector>();
+}
+
+std::vector<Property> CreateVectorWithProps(
+    const std::vector<std::string>& field_names) {
+  return field_names |
+         std::views::transform([](auto& name) { return Property{name, {}}; }) |
+         std::ranges::to<std::vector>();
+}
+
+void WriteColumnNames(std::ostream& out,
+                      const std::vector<std::string>& column_names) {
+  bool is_first = true;
+
+  for (auto& column_name : column_names) {
+    if (!is_first) {
+      out << kCsvDelimiter;
+    }
+
+    out << column_name;
+    is_first = false;
   }
 
-  std::string lastDelimitedLine = str.substr(previousElementIndex);
-  result.push_back(lastDelimitedLine);
-
-  return result;
+  out << kLineBreaker;
 }
 
-std::vector<Property*> createVectorWithProperties(
-    const std::vector<std::string>& fieldNames) {
-  std::vector<Property*> result;
-
-  for (const auto& fieldName : fieldNames) {
-    auto* property = new Property(fieldName, {});
-
-    result.push_back(property);
+std::vector<std::reference_wrapper<const Property>> GetOrderedProps(
+    const std::vector<Property>& properties,
+    const std::vector<std::string>& column_names) {
+  std::unordered_map<std::string_view, size_t> order;
+  order.reserve(column_names.size());
+  for (auto [idx, column_name] : std::views::enumerate(column_names)) {
+    order.try_emplace(column_name, static_cast<size_t>(idx));
   }
 
-  return result;
-}
-
-std::vector<std::string> getColumnNamesFromString(const std::string& filePath) {
-  std::ifstream fileReader(filePath);
-
-  if (!fileReader.is_open()) return *(new std::vector<std::string>);
-
-  std::string firstLine;
-  std::getline(fileReader, firstLine);
-
-  if (firstLine.empty()) return {};
-
-  return splitLine(firstLine, CSV_DELIMITER);
-}
-
-std::vector<std::string> getColumnNamesFromProperties(
-    const std::vector<Property*>& properties) {
-  std::vector<std::string> columnNames;
-
-  for (Property* property : properties)
-    columnNames.push_back(property->getFieldName());
-
-  return columnNames;
-}
-
-std::vector<Property*> CsvFileService::getAllLines() {
-  std::ifstream fileReader(filePath);
-
-  std::string lineWithColumnNames;
-  std::getline(fileReader, lineWithColumnNames);
-
-  std::vector<std::string> fieldNames =
-      splitLine(lineWithColumnNames, CSV_DELIMITER);
-  std::vector<Property*> allLines = createVectorWithProperties(fieldNames);
-
-  std::string line;
-  while (std::getline(fileReader, line)) {
-    std::vector<std::string> lineValues = splitLine(line, CSV_DELIMITER);
-
-    for (int i = 0; i < allLines.size(); ++i) {
-      Property* property = allLines.at(i);
-
-      std::vector<std::string> values = property->getValues();
-      values.push_back(lineValues.at(i));
-
-      property->setValues(values);
+  std::vector<const Property*> slots(column_names.size(), nullptr);
+  for (const auto& prop : properties) {
+    if (auto it = order.find(prop.getFieldName()); it != order.end()) {
+      slots[it->second] = &prop;
     }
   }
 
-  fileReader.close();
-
-  return allLines;
+  return slots |
+         std::views::filter([](const Property* p) { return p != nullptr; }) |
+         std::views::transform(
+             [](const Property* p) { return std::cref(*p); }) |
+         std::ranges::to<std::vector>();
 }
 
-void writeColumnNamesToFile(std::ofstream& fileWriter,
-                            std::vector<std::string> columnNames) {
-  for (int i = 0; i < columnNames.size(); ++i) {
-    std::string columnName = columnNames.at(i);
+size_t FindMaxValuesSize(const std::vector<Property>& properties) {
+  if (properties.empty()) return 0;
 
-    fileWriter << columnName;
-    bool hasNext = i + 1 < columnNames.size();
-    if (hasNext) {
-      fileWriter << CSV_DELIMITER;
-    } else {
-      fileWriter << LINE_BREAKER;
+  const auto& sizes = properties | std::views::transform([](const Property& p) {
+                        return p.getValues().size();
+                      });
+
+  return std::ranges::max(sizes);
+}
+
+void WriteValues(std::ostream& out, const auto& ordered_props, size_t rows) {
+  const auto cell = [](const Property& prop, size_t row) {
+    const auto& values = prop.getValues();
+    return row < values.size() ? std::string_view{values[row]}
+                               : std::string_view{kEmptyValue};
+  };
+
+  for (size_t row = 0; row < rows; ++row) {
+    for (auto [column, prop] : std::views::enumerate(ordered_props)) {
+      if (column != 0) out << kCsvDelimiter;
+      out << cell(prop, row);
     }
+
+    out << kLineBreaker;
   }
 }
 
-void writeInSpecificMode(const std::string& filePath,
+void WriteInSpecificMode(const std::string& file_path,
                          std::ios_base::openmode mode,
-                         std::vector<Property*> properties) {
-  std::ofstream fileWriter(filePath, mode);
+                         const std::vector<Property>& properties) {
+  std::ofstream writer(file_path, mode);
 
-  if (!fileWriter.is_open()) return;
+  if (!writer.is_open()) return;
 
-  std::vector<std::string> columnNames = getColumnNamesFromString(filePath);
+  std::vector<std::string> column_names = ReadColumnNames(file_path);
 
-  if (columnNames.empty()) {
-    columnNames = getColumnNamesFromProperties(properties);
-    writeColumnNamesToFile(fileWriter, columnNames);
+  if (column_names.empty()) {
+    column_names = GetColumnNamesFromProps(properties);
+    WriteColumnNames(writer, column_names);
   }
 
-  // Sorting properties by their order in file
-  std::vector<Property*> sortedProperties;
-  for (Property* property : properties) {
-    for (const std::string& columnName : columnNames) {
-      if (property->getFieldName() == columnName)
-        sortedProperties.push_back(property);
+  const auto ordered_props = GetOrderedProps(properties, column_names);
+  const size_t rows = FindMaxValuesSize(properties);
+
+  WriteValues(writer, ordered_props, rows);
+}
+
+std::vector<Property> ReadAll(std::istream& in,
+                              const std::vector<std::string>& column_names) {
+  std::vector<Property> properties = CreateVectorWithProps(column_names);
+
+  for (std::string line; std::getline(in, line);) {
+    std::vector<std::string> values = SplitLine(line, kCsvDelimiter);
+
+    for (auto&& [property, value] : std::views::zip(properties, values)) {
+      property.addValue(value);
     }
   }
 
-  // Finding maximal amount of values (lines) in properties
-  int maxAmountOfValues = (int)properties.at(0)->getValues().size();
-  for (Property* property : properties) {
-    int amountOfValues = (int)property->getValues().size();
-    maxAmountOfValues = std::max(maxAmountOfValues, amountOfValues);
-  }
-
-  for (int lineNumber = 0; lineNumber < maxAmountOfValues; ++lineNumber) {
-    for (int i = 0; i < sortedProperties.size(); ++i) {
-      Property* property = sortedProperties.at(i);
-
-      std::vector<std::string> values = property->getValues();
-      if (lineNumber < values.size())
-        fileWriter << property->getValues().at(lineNumber);
-      else
-        fileWriter << EMPTY_VALUE;
-
-      if (i + 1 < sortedProperties.size()) fileWriter << CSV_DELIMITER;
-    }
-
-    fileWriter << LINE_BREAKER;
-  }
+  return properties;
 }
 
-void CsvFileService::write(std::vector<Property*> properties) {
-  writeInSpecificMode(filePath, std::ios::app, std::move(properties));
+}  // namespace
+
+CsvFileService::CsvFileService(const std::string& file_path)
+    : file_path_(file_path) {}
+
+std::vector<Property> CsvFileService::getAllLines() const {
+  std::ifstream reader(file_path_);
+
+  std::string header;
+  std::getline(reader, header);
+
+  std::vector<std::string> column_names = SplitLine(header, kCsvDelimiter);
+
+  return ReadAll(reader, column_names);
 }
 
-void CsvFileService::eraseAndWrite(std::vector<Property*> properties) {
-  writeInSpecificMode(filePath, std::ios::ate, std::move(properties));
+void CsvFileService::write(const std::vector<Property>& properties) const {
+  WriteInSpecificMode(file_path_, std::ios::app, properties);
+}
+
+void CsvFileService::eraseAndWrite(
+    const std::vector<Property>& properties) const {
+  WriteInSpecificMode(file_path_, std::ios::ate, properties);
+}
+
+const std::string& CsvFileService::getFilePath() const { return file_path_; }
+
+void CsvFileService::setFilePath(const std::string& file_path) {
+  file_path_ = file_path;
 }

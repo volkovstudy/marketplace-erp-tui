@@ -18,11 +18,11 @@ std::vector<Order>& OrderRepository::getAll() {
   if (!orders_.empty()) return orders_;
 
   std::vector<Order> result;
-  std::vector<Property*> allLines = csv_file_service_.getAllLines();
+  std::vector<Property> allLines = csv_file_service_.getAllLines();
 
   int maxAmountOfLines = 0;
-  for (Property* property : allLines) {
-    int amountOfLines = (int)property->getValues().size();
+  for (const Property& property : allLines) {
+    int amountOfLines = (int)property.getValues().size();
     maxAmountOfLines = std::max(maxAmountOfLines, amountOfLines);
   }
 
@@ -30,11 +30,11 @@ std::vector<Order>& OrderRepository::getAll() {
     int id = 0;
     Client client;
 
-    for (Property* property : allLines) {
-      if (property->getValues().size() < maxAmountOfLines) break;
+    for (const Property& property : allLines) {
+      if (property.getValues().size() < maxAmountOfLines) break;
 
-      std::string value = property->getValues().at(i);
-      std::string fieldName = property->getFieldName();
+      std::string value = property.getValues().at(i);
+      std::string fieldName = property.getFieldName();
 
       if (fieldName == "id") id = std::stoi(value);
       if (fieldName == "client_id") {
@@ -52,11 +52,10 @@ std::vector<Order>& OrderRepository::getAll() {
   return orders_;
 }
 
-void write(const Order& order, CsvFileService& csv_file_service,
+void write(const Order& order, const CsvFileService& csv_file_service,
            ProductsRepository& products_repo) {
-  auto* id = new Property("id", {std::to_string(order.getId())});
-  auto* clientId =
-      new Property("client_id", {std::to_string(order.getClient().getId())});
+  Property id("id", {std::to_string(order.getId())});
+  Property clientId("client_id", {std::to_string(order.getClient().getId())});
 
   csv_file_service.write({id, clientId});
 

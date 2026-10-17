@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <iostream>
 #include <vector>
 
 #include "models/Client.h"
@@ -50,13 +51,13 @@ static std::vector<Order> givenFourOrders() {
 TEST(TablePrinterTests, printClients) {
   std::vector<Client> clients = givenFourClients();
 
-  TablePrinter printer;
+  TablePrinter printer(std::cout);
   printer.printVector(clients);
 }
 
 TEST(TablePrinterTests, printOrders) {
   std::vector<Order> orders = givenFourOrders();
 
-  TablePrinter printer;
+  TablePrinter printer(std::cout);
   printer.printVector(orders);
 }

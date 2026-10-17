@@ -72,7 +72,7 @@ std::string makeProductLine(const Product& product) {
 
 TablePrinter::TablePrinter(std::ostream& out) : out_(out) {}
 
-void TablePrinter::printVector(const std::vector<Client>& clients) {
+void TablePrinter::print(const std::vector<Client>& clients) {
   const size_t max_name_length =
       std::ranges::max(clients | std::views::transform([](const auto& c) {
                          return c.getFullName().length();
@@ -112,7 +112,7 @@ void TablePrinter::printVector(const std::vector<Client>& clients) {
   PrintHorizontalLine(out_, line_length);
 }
 
-void TablePrinter::printVector(const std::vector<Order>& orders) {
+void TablePrinter::print(const std::vector<Order>& orders) {
   std::map<const Order*, std::string> idStrings;
   std::map<const Order*, std::string> clientLines;
   std::map<const Order*, std::vector<std::string>> productLines;

@@ -50,7 +50,7 @@ std::vector<Order> givenFourOrders() {
 }
 
 template <typename C, typename T>
-concept has_print_vector_for = requires(C c, T arg) { c.printVector(arg); };
+concept has_print_vector_for = requires(C c, T arg) { c.print(arg); };
 
 template <typename T>
   requires has_print_vector_for<TablePrinter, T>
@@ -58,7 +58,7 @@ std::string Render(const T& data) {
   std::ostringstream out;
 
   TablePrinter printer(out);
-  printer.printVector(data);
+  printer.print(data);
 
   return out.str();
 }
@@ -80,7 +80,7 @@ TEST(TablePrinterTests, PrintClients) {
   std::vector<Client> clients = givenFourClients();
   TablePrinter printer(std::cout);
 
-  printer.printVector(clients);
+  printer.print(clients);
 }
 
 TEST(TablePrinterTests, AllLinesHasTheSameWidthInClients) {
@@ -98,5 +98,5 @@ TEST(TablePrinterTests, printOrders) {
   std::vector<Order> orders = givenFourOrders();
 
   TablePrinter printer(std::cout);
-  printer.printVector(orders);
+  printer.print(orders);
 }

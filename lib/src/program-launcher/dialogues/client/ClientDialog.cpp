@@ -57,7 +57,7 @@ void ClientDialog::listAllClients() {
 
   out_ << "All clients:" << std::endl;
   TablePrinter printer(out_);
-  printer.printVector(clients);
+  printer.print(clients);
 
   out_ << std::endl << "What do you want to do?" << std::endl;
   out_ << "(Q)uit;" << std::endl;

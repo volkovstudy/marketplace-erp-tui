@@ -1,8 +1,12 @@
 #include <gtest/gtest.h>
 
+#include <filesystem>
 #include <format>
+#include <fstream>
 #include <iostream>
+#include <source_location>
 #include <sstream>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -10,6 +14,8 @@
 #include "table-printer/TablePrinter.h"
 
 namespace {
+
+namespace fs = std::filesystem;
 
 std::vector<Client> givenFourClients() {
   std::vector<Client> clients;
@@ -74,13 +80,36 @@ std::vector<std::string> SplitLines(const std::string& str) {
   return lines;
 }
 
+std::string ReadExpectedFile(const fs::path& path) {
+  const std::source_location source = std::source_location::current();
+  const fs::path full_path =
+      fs::path{source.file_name()}.parent_path() / "tables" / path;
+
+  if (!fs::exists(full_path)) {
+    throw std::invalid_argument{
+        std::format("Expected file doesn't exist: {}", full_path.string())};
+  }
+
+  std::ifstream in{full_path, std::ios::binary};
+  if (!in.is_open()) {
+    throw std::invalid_argument(
+        std::format("Cannot open example file: {}", full_path.string()));
+  }
+
+  std::ostringstream content;
+  content << in.rdbuf();
+
+  return content.str();
+}
+
 }  // namespace
 
-TEST(TablePrinterTests, PrintClients) {
-  std::vector<Client> clients = givenFourClients();
-  TablePrinter printer(std::cout);
+TEST(TablePrinterTests, RenderedClientsAreMatchedWithExample) {
+  const auto expected = ReadExpectedFile("clients-table-example.txt");
 
-  printer.print(clients);
+  const auto out = Render(givenFourClients());
+
+  ASSERT_EQ(out, expected);
 }
 
 TEST(TablePrinterTests, AllLinesHasTheSameWidthInClients) {

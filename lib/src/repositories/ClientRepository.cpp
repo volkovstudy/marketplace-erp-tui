@@ -22,6 +22,8 @@ void Write(const Client& client, const CsvFileService& csv_file_service) {
 std::vector<Client> ReadClients(const CsvFileService& csv_file_service) {
   const std::vector<Property> data = csv_file_service.getAllLines();
 
+  if (data.empty()) return {};
+
   const auto& ids = utils::FindColumn("id", data).getValues();
   const auto& names = utils::FindColumn("fullName", data).getValues();
   const auto& emails = utils::FindColumn("email", data).getValues();

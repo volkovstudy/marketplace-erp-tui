@@ -11,8 +11,9 @@ class ClientRepository {
   explicit ClientRepository(CsvFileService& csv_file_service);
 
   std::vector<Client>& getAll();
+  const std::vector<Client>& getAll() const;
 
-  std::optional<Client> getById(int id);
+  std::optional<Client> getById(int id) const;
 
   void save(const Client& client);
 

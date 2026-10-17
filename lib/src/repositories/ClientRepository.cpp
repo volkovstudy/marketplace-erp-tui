@@ -39,19 +39,14 @@ std::vector<Client> ReadClients(const CsvFileService& csv_file_service) {
 }  // namespace
 
 ClientRepository::ClientRepository(CsvFileService& csv_file_service)
-    : csv_file_service_(csv_file_service) {}
+    : clients_(ReadClients(csv_file_service)),
+      csv_file_service_(csv_file_service) {}
 
-std::vector<Client>& ClientRepository::getAll() {
-  if (clients_.empty()) {
-    clients_ = ReadClients(csv_file_service_);
-  }
+std::vector<Client>& ClientRepository::getAll() { return clients_; }
 
-  return clients_;
-}
+const std::vector<Client>& ClientRepository::getAll() const { return clients_; }
 
-std::optional<Client> ClientRepository::getById(int id) {
-  if (clients_.empty()) getAll();
-
+std::optional<Client> ClientRepository::getById(int id) const {
   const auto it = std::ranges::find(clients_, id, &Client::getId);
 
   return it == clients_.end() ? std::nullopt : std::optional{*it};

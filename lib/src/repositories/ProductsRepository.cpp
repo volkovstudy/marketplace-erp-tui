@@ -1,72 +1,47 @@
 #include "repositories/ProductsRepository.h"
 
-#include <algorithm>
+#include <ranges>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "file-services/CsvFileService.h"
+#include "models/Order.h"
+#include "models/Product.h"
+#include "models/Property.h"
+#include "utils/Utils.h"
 
 ProductsRepository::ProductsRepository(CsvFileService& csv_file_service)
     : csv_file_service_(csv_file_service) {}
 
 std::vector<Product> ProductsRepository::getForOrderId(int id) const {
-  std::vector<Product> result;
-  std::vector<Property> allLines = csv_file_service_.getAllLines();
+  std::vector<Property> data = csv_file_service_.getAllLines();
 
-  int maxAmountOfLines = 0;
-  for (const Property& property : allLines) {
-    int amountOfLines = (int)property.getValues().size();
-    maxAmountOfLines = std::max(maxAmountOfLines, amountOfLines);
-  }
+  if (data.empty()) return {};
 
-  bool areLinesFoundForTheId = false;
-  const Property* orderIdColumn;
-  for (const Property& property : allLines) {
-    if (property.getFieldName() == "order_id") {
-      for (const std::string& value : property.getValues()) {
-        if (std::stoi(value) == id) {
-          areLinesFoundForTheId = true;
-          orderIdColumn = &property;
-          break;
-        }
-      }
-      break;
-    }
-  }
+  const auto& order_ids = utils::FindColumn("order_id", data).getValues();
+  const auto& names = utils::FindColumn("name", data).getValues();
+  const auto& amounts = utils::FindColumn("amount", data).getValues();
 
-  if (!areLinesFoundForTheId) return {};
-
-  for (int i = 0; i < maxAmountOfLines; ++i) {
-    if (stoi(orderIdColumn->getValues().at(i)) != id) continue;
-
-    std::string name;
-    int amount;
-
-    for (const Property& property : allLines) {
-      if (property.getValues().size() < maxAmountOfLines) break;
-
-      std::string value = property.getValues().at(i);
-      std::string fieldName = property.getFieldName();
-
-      if (fieldName == "name") name = value;
-      if (fieldName == "amount") amount = stoi(value);
-    }
-
-    result.emplace_back(std::move(name), amount);
-  }
-
-  return result;
+  return std::views::zip(order_ids, names, amounts) |
+         std::views::filter([&id](auto row) {
+           auto [order_id, name, amount] = row;
+           return utils::MapStringToInt(order_id) == id;
+         }) |
+         std::views::transform([](auto row) {
+           auto [order_id, name, amount] = row;
+           return Product{name, utils::MapStringToInt(amount)};
+         }) |
+         std::ranges::to<std::vector>();
 }
 
 void ProductsRepository::save(const std::vector<Product>& products,
-                              int orderId) {
-  std::string orderIdString = std::to_string(orderId);
+                              int order_id) {
+  std::string id_str = std::to_string(order_id);
 
-  for (auto& product : products) {
+  for (const auto& product : products) {
     Property name("name", {product.getName()});
     Property amount("amount", {std::to_string(product.getAmount())});
-    Property orderIdProperty("order_id", {orderIdString});
+    Property orderIdProperty("order_id", {id_str});
 
     csv_file_service_.write({name, amount, orderIdProperty});
   }

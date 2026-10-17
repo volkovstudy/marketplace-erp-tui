@@ -132,9 +132,10 @@ TEST(TablePrinterTests, ContainsClientNameAndEmail) {
   ASSERT_NE(out.find("petr@example.com"), std::string::npos);
 }
 
-TEST(TablePrinterTests, printOrders) {
-  std::vector<Order> orders = givenFourOrders();
+TEST(TablePrinterTests, RenderedOrdersAreMatchedWithExample) {
+  const auto expected = ReadExpectedFile("orders-table-example.txt");
 
-  TablePrinter printer(std::cout);
-  printer.print(orders);
+  const auto out = Render(givenFourOrders());
+
+  ASSERT_EQ(out, expected);
 }

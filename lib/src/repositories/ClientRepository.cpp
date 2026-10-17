@@ -1,21 +1,52 @@
 #include "repositories/ClientRepository.h"
 
-#include <algorithm>
+#include <format>
 #include <optional>
+#include <ranges>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
 #include "models/Client.h"
 #include "models/Property.h"
+#include "utils/Utils.h"
 
 namespace {
 
-void write(const Client& client, const CsvFileService& csv_file_service) {
+const Property& FindColumn(const std::string& column_name,
+                           const std::vector<Property>& properties) {
+  const auto it =
+      std::ranges::find(properties, column_name, &Property::getFieldName);
+
+  if (it == properties.end()) {
+    throw std::invalid_argument(
+        std::format("Column {} isn't found", column_name));
+  }
+
+  return *it;
+}
+
+void Write(const Client& client, const CsvFileService& csv_file_service) {
   Property id("id", {std::to_string(client.getId())});
   Property fullName("fullName", {client.getFullName()});
   Property email("email", {client.getEmail()});
 
   csv_file_service.write({id, fullName, email});
+}
+
+std::vector<Client> ReadClients(const CsvFileService& csv_file_service) {
+  const std::vector<Property> data = csv_file_service.getAllLines();
+
+  const auto& ids = FindColumn("id", data).getValues();
+  const auto& names = FindColumn("fullName", data).getValues();
+  const auto& emails = FindColumn("email", data).getValues();
+
+  return std::views::zip(ids, names, emails) |
+         std::views::transform([](const auto& row) {
+           auto [id, name, email] = row;
+           return Client{utils::MapStringToInt(id), name, email};
+         }) |
+         std::ranges::to<std::vector>();
 }
 
 }  // namespace
@@ -24,36 +55,9 @@ ClientRepository::ClientRepository(CsvFileService& csv_file_service)
     : csv_file_service_(csv_file_service) {}
 
 std::vector<Client>& ClientRepository::getAll() {
-  if (!clients_.empty()) return clients_;
-
-  std::vector<Client> result;
-  std::vector<Property> allLines = csv_file_service_.getAllLines();
-
-  int maxAmountOfLines = 0;
-  for (const Property& property : allLines) {
-    int amountOfLines = (int)property.getValues().size();
-    maxAmountOfLines = std::max(maxAmountOfLines, amountOfLines);
+  if (clients_.empty()) {
+    clients_ = ReadClients(csv_file_service_);
   }
-
-  for (int i = 0; i < maxAmountOfLines; ++i) {
-    int id = 0;
-    std::string fullName, email;
-
-    for (const Property& property : allLines) {
-      if (property.getValues().size() < maxAmountOfLines) break;
-
-      std::string value = property.getValues().at(i);
-      std::string fieldName = property.getFieldName();
-
-      if (fieldName == "id") id = stoi(value);
-      if (fieldName == "fullName") fullName = value;
-      if (fieldName == "email") email = value;
-    }
-
-    result.emplace_back(id, fullName, email);
-  }
-
-  clients_ = result;
 
   return clients_;
 }
@@ -61,15 +65,13 @@ std::vector<Client>& ClientRepository::getAll() {
 std::optional<Client> ClientRepository::getById(int id) {
   if (clients_.empty()) getAll();
 
-  for (auto& client : clients_) {
-    if (client.getId() == id) return client;
-  }
+  const auto it = std::ranges::find(clients_, id, &Client::getId);
 
-  return std::nullopt;
+  return it == clients_.end() ? std::nullopt : std::optional{*it};
 }
 
 void ClientRepository::save(const Client& client) {
   clients_.push_back(client);
 
-  write(client, csv_file_service_);
+  Write(client, csv_file_service_);
 }

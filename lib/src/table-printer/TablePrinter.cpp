@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <functional>
 #include <ostream>
 #include <print>
 #include <ranges>
@@ -14,7 +15,8 @@
 
 namespace {
 
-constexpr size_t kIndentLength = 10;
+constexpr size_t kLeftIndent = 10;
+constexpr size_t kRightIndent = 1;
 
 constexpr char kLineEnd = '\n';
 
@@ -68,45 +70,67 @@ std::string MakeProductLine(const Product& product) {
   return line.str();
 }
 
+struct Column {
+  std::string name;
+  size_t width;
+};
+
+template <typename T>
+Column MakeColumn(const std::string& name, const std::vector<T>& data,
+                  auto getter) {
+  const size_t width = std::ranges::fold_left(
+      data, name.length(), [&getter](size_t w, const T& o) {
+        return std::max(w, std::invoke(getter, o).length());
+      });
+
+  return Column{name, width};
+}
+
+size_t ComputeLineLength(const std::vector<Column>& columns) {
+  const size_t separators = columns.size() + 1;
+  const size_t indents = (kLeftIndent + kRightIndent) * columns.size();
+
+  const auto values_view = columns | std::views::transform(&Column::width);
+  const size_t values =
+      std::ranges::fold_left(values_view, size_t{0}, std::plus{});
+
+  return values + indents + separators;
+}
+
+void PrintRow(std::ostream& out, const std::vector<Column>& columns,
+              const std::vector<std::string>& values) {
+  for (auto [column, value] : std::views::zip(columns, values)) {
+    std::print(out, "|{0:>{1}}{2:>{3}}", value, column.width + kLeftIndent, "",
+               kRightIndent);
+  }
+
+  out << '|' << kLineEnd;
+}
+
+void PrintColumnNames(std::ostream& out, const std::vector<Column>& columns) {
+  auto names = std::ranges::to<std::vector>(
+      std::views::transform(columns, &Column::name));
+
+  PrintRow(out, columns, names);
+}
+
 }  // namespace
 
 TablePrinter::TablePrinter(std::ostream& out) : out_(out) {}
 
 void TablePrinter::print(const std::vector<Client>& clients) {
-  struct MaxLengths {
-    size_t name;
-    size_t email;
-  };
+  const auto columns =
+      std::vector<Column>{MakeColumn("NAME", clients, &Client::getFullName),
+                          MakeColumn("EMAIL", clients, &Client::getEmail)};
 
-  auto max_lengths = std::ranges::fold_left(
-      clients, MaxLengths{}, [](MaxLengths w, const auto& c) {
-        w.name = std::max(w.name, c.getFullName().length());
-        w.email = std::max(w.email, c.getEmail().length());
-        return w;
-      });
+  const size_t line_length = ComputeLineLength(columns);
 
-  // indentLength * 2 => because of left & right indent
-  // + 3 => because of three '|' characters in header
-  const size_t line_length =
-      max_lengths.name + max_lengths.email + (kIndentLength * 2) + 3;
   PrintHeader(out_, line_length, "*Clients*");
-
-  const size_t name_header_width = max_lengths.name + kIndentLength;
-  std::print(out_, "|{:>{}} |", "NAME", name_header_width);
-
-  // -2 => because of two spaces in next line
-  const size_t email_header_width = max_lengths.email + kIndentLength - 2;
-  std::print(out_, "{:>{}} |{}", "EMAIL", email_header_width, kLineEnd);
-
+  PrintColumnNames(out_, columns);
   PrintHorizontalLine(out_, line_length);
 
-  const size_t name_width = max_lengths.name + kIndentLength;
-  // -2 => because of one space in " |" in NAME column &  one space in the end
-  const size_t email_width = max_lengths.email + kIndentLength - 2;
-
   for (const auto& client : clients) {
-    std::print(out_, "|{:>{}} |", client.getFullName(), name_width);
-    std::print(out_, "{:>{}} |{}", client.getEmail(), email_width, kLineEnd);
+    PrintRow(out_, columns, {client.getFullName(), client.getEmail()});
   }
 
   PrintHorizontalLine(out_, line_length);
@@ -126,72 +150,37 @@ void TablePrinter::print(const std::vector<Order>& orders) {
                                       std::views::transform(MakeProductLine) |
                                       std::ranges::to<std::vector>();
 
-                      return Row{id, client, products};
-                    });
+                      return Row{std::move(id), std::move(client), products};
+                    }) |
+                    std::ranges::to<std::vector>();
 
-  struct MaxLengths {
-    size_t id;
-    size_t client;
-    size_t product;
-  };
+  const auto columns = std::vector<Column>{
+      MakeColumn("ID", rows, &Row::id),
+      MakeColumn("CLIENT", rows, &Row::client),
+      MakeColumn("PRODUCTS", rows, [](const Row& row) -> std::string {
+        if (row.products.empty()) return {};
+        return std::ranges::max(row.products, std::ranges::less{},
+                                std::ranges::size);
+      })};
 
-  auto max_len = std::ranges::fold_left(
-      rows, MaxLengths{}, [](MaxLengths l, const Row& r) {
-        l.id = std::max(l.id, r.id.length());
-        l.client = std::max(l.client, r.client.length());
-        l.product = std::ranges::fold_left(r.products, l.product,
-                                           [](std::size_t s, const auto& p) {
-                                             return std::max(s, p.length());
-                                           });
+  const size_t line_length = ComputeLineLength(columns);
 
-        return l;
-      });
-
-  // indentLength * 2 => because of left & right indent
-  // + 4 => because of four '|' characters in header
-  // + 4 => because of spaces before '|' characters in header
-  const size_t line_len = max_len.id + max_len.client + max_len.product +
-                          (kIndentLength * 2) + 4 + 4;
-  PrintHeader(out_, line_len, "*Orders*");
-
-  const size_t id_header_width = max_len.id + kIndentLength;
-  std::print(out_, "|{:>{}} |", "ID", id_header_width);
-
-  // +1 => because of 1 space in " |"
-  const size_t client_header_width = max_len.client + 1;
-  std::print(out_, "{:>{}} |", "CLIENT", client_header_width);
-
-  const size_t products_header_width = max_len.product + kIndentLength;
-  std::print(out_, "{:>{}} |{}", "PRODUCTS", products_header_width, kLineEnd);
-
-  PrintHorizontalLine(out_, line_len);
-
-  const size_t id_width = max_len.id + kIndentLength;
-  // +1 => because we need a space after previous '|' in ID column AND because
-  // we don't have indent there
-  const size_t client_width = max_len.client + 1;
-  const size_t product_width = max_len.product + kIndentLength;
-
-  // +1 => because of the need to move the '|' to the right
-  const size_t empty_id_width = id_width + 1;
-  const size_t empty_client_width = client_width + 1;
+  PrintHeader(out_, line_length, "*Orders*");
+  PrintColumnNames(out_, columns);
+  PrintHorizontalLine(out_, line_length);
 
   for (const auto& row : rows) {
-    std::print(out_, "|{:>{}} |", row.id, id_width);
-    std::print(out_, "{:>{}} |", row.client, client_width);
-
     const std::vector<std::string>& products = row.products;
 
-    const std::string_view first_line =
-        products.empty() ? std::string_view{} : products.front();
-    std::print(out_, "{:>{}} |{}", first_line, product_width, kLineEnd);
+    const std::string first_line =
+        products.empty() ? std::string{""} : products.front();
+
+    PrintRow(out_, columns, {row.id, row.client, first_line});
 
     for (const auto& line : products | std::views::drop(1)) {
-      std::print(out_, "|{:>{}}|", "", empty_id_width);
-      std::print(out_, "{:>{}}|", "", empty_client_width);
-      std::print(out_, "{:>{}} |{}", line, product_width, kLineEnd);
+      PrintRow(out_, columns, {"", "", line});
     }
 
-    PrintHorizontalLine(out_, line_len);
+    PrintHorizontalLine(out_, line_length);
   }
 }

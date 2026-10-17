@@ -17,8 +17,8 @@
 namespace utils {
 
 void toLowerCase(std::string& line) {
-  std::transform(line.begin(), line.end(), line.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
+  std::ranges::transform(line, line.begin(),
+                         [](unsigned char c) { return std::tolower(c); });
 }
 
 void printDelimiter() {

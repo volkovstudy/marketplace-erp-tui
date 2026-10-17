@@ -18,7 +18,7 @@ class ClientRepository {
   void save(const Client& client);
 
  private:
-  std::vector<Client> clients_{};
+  std::vector<Client> clients_;
 
   CsvFileService& csv_file_service_;
 };

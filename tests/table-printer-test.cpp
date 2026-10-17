@@ -94,6 +94,15 @@ TEST(TablePrinterTests, AllLinesHasTheSameWidthInClients) {
   }
 }
 
+TEST(TablePrinterTests, ContainsClientNameAndEmail) {
+  Client client{"Petr Ivanovich", "petr@example.com"};
+
+  const auto out = Render(std::vector<Client>{client});
+
+  ASSERT_NE(out.find("Petr Ivanovich"), std::string::npos);
+  ASSERT_NE(out.find("petr@example.com"), std::string::npos);
+}
+
 TEST(TablePrinterTests, printOrders) {
   std::vector<Order> orders = givenFourOrders();
 

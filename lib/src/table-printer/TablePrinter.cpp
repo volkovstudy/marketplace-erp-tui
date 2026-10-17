@@ -113,97 +113,91 @@ void TablePrinter::print(const std::vector<Client>& clients) {
 }
 
 void TablePrinter::print(const std::vector<Order>& orders) {
-  std::map<const Order*, std::string> idStrings;
-  std::map<const Order*, std::string> clientLines;
-  std::map<const Order*, std::vector<std::string>> productLines;
+  std::map<const Order*, std::string> ids;
+  std::map<const Order*, std::string> clients;
+  std::map<const Order*, std::vector<std::string>> products;
 
-  int maxLengthOfId = 0, maxLengthOfClientLine = 0, maxLengthOfProductLine = 0;
-  for (auto& order : orders) {
-    std::string idString = std::to_string(order.getId());
-    idStrings[&order] = idString;
-    int idLength = (int)idString.length();
-    maxLengthOfId = std::max(maxLengthOfId, idLength);
+  size_t max_id_len =
+      std::ranges::max(orders | std::views::transform([&ids](const auto& o) {
+                         std::string str = std::to_string(o.getId());
+                         ids[&o] = str;
+                         return str.length();
+                       }));
 
-    Client client = order.getClient();
-    std::string clientLine = makeClientLine(client);
-    clientLines[&order] = clientLine;
-    maxLengthOfClientLine =
-        std::max(maxLengthOfClientLine, (int)clientLine.length());
+  size_t max_client_len = std::ranges::max(
+      orders | std::views::transform([&clients](const auto& o) {
+        std::string str = makeClientLine(o.getClient());
+        clients[&o] = str;
+        return str.length();
+      }));
 
-    std::vector<std::string> productsLines;
-    for (auto& product : order.getProducts()) {
-      std::string productLine = makeProductLine(product);
-      maxLengthOfProductLine =
-          std::max(maxLengthOfProductLine, (int)productLine.length());
-
-      productsLines.push_back(productLine);
-    }
-    productLines[&order] = productsLines;
-  }
+  size_t max_product_len = std::ranges::max(
+      orders | std::views::transform([&products](const auto& o) {
+        auto lines = o.getProducts() | std::views::transform(makeProductLine);
+        products[&o] = std::ranges::to<std::vector>(lines);
+        return std::ranges::max(lines |
+                                std::views::transform(&std::string::length));
+      }));
 
   // indentLength * 2 => because of left & right indent
   // + 4 => because of four '|' characters in header
   // + 4 => because of spaces before '|' characters in header
-  int lineLength = maxLengthOfId + maxLengthOfClientLine +
-                   maxLengthOfProductLine + (kIndentLength * 2) + 4 + 4;
-  PrintHeader(out_, lineLength, "*Orders*");
+  const size_t line_len = max_id_len + max_client_len + max_product_len +
+                          (kIndentLength * 2) + 4 + 4;
+  PrintHeader(out_, line_len, "*Orders*");
 
-  std::cout << "|";
-  std::cout.width(maxLengthOfId + kIndentLength);
-  std::cout << "ID " << " |";
+  out_ << '|';
+  out_.width(max_id_len + kIndentLength);
+  out_ << "ID " << " |";
 
-  std::cout.width(maxLengthOfClientLine +
-                  1);  // +1 => because of 1 space in " |"
-  std::cout << "CLIENT " << " |";
+  out_.width(max_client_len + 1);  // +1 => because of 1 space in " |"
+  out_ << "CLIENT " << " |";
 
-  std::cout.width(maxLengthOfProductLine + kIndentLength);
-  std::cout << "PRODUCTS " << " |";
-  std::cout << std::endl;
+  out_.width(max_product_len + kIndentLength);
+  out_ << "PRODUCTS " << " |";
+  out_ << std::endl;
 
-  PrintHorizontalLine(out_, lineLength);
+  PrintHorizontalLine(out_, line_len);
 
-  int widthForId = maxLengthOfId + kIndentLength;
+  const size_t id_width = max_id_len + kIndentLength;
   // +1 => because we need a space after previous '|' in ID column AND because
   // we don't have indent there
-  int widthForClient = maxLengthOfClientLine + 1;
-  int widthForProducts = maxLengthOfProductLine + kIndentLength;
+  const size_t client_width = max_client_len + 1;
+  const size_t product_width = max_product_len + kIndentLength;
 
   for (auto& order : orders) {
-    std::cout << "|";
+    out_ << '|';
 
-    std::cout.width(widthForId);
-    std::cout << std::right << idStrings[&order] << " |";
+    out_.width(id_width);
+    out_ << std::right << ids[&order] << " |";
 
-    std::cout.width(widthForClient);
-    std::cout << std::right << clientLines[&order] << " |";
+    out_.width(client_width);
+    out_ << std::right << clients[&order] << " |";
 
-    std::vector<std::string> productsLines = productLines[&order];
-    std::cout.width(widthForProducts);
-    std::cout << std::right
-              << (productsLines.empty() ? "" : productsLines.at(0)) << " |"
-              << std::endl;
+    const std::vector<std::string>& products_lines = products[&order];
+    out_.width(product_width);
+    out_ << std::right << (products_lines.empty() ? "" : products_lines.at(0))
+         << " |" << kLineEnd;
 
     // Starts from 1 because we've already printed the first line
-    for (int i = 1; i < productsLines.size(); ++i) {
-      std::string productLine = productsLines.at(i);
+    for (size_t i = 1; i < products_lines.size(); ++i) {
+      const std::string& product_line = products_lines.at(i);
 
-      std::cout << "|";
+      out_ << '|';
 
-      std::cout.width(
-          widthForId +
-          2);  // +2 => because of the need to move the '|' to the right
-      std::cout << std::right << "|";
+      // +2 => because of the need to move the '|' to the right
+      out_.width(id_width + 2);
+      out_ << std::right << '|';
 
-      std::cout.width(
-          widthForClient +
-          2);  // +2 => because of the need to move the '|' to the right
-      std::cout << std::right << "|";
+      // +2 => because of the need to move the '|' to the right
+      out_.width(client_width + 2);
+      out_ << std::right << '|';
 
-      std::cout.width(widthForProducts);
-      std::cout << std::right;
-      std::cout << productLine << " |" << std::endl;
+      out_.width(product_width);
+      out_ << std::right;
+      out_ << product_line << " |" << std::endl;
     }
 
-    PrintHorizontalLine(out_, lineLength);
+    PrintHorizontalLine(out_, line_len);
   }
 }

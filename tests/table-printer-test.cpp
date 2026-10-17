@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <format>
 #include <iostream>
+#include <sstream>
+#include <utility>
 #include <vector>
 
 #include "models/Client.h"
@@ -8,7 +11,7 @@
 
 namespace {
 
-static std::vector<Client> givenFourClients() {
+std::vector<Client> givenFourClients() {
   std::vector<Client> clients;
   clients.emplace_back("Very long testing name",
                        "very.long.testing.email@example.com");
@@ -21,7 +24,7 @@ static std::vector<Client> givenFourClients() {
   return clients;
 }
 
-static std::vector<Order> givenFourOrders() {
+std::vector<Order> givenFourOrders() {
   std::vector<Order> orders;
   std::vector<Client> clients = givenFourClients();
 
@@ -46,13 +49,49 @@ static std::vector<Order> givenFourOrders() {
   return orders;
 }
 
+template <typename C, typename T>
+concept has_print_vector_for = requires(C c, T arg) { c.printVector(arg); };
+
+template <typename T>
+  requires has_print_vector_for<TablePrinter, T>
+std::string Render(const T& data) {
+  std::ostringstream out;
+
+  TablePrinter printer(out);
+  printer.printVector(data);
+
+  return out.str();
+}
+
+std::vector<std::string> SplitLines(const std::string& str) {
+  std::vector<std::string> lines;
+
+  std::istringstream in{str};
+  for (std::string line; std::getline(in, line);) {
+    lines.push_back(std::move(line));
+  }
+
+  return lines;
+}
+
 }  // namespace
 
-TEST(TablePrinterTests, printClients) {
+TEST(TablePrinterTests, PrintClients) {
   std::vector<Client> clients = givenFourClients();
-
   TablePrinter printer(std::cout);
+
   printer.printVector(clients);
+}
+
+TEST(TablePrinterTests, AllLinesHasTheSameWidthInClients) {
+  const auto lines = SplitLines(Render(givenFourClients()));
+
+  ASSERT_FALSE(lines.empty());
+
+  const size_t length = lines.front().length();
+  for (const auto& line : lines) {
+    ASSERT_EQ(line.length(), length) << std::format("line: [{}]", line);
+  }
 }
 
 TEST(TablePrinterTests, printOrders) {

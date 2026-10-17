@@ -53,4 +53,17 @@ int MapStringToInt(std::string_view str) {
   return result;
 }
 
+const Property& FindColumn(const std::string& column_name,
+                           const std::vector<Property>& properties) {
+  const auto it =
+      std::ranges::find(properties, column_name, &Property::getFieldName);
+
+  if (it == properties.end()) {
+    throw std::invalid_argument(
+        std::format("Column {} isn't found", column_name));
+  }
+
+  return *it;
+}
+
 }  // namespace utils

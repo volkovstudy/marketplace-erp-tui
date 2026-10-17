@@ -12,11 +12,12 @@ class OrderRepository {
                            ProductsRepository& products_repo);
 
   std::vector<Order>& getAll();
+  const std::vector<Order>& getAll() const;
 
   void save(const Order& order);
 
  private:
-  std::vector<Order> orders_{};
+  std::vector<Order> orders_;
 
   CsvFileService& csv_file_service_;
   ClientRepository& client_repo_;

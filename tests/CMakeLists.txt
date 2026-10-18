@@ -22,6 +22,7 @@ add_executable(
         order-repository-test.cpp
         products-repository-test.cpp
         table-printer-test.cpp
+        utils-test.cpp
 )
 
 target_link_libraries(marketplace-erp-tui-tests

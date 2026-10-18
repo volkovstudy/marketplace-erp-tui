@@ -27,7 +27,7 @@ void ClientAddingDialog::addClient() {
   Client client = readClientDetails();
 
   while (true) {
-    utils::printDelimiter();
+    utils::PrintDelimiter(out_);
 
     out_ << "Well, check the information about new client:" << std::endl;
     out_ << "Name" << kTab << client.getFullName() << std::endl;
@@ -52,7 +52,7 @@ void ClientAddingDialog::addClient() {
         return;
 
       case editChar:
-        utils::printDelimiter();
+        utils::PrintDelimiter(out_);
         client = readClientDetails();
         break;
 

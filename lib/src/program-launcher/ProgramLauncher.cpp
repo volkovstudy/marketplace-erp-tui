@@ -45,14 +45,14 @@ bool ProgramLauncher::handleUserChoice() {
     utils::toLowerCase(program);
 
     if (program == kClientsManagementProgram) {
-      utils::printDelimiter();
+      utils::PrintDelimiter(out_);
 
       ClientDialog dialog(out_, in_, client_repo_);
       dialog.openManagement();
 
       return false;
     } else if (program == kOrdersManagementProgram) {
-      utils::printDelimiter();
+      utils::PrintDelimiter(out_);
 
       OrdersDialog dialog;
       dialog.openManagementDialog();

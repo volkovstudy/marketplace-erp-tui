@@ -31,11 +31,11 @@ void ClientDialog::openManagement() {
     bool isUserWantToLeft = handleUserChoice();
 
     if (isUserWantToLeft) {
-      utils::printDelimiter();
+      utils::PrintDelimiter(out_);
       return;
     }
 
-    utils::printDelimiter();
+    utils::PrintDelimiter(out_);
 
     out_ << "You came back to the clients management section." << std::endl;
     printSectionVariants();
@@ -107,12 +107,12 @@ bool ClientDialog::handleUserChoice() {
 
     switch (program) {
       case kAddNewClientProgramChar:
-        utils::printDelimiter();
+        utils::PrintDelimiter(out_);
         addNewClient();
         return false;
 
       case kListAllClientsProgramChar:
-        utils::printDelimiter();
+        utils::PrintDelimiter(out_);
         listAllClients();
         return false;
 

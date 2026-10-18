@@ -4,7 +4,8 @@
 #include <charconv>
 #include <cstddef>
 #include <format>
-#include <iostream>
+#include <ostream>
+#include <print>
 #include <ranges>
 #include <stdexcept>
 #include <string>
@@ -21,11 +22,10 @@ void toLowerCase(std::string& line) {
                          [](unsigned char c) { return std::tolower(c); });
 }
 
-void printDelimiter() {
-  std::cout << std::endl;
-  std::cout << "--------------------------------------------------------"
-            << std::endl;
-  std::cout << std::endl;
+void PrintDelimiter(std::ostream& out) {
+  static constexpr size_t kDelimiterWidth = 56;
+
+  std::print(out, "\n{:-<{}}\n\n", "", kDelimiterWidth);
 }
 
 size_t FindMaxValuesSize(const std::vector<Property>& properties) {

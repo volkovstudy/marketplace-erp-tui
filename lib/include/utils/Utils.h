@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <ostream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -11,7 +12,7 @@ namespace utils {
 
 void toLowerCase(std::string& line);
 
-void printDelimiter();
+void PrintDelimiter(std::ostream& out);
 
 size_t FindMaxValuesSize(const std::vector<Property>& properties);
 

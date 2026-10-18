@@ -181,7 +181,7 @@ void OrderAddingDialog::addOrder() {
   }
 
   do {
-    utils::printDelimiter();
+    utils::PrintDelimiter(std::cout);
 
     std::cout << "Well, check the information about new order:" << std::endl
               << std::endl;
@@ -206,7 +206,7 @@ void OrderAddingDialog::addOrder() {
 
       break;
     } else if (program == editChar) {
-      utils::printDelimiter();
+      utils::PrintDelimiter(std::cout);
 
       products = {};
 

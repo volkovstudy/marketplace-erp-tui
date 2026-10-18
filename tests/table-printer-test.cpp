@@ -56,10 +56,10 @@ std::vector<Order> givenFourOrders() {
 }
 
 template <typename C, typename T>
-concept has_print_vector_for = requires(C c, T arg) { c.print(arg); };
+concept has_print_for = requires(C c, T arg) { c.print(arg); };
 
 template <typename T>
-  requires has_print_vector_for<TablePrinter, T>
+  requires has_print_for<TablePrinter, T>
 std::string Render(const T& data) {
   std::ostringstream out;
 

@@ -7,16 +7,16 @@
 #include "file-services/CsvFileService.h"
 #include "repositories/ProductsRepository.h"
 
-namespace fs = std::filesystem;
+namespace {
 
-static const std::string kTestFilename = "products-test.csv";
+namespace fs = std::filesystem;
 
 class ProductsRepositoryTests : public ::testing::Test {
  protected:
   static inline fs::path file_;
 
   static void SetUpTestSuite() {
-    file_ = fs::path(::testing::TempDir()) / kTestFilename;
+    file_ = fs::path(::testing::TempDir()) / "products-test.csv";
   }
 
   static void TearDownTestSuite() {
@@ -24,6 +24,8 @@ class ProductsRepositoryTests : public ::testing::Test {
     fs::remove_all(file_, ec);
   }
 };
+
+}  // namespace
 
 TEST_F(ProductsRepositoryTests, writeProductsToFile) {
   CsvFileService products_csv(file_);

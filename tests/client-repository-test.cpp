@@ -8,10 +8,9 @@
 #include "file-services/CsvFileService.h"
 #include "repositories/ClientRepository.h"
 
-namespace fs = std::filesystem;
+namespace {
 
-static const std::string kClientsFile = "clients-test.csv";
-static const std::string kConfigFile = "config-test.csv";
+namespace fs = std::filesystem;
 
 class ClientRepositoryTests : public ::testing::Test {
  protected:
@@ -26,8 +25,8 @@ class ClientRepositoryTests : public ::testing::Test {
     fs::create_directories(dir_, ec);
     ASSERT_FALSE(ec) << "Cannot create " << dir_ << ": " << ec.message();
 
-    clients_file_ = dir_ / kClientsFile;
-    config_file_ = dir_ / kConfigFile;
+    clients_file_ = dir_ / "clients-test.csv";
+    config_file_ = dir_ / "config-test.csv";
   }
 
   static void TearDownTestSuite() {
@@ -35,6 +34,8 @@ class ClientRepositoryTests : public ::testing::Test {
     fs::remove_all(dir_, ec);
   }
 };
+
+}  // namespace
 
 TEST_F(ClientRepositoryTests, saveAndWriteClientToFile) {
   CsvFileService config_csv{config_file_};

@@ -6,16 +6,16 @@
 
 #include "file-services/CsvFileService.h"
 
-namespace fs = std::filesystem;
+namespace {
 
-static const std::string kTestFilename = "csv-file-service-test.csv";
+namespace fs = std::filesystem;
 
 class CsvFileServiceTests : public ::testing::Test {
  protected:
   static inline fs::path file_;
 
   static void SetUpTestSuite() {
-    file_ = fs::path(::testing::TempDir()) / kTestFilename;
+    file_ = fs::path(::testing::TempDir()) / "csv-file-service-test.csv";
   }
 
   static void TearDownTestSuite() {
@@ -23,8 +23,6 @@ class CsvFileServiceTests : public ::testing::Test {
     fs::remove_all(file_, ec);
   }
 };
-
-namespace {
 
 std::vector<Property> givenThreeProperties() {
   std::vector<std::string> names;

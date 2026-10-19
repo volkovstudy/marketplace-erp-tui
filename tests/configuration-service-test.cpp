@@ -5,18 +5,16 @@
 
 #include "file-services/ConfigurationService.h"
 
-namespace fs = std::filesystem;
-
 namespace {
 
-const std::string kTestFilename = "configuration-test.csv";
+namespace fs = std::filesystem;
 
 class ConfigurationServiceTests : public ::testing::Test {
  protected:
   static inline fs::path file_;
 
   static void SetUpTestSuite() {
-    file_ = fs::path(::testing::TempDir()) / kTestFilename;
+    file_ = fs::path(::testing::TempDir()) / "configuration-test.csv";
   }
 
   static void TearDownTestSuite() {

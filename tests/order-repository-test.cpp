@@ -10,12 +10,9 @@
 #include "repositories/OrderRepository.h"
 #include "repositories/ProductsRepository.h"
 
-namespace fs = std::filesystem;
+namespace {
 
-static const std::string kOrderFile = "orders-test.csv";
-static const std::string kClientFile = "clients-test.csv";
-static const std::string kProductFile = "products-test.csv";
-static const std::string kConfigFile = "config-test.csv";
+namespace fs = std::filesystem;
 
 class OrderRepositoryTests : public ::testing::Test {
  protected:
@@ -32,10 +29,10 @@ class OrderRepositoryTests : public ::testing::Test {
     fs::create_directories(dir_, ec);
     ASSERT_FALSE(ec) << "Cannot create " << dir_ << ": " << ec.message();
 
-    order_file_ = dir_ / kOrderFile;
-    client_file_ = dir_ / kClientFile;
-    product_file_ = dir_ / kProductFile;
-    config_file_ = dir_ / kConfigFile;
+    order_file_ = dir_ / "orders-test.csv";
+    client_file_ = dir_ / "clients-test.csv";
+    product_file_ = dir_ / "products-test.csv";
+    config_file_ = dir_ / "config-test.csv";
   }
 
   static void TearDownTestSuite() {
@@ -43,6 +40,8 @@ class OrderRepositoryTests : public ::testing::Test {
     fs::remove_all(dir_, ec);
   }
 };
+
+}  // namespace
 
 TEST_F(OrderRepositoryTests, writeOrderToFile) {
   CsvFileService clients_csv(client_file_), config_csv(config_file_),

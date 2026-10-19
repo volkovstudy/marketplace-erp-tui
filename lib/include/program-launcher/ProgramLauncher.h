@@ -4,10 +4,16 @@
 #include <ostream>
 #include <string>
 
+#include "file-services/ConfigurationService.h"
 #include "file-services/CsvFileService.h"
 #include "repositories/ClientRepository.h"
+#include "repositories/OrderRepository.h"
+#include "repositories/ProductsRepository.h"
 
-const static std::string kPathToClientsFile = "marketplace-erp/clients.csv";
+static const std::string kConfigFile = "marketplace-erp/config.csv";
+static const std::string kClientsFile = "marketplace-erp/clients.csv";
+static const std::string kProductsFile = "marketplace-erp/products.csv";
+static const std::string kOrdersFile = "marketplace-erp/orders.csv";
 
 class ProgramLauncher {
  public:
@@ -22,6 +28,16 @@ class ProgramLauncher {
   std::ostream& out_;
   std::istream& in_;
 
-  CsvFileService client_csv_{kPathToClientsFile};
-  ClientRepository client_repo_{client_csv_};
+  CsvFileService config_csv_{kConfigFile};
+  ConfigurationService config_service_{config_csv_};
+
+  CsvFileService clients_csv_{kClientsFile};
+  ClientRepository clients_repo_{clients_csv_, config_service_};
+
+  CsvFileService products_csv_{kProductsFile};
+  ProductsRepository products_repo_{products_csv_};
+
+  CsvFileService orders_csv_{kOrdersFile};
+  OrderRepository orders_repo_{orders_csv_, clients_repo_, products_repo_,
+                               config_service_};
 };

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 
 #include "models/Client.h"
 #include "repositories/ClientRepository.h"
@@ -47,7 +48,7 @@ void ClientAddingDialog::addClient() {
 
     switch (program) {
       case yesChar:
-        repo_.save(client);
+        repo_.save(std::move(client));
         out_ << std::endl << "Client added." << std::endl;
         return;
 
@@ -67,7 +68,8 @@ void ClientAddingDialog::addClient() {
 }
 
 Client ClientAddingDialog::readClientDetails() {
-  std::string name, email;
+  std::string name;
+  std::string email;
 
   out_ << "Write the name: ";
   while (name.empty()) {
@@ -79,5 +81,5 @@ Client ClientAddingDialog::readClientDetails() {
     in_ >> email;
   }
 
-  return Client(name, email);
+  return Client(std::move(name), std::move(email));
 }

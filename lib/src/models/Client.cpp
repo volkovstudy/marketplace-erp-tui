@@ -2,17 +2,8 @@
 
 #include <string>
 
-#include "file-services/ConfigurationService.h"
-
 Client::Client(const std::string& full_name, const std::string& email)
-    : full_name_(full_name), email_(email) {
-  ConfigurationService* configurationService =
-      ConfigurationService::getInstance(
-          ConfigurationService::getMainConfigFilePath());
-
-  id_ = configurationService->getNextId();
-  configurationService->save();
-}
+    : full_name_(full_name), email_(email) {}
 
 Client::Client(int id, const std::string& full_name, const std::string& email)
     : id_(id), full_name_(full_name), email_(email) {}

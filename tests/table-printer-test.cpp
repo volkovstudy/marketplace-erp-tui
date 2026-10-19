@@ -19,13 +19,13 @@ namespace fs = std::filesystem;
 
 std::vector<Client> givenFourClients() {
   std::vector<Client> clients;
-  clients.emplace_back("Very long testing name",
+  clients.emplace_back(5, "Very long testing name",
                        "very.long.testing.email@example.com");
   clients.emplace_back(
-      "Very very very long name for testing class",
+      6, "Very very very long name for testing class",
       "very.very.very.long.email.for.testing.class@example.com");
-  clients.emplace_back("Test name", "test@example.com");
-  clients.emplace_back("Petr", "petya@example.com");
+  clients.emplace_back(7, "Test name", "test@example.com");
+  clients.emplace_back(8, "Petr", "petya@example.com");
 
   return clients;
 }
@@ -124,7 +124,7 @@ TEST(TablePrinterTests, AllLinesHasTheSameWidthInClients) {
 }
 
 TEST(TablePrinterTests, ContainsClientNameAndEmail) {
-  Client client{"Petr Ivanovich", "petr@example.com"};
+  Client client{1, "Petr Ivanovich", "petr@example.com"};
 
   const auto out = Render(std::vector<Client>{client});
 

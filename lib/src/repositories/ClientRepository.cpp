@@ -3,8 +3,10 @@
 #include <optional>
 #include <ranges>
 #include <string>
+#include <utility>
 #include <vector>
 
+#include "file-services/ConfigurationService.h"
 #include "models/Client.h"
 #include "models/Property.h"
 #include "utils/Utils.h"
@@ -38,9 +40,11 @@ std::vector<Client> ReadClients(const CsvFileService& csv_file_service) {
 
 }  // namespace
 
-ClientRepository::ClientRepository(CsvFileService& csv_file_service)
+ClientRepository::ClientRepository(CsvFileService& csv_file_service,
+                                   ConfigurationService& config_service)
     : clients_(ReadClients(csv_file_service)),
-      csv_file_service_(csv_file_service) {}
+      csv_file_service_(csv_file_service),
+      config_service_(config_service) {}
 
 std::vector<Client>& ClientRepository::getAll() { return clients_; }
 
@@ -52,8 +56,14 @@ std::optional<Client> ClientRepository::getById(int id) const {
   return it == clients_.end() ? std::nullopt : std::optional{*it};
 }
 
-void ClientRepository::save(const Client& client) {
-  clients_.push_back(client);
+ClientRepository::ClientId ClientRepository::save(Client client) {
+  const ClientId id =
+      client.getId() == -1 ? config_service_.getNextId() : client.getId();
+  client.setId(id);
 
-  Write(client, csv_file_service_);
+  const Client& stored = clients_.emplace_back(std::move(client));
+
+  Write(stored, csv_file_service_);
+
+  return id;
 }

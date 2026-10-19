@@ -2,19 +2,11 @@
 
 #include <vector>
 
-#include "file-services/ConfigurationService.h"
 #include "models/Client.h"
 #include "models/Product.h"
 
 Order::Order(const Client& client, const std::vector<Product>& products)
-    : client_(client), products_(products) {
-  ConfigurationService* configurationService =
-      ConfigurationService::getInstance(
-          ConfigurationService::getMainConfigFilePath());
-
-  id_ = configurationService->getNextId();
-  configurationService->save();
-}
+    : client_(client), products_(products) {}
 
 Order::Order(int id, const Client& client, const std::vector<Product>& products)
     : id_(id), client_(client), products_(products) {}

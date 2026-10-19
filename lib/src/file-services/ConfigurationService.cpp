@@ -3,53 +3,37 @@
 #include <string>
 #include <utility>
 
+#include "file-services/CsvFileService.h"
+#include "models/Property.h"
+
 namespace {
 
-static const std::string kCurrentIdColumn = "current_id";
-
-static ConfigurationService* instance;
-static std::string mainConfiguration;
+const std::string kCurrentIdColumn = "current_id";
 
 }  // namespace
 
-ConfigurationService::ConfigurationService(const std::string& filePath)
-    : csvFileService(filePath) {
-  for (const Property& property : csvFileService.getAllLines()) {
+ConfigurationService::ConfigurationService(CsvFileService& csv_file_service)
+    : csv_file_service_(csv_file_service) {
+  for (const Property& property : csv_file_service.getAllLines()) {
     if (property.getFieldName() == kCurrentIdColumn) {
       int element = std::stoi(property.getValues().at(0));
-      currentId = element;
+      current_id_ = element;
       break;
     }
   }
 }
 
-ConfigurationService::~ConfigurationService() { instance->save(); }
-
-ConfigurationService* ConfigurationService::getInstance(
-    const std::string& filePath) {
-  if (instance == nullptr) instance = new ConfigurationService(filePath);
-
-  return instance;
-}
-
-std::string ConfigurationService::getMainConfigFilePath() {
-  return mainConfiguration;
-}
-
-void ConfigurationService::setMainConfigFilePath(
-    const std::string& newFilePath) {
-  mainConfiguration = newFilePath;
-}
+ConfigurationService::~ConfigurationService() { save(); }
 
 int ConfigurationService::getNextId() {
-  int nextId = currentId + 1;
-  currentId = nextId;
+  int next_id = current_id_ + 1;
+  current_id_ = next_id;
 
-  return nextId;
+  return next_id;
 }
 
 void ConfigurationService::save() {
-  Property property(kCurrentIdColumn, {std::to_string(currentId)});
+  Property property(kCurrentIdColumn, {std::to_string(current_id_)});
 
-  csvFileService.eraseAndWrite({property});
+  csv_file_service_.eraseAndWrite({property});
 }

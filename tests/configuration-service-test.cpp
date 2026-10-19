@@ -7,7 +7,9 @@
 
 namespace fs = std::filesystem;
 
-static const std::string kTestFilename = "configuration-test.csv";
+namespace {
+
+const std::string kTestFilename = "configuration-test.csv";
 
 class ConfigurationServiceTests : public ::testing::Test {
  protected:
@@ -23,20 +25,22 @@ class ConfigurationServiceTests : public ::testing::Test {
   }
 };
 
-TEST_F(ConfigurationServiceTests, getNextId) {
-  ConfigurationService* configurationService =
-      ConfigurationService::getInstance(file_);
+}  // namespace
 
-  int actual = configurationService->getNextId();
+TEST_F(ConfigurationServiceTests, getNextId) {
+  CsvFileService config_csv{file_};
+  ConfigurationService configurationService{config_csv};
+
+  int actual = configurationService.getNextId();
 
   ASSERT_EQ(actual, 1);
 }
 
 TEST_F(ConfigurationServiceTests, saveNewCurrentId) {
-  ConfigurationService* configurationService =
-      ConfigurationService::getInstance(file_);
+  CsvFileService config_csv{file_};
+  ConfigurationService configurationService{config_csv};
 
-  configurationService->save();
+  configurationService.save();
 
   // Check it. In file should not be 0!
 }

@@ -21,7 +21,7 @@ class Order {
   void setProducts(const std::vector<Product>& products);
 
  private:
-  int id_ = 0;
+  int id_ = -1;
   Client client_{};
   std::vector<Product> products_{};
 };

@@ -30,6 +30,10 @@ void printSectionVariants() {
 
 }  // namespace
 
+OrdersDialog::OrdersDialog(OrderRepository& orders_repo,
+                           ClientRepository& clients_repo)
+    : orders_repo_(orders_repo), clients_repo_(clients_repo) {}
+
 void OrdersDialog::openManagementDialog() {
   std::cout << "You opened orders management section. ";
   printSectionVariants();
@@ -50,19 +54,12 @@ void OrdersDialog::openManagementDialog() {
 }
 
 void OrdersDialog::addNewOrder() {
-  OrderAddingDialog dialog;
+  OrderAddingDialog dialog{orders_repo_, clients_repo_};
   dialog.addOrder();
 }
 
 void OrdersDialog::listAllOrders() {
-  CsvFileService clients_csv(pathToClientsFile),
-      products_csv(pathToProductsFile), orders_csv(pathToOrdersFile);
-
-  ClientRepository client_repo(clients_csv);
-  ProductsRepository products_repo(products_csv);
-  OrderRepository order_repo(orders_csv, client_repo, products_repo);
-
-  const std::vector<Order>& orders = order_repo.getAll();
+  const std::vector<Order>& orders = orders_repo_.getAll();
 
   if (orders.empty()) {
     std::cout << "There are no orders!" << std::endl;

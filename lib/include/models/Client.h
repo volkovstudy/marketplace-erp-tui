@@ -18,7 +18,7 @@ class Client {
   void setEmail(const std::string& email);
 
  private:
-  int id_ = 0;
+  int id_ = -1;
   std::string full_name_{};
   std::string email_{};
 };

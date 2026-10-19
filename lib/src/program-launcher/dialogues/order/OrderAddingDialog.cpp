@@ -24,11 +24,8 @@
 
 namespace {
 
-std::vector<Client>& getAllClients() {
-  CsvFileService csv_file_service(pathToClientsFile);
-  ClientRepository clientRepository(csv_file_service);
-
-  return clientRepository.getAll();
+std::vector<Client>& getAllClients(ClientRepository& clients_repo) {
+  return clients_repo.getAll();
 }
 
 std::string makeClientLine(const Client& client) {
@@ -38,8 +35,8 @@ std::string makeClientLine(const Client& client) {
   return clientLine.str();
 }
 
-void printAllClients() {
-  const std::vector<Client>& clients = getAllClients();
+void printAllClients(ClientRepository& clients_repo) {
+  const std::vector<Client>& clients = getAllClients(clients_repo);
 
   std::vector<std::string> clientLines;
   for (int i = 0; i < clients.size(); ++i) {
@@ -87,15 +84,16 @@ void readAndSaveProduct(std::vector<Product>& products) {
   products.emplace_back(name, amount);
 }
 
-void getInformationAboutOrder(Client& client, std::vector<Product>& products) {
-  const std::vector<Client>& clients = getAllClients();
+void getInformationAboutOrder(Client& client, std::vector<Product>& products,
+                              ClientRepository& clients_repo) {
+  const std::vector<Client>& clients = getAllClients(clients_repo);
 
   if (clients.empty()) {
     throw *new std::exception;
   }
 
   std::cout << "All clients:" << std::endl;
-  printAllClients();
+  printAllClients(clients_repo);
   int clientNo;
   do {
     std::cout << "Choose a client (" << 1 << "-" << clients.size() << "): ";
@@ -154,18 +152,15 @@ void printProducts(const std::vector<Product>& products) {
   }
 }
 
-void saveOrder(Order& order) {
-  CsvFileService clients_csv(pathToClientsFile),
-      products_csv(pathToProductsFile), orders_csv(pathToOrdersFile);
-
-  ClientRepository client_repo(clients_csv);
-  ProductsRepository products_repo(products_csv);
-  OrderRepository orderRepository(orders_csv, client_repo, products_repo);
-
-  orderRepository.save(order);
+void saveOrder(Order& order, OrderRepository& orders_repo) {
+  orders_repo.save(order);
 }
 
 }  // namespace
+
+OrderAddingDialog::OrderAddingDialog(OrderRepository& orders_repo,
+                                     ClientRepository& clients_repo)
+    : orders_repo_(orders_repo), clients_repo_(clients_repo) {}
 
 void OrderAddingDialog::addOrder() {
   std::cout << "Now you're going to add new order." << std::endl << std::endl;
@@ -174,7 +169,7 @@ void OrderAddingDialog::addOrder() {
   std::vector<Product> products{};
 
   try {
-    getInformationAboutOrder(client, products);
+    getInformationAboutOrder(client, products, clients_repo_);
   } catch (std::exception& exception) {
     std::cout << "There are no clients! Add new client!" << std::endl;
     return;
@@ -200,7 +195,7 @@ void OrderAddingDialog::addOrder() {
 
     if (program == yesChar) {
       Order order(client, products);
-      saveOrder(order);
+      saveOrder(order, orders_repo_);
 
       std::cout << std::endl << "Order saved." << std::endl;
 
@@ -210,7 +205,7 @@ void OrderAddingDialog::addOrder() {
 
       products = {};
 
-      getInformationAboutOrder(client, products);
+      getInformationAboutOrder(client, products, clients_repo_);
     } else if (program == cancelChar) {
       std::cout << std::endl << "You left adding new order." << std::endl;
       return;

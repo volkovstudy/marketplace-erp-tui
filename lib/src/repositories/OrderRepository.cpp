@@ -2,8 +2,10 @@
 
 #include <ranges>
 #include <string>
+#include <utility>
 #include <vector>
 
+#include "file-services/ConfigurationService.h"
 #include "file-services/CsvFileService.h"
 #include "models/Order.h"
 #include "models/Product.h"
@@ -52,18 +54,26 @@ std::vector<Order> ReadAll(const CsvFileService& csv_file_service,
 
 OrderRepository::OrderRepository(CsvFileService& csv_file_service,
                                  ClientRepository& client_repo,
-                                 ProductsRepository& products_repo)
+                                 ProductsRepository& products_repo,
+                                 ConfigurationService& config_service)
     : orders_(ReadAll(csv_file_service, client_repo, products_repo)),
       csv_file_service_(csv_file_service),
       client_repo_(client_repo),
-      products_repo_(products_repo) {}
+      products_repo_(products_repo),
+      config_service_(config_service) {}
 
 std::vector<Order>& OrderRepository::getAll() { return orders_; }
 
 const std::vector<Order>& OrderRepository::getAll() const { return orders_; }
 
-void OrderRepository::save(const Order& order) {
-  orders_.push_back(order);
+OrderRepository::OrderId OrderRepository::save(Order order) {
+  const OrderId id =
+      order.getId() == -1 ? config_service_.getNextId() : order.getId();
+  order.setId(id);
 
-  Write(order, csv_file_service_, products_repo_);
+  const Order& stored = orders_.emplace_back(std::move(order));
+
+  Write(stored, csv_file_service_, products_repo_);
+
+  return id;
 }

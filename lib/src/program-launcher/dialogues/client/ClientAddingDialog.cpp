@@ -1,7 +1,10 @@
 #include "program-launcher/dialogues/client/ClientAddingDialog.h"
 
-#include <iostream>
+#include <cstdint>
+#include <optional>
+#include <print>
 #include <string>
+#include <string_view>
 #include <utility>
 
 #include "models/Client.h"
@@ -10,11 +13,30 @@
 
 namespace {
 
-const static char kTab = '\t';
+constexpr char kTab = '\t';
 
-const static char yesChar = 'y';
-const static char editChar = 'e';
-const static char cancelChar = 'c';
+constexpr char kYesChar = 'y';
+constexpr char kEditChar = 'e';
+constexpr char kCancelChar = 'c';
+
+enum class UserChoice : std::uint8_t { Yes, Edit, Cancel };
+
+constexpr std::optional<UserChoice> ParseUserChoice(std::string_view input) {
+  const auto command = static_cast<unsigned char>(std::tolower(input.front()));
+
+  switch (command) {
+    using enum UserChoice;
+
+    case kYesChar:
+      return Yes;
+    case kEditChar:
+      return Edit;
+    case kCancelChar:
+      return Cancel;
+    default:
+      return std::nullopt;
+  }
+}
 
 }  // namespace
 
@@ -23,60 +45,62 @@ ClientAddingDialog::ClientAddingDialog(std::ostream& out, std::istream& in,
     : out_(out), in_(in), repo_(repo) {}
 
 void ClientAddingDialog::addClient() {
-  out_ << "Now you're going to add new client." << std::endl;
+  std::print(out_, "Now you're going to add new client.\n");
 
   Client client = readClientDetails();
 
   while (true) {
     utils::PrintDelimiter(out_);
 
-    out_ << "Well, check the information about new client:" << std::endl;
-    out_ << "Name" << kTab << client.getFullName() << std::endl;
-    out_ << "Email" << kTab << client.getEmail() << std::endl;
+    std::println(out_, "Well, check the information about new client:");
+    std::println(out_, "Name{}{}", kTab, client.getFullName());
+    std::println(out_, "Email{}{}", kTab, client.getEmail());
 
-    out_ << std::endl << "Is it right?" << std::endl;
-    out_ << "(Y)es, (E)dit, (C)ancel: ";
+    std::println(out_, "\nIs it right?");
+    std::print(out_, "(Y)es, (E)dit, (C)ancel: ");
 
     std::string input;
     in_ >> input;
 
     if (input.empty()) {
-      out_ << std::endl << "Wrong input. Try again." << std::endl;
+      std::println(out_, "\nWrong input. Try again.");
+      continue;
     }
 
-    char program = std::tolower(input[0]);
+    auto choice = ParseUserChoice(input);
+    if (!choice.has_value()) {
+      std::println(out_, "\nWrong input. Try again.");
+      continue;
+    }
 
-    switch (program) {
-      case yesChar:
+    switch (choice.value()) {
+      using enum UserChoice;
+      case Yes:
         repo_.save(std::move(client));
-        out_ << std::endl << "Client added." << std::endl;
+        std::println(out_, "\nClient added.");
         return;
 
-      case editChar:
+      case Edit:
         utils::PrintDelimiter(out_);
         client = readClientDetails();
         break;
 
-      case cancelChar:
-        out_ << std::endl << "You left adding new client." << std::endl;
+      case Cancel:
+        std::println(out_, "\nYou left adding new client.");
         return;
-
-      default:
-        out_ << std::endl << "Wrong input. Try again." << std::endl;
     }
   }
 }
 
 Client ClientAddingDialog::readClientDetails() {
   std::string name;
-  std::string email;
-
-  out_ << "Write the name: ";
+  std::print(out_, "Write the name: ");
   while (name.empty()) {
     std::getline(in_, name);
   }
 
-  out_ << "Write the email: ";
+  std::string email;
+  std::print(out_, "Write the email: ");
   while (email.empty()) {
     in_ >> email;
   }

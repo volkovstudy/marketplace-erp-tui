@@ -11,7 +11,7 @@ namespace fs = std::filesystem;
 
 class ConfigurationServiceTests : public ::testing::Test {
  protected:
-  static inline fs::path file_;
+  static inline std::string file_;
 
   static void SetUpTestSuite() {
     file_ = fs::path(::testing::TempDir()) / "configuration-test.csv";

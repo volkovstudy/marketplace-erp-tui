@@ -1,13 +1,14 @@
 #include "models/Product.h"
 
 #include <string>
+#include <string_view>
 
-Product::Product(const std::string& name, int amount)
+Product::Product(std::string_view name, int amount)
     : name_(name), amount_(amount) {}
 
 const std::string& Product::getName() const { return name_; }
 
-void Product::setName(const std::string& name) { name_ = name; }
+void Product::setName(std::string_view name) { name_ = name; }
 
 int Product::getAmount() const { return amount_; }
 

@@ -2,12 +2,13 @@
 
 #include <string>
 #include <vector>
+#include <string_view>
 
 #include "models/Property.h"
 
 class CsvFileService {
  public:
-  explicit CsvFileService(const std::string& file_path);
+  explicit CsvFileService(std::string_view file_path);
 
   std::vector<Property> getAllLines() const;
 
@@ -15,7 +16,7 @@ class CsvFileService {
   void eraseAndWrite(const std::vector<Property>& properties) const;
 
   const std::string& getFilePath() const;
-  void setFilePath(const std::string& file_path);
+  void setFilePath(std::string_view file_path);
 
  private:
   std::string file_path_;

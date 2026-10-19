@@ -1,21 +1,22 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 class Client {
  public:
   Client() = default;
-  Client(const std::string& full_name, const std::string& email);
-  Client(int id, const std::string& full_name, const std::string& email);
+  Client(std::string_view full_name, std::string_view email);
+  Client(int id, std::string_view full_name, std::string_view email);
 
   int getId() const;
   void setId(int id);
 
   const std::string& getFullName() const;
-  void setFullName(const std::string& full_name);
+  void setFullName(std::string_view full_name);
 
   const std::string& getEmail() const;
-  void setEmail(const std::string& email);
+  void setEmail(std::string_view email);
 
  private:
   int id_ = -1;

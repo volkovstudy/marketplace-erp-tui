@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 class Product {
  public:
-  Product(const std::string& name, int amount);
+  Product(std::string_view name, int amount);
 
   const std::string& getName() const;
-  void setName(const std::string& name);
+  void setName(std::string_view name);
 
   int getAmount() const;
   void setAmount(int amount);

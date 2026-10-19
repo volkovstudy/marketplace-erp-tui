@@ -15,8 +15,8 @@ namespace fs = std::filesystem;
 class ClientRepositoryTests : public ::testing::Test {
  protected:
   static inline fs::path dir_;
-  static inline fs::path config_file_;
-  static inline fs::path clients_file_;
+  static inline std::string config_file_;
+  static inline std::string clients_file_;
 
   static void SetUpTestSuite() {
     dir_ = fs::path(::testing::TempDir()) / "marketplace_erp_tui_tests";

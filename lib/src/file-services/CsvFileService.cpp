@@ -150,7 +150,7 @@ std::vector<Property> ReadAll(std::istream& in,
 
 }  // namespace
 
-CsvFileService::CsvFileService(const std::string& file_path)
+CsvFileService::CsvFileService(std::string_view file_path)
     : file_path_(file_path) {}
 
 std::vector<Property> CsvFileService::getAllLines() const {
@@ -175,6 +175,6 @@ void CsvFileService::eraseAndWrite(
 
 const std::string& CsvFileService::getFilePath() const { return file_path_; }
 
-void CsvFileService::setFilePath(const std::string& file_path) {
+void CsvFileService::setFilePath(std::string_view file_path) {
   file_path_ = file_path;
 }

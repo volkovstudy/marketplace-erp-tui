@@ -17,10 +17,10 @@ namespace fs = std::filesystem;
 class OrderRepositoryTests : public ::testing::Test {
  protected:
   static inline fs::path dir_;
-  static inline fs::path order_file_;
-  static inline fs::path client_file_;
-  static inline fs::path product_file_;
-  static inline fs::path config_file_;
+  static inline std::string order_file_;
+  static inline std::string client_file_;
+  static inline std::string product_file_;
+  static inline std::string config_file_;
 
   static void SetUpTestSuite() {
     dir_ = fs::path(::testing::TempDir()) / "marketplace_erp_tui_tests";

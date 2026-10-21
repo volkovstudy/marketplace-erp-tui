@@ -15,8 +15,6 @@ class ClientDialog {
   void listAllClients();
 
  private:
-  bool handleUserChoice();
-
   std::ostream& out_;
   std::istream& in_;
 

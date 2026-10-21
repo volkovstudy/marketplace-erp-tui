@@ -15,7 +15,6 @@ class ClientDialog {
   void listAllClients();
 
  private:
-  void printSectionVariants();
   bool handleUserChoice();
 
   std::ostream& out_;
